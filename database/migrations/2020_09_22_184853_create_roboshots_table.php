@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateRoboshotsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('usuarios', function (Blueprint $table) {
-            $table->bigIncrements('idUsuario')->unique();
-            $table->string('nombre');
-            $table->string('password');
-            $table->integer('idRol');
+        Schema::create('roboshots', function (Blueprint $table) {
+            $table->bigIncrements('idRoboshot')->unique();
+            $table->integer('idUsuario')->nullable();
+            $table->string('esquema')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('usuarios');
+        Schema::dropIfExists('roboshots');
     }
 }
