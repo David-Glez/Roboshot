@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -11,9 +12,34 @@ use Illuminate\Support\Facades\Route;
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
-|
+| https://www.twilio.com/blog/build-secure-api-php-laravel-passport
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+//rutas de login y administracion
+// rutas con la forma localhost/api/auth/
+
+Route::group([
+    'prefix' => 'auth'
+], function(){
+    Route::post('/login', 'InicioController@inicio');
+    Route::get('/sesion', 'InicioController@vidaSesion');
+
+    //  ruta para roboshot local
+    Route::post('/roboshots/local/actualizar', 'RoboshotController@actualizarLocal');
+    
+    //rutas con requerimiento de autorizacion
+    Route::group([
+        'middleware' => 'auth:api'
+    ], function(){
+        // rutas para funciones destinadas a usuarios
+        Route::get('/usuarios', 'UsuariosController@inicio');
+        Route::get('/clientes', 'UsuariosController@clientes');
+        Route::post('/usuarios/anadir', 'UsuariosController@anadirCliente');
+
+        // rutas para funciones destinadas a roboshots
+        Route::get('/roboshots', 'RoboshotController@inicio');
+        Route::post('/roboshots/revisar', 'RoboshotController@disponibles');
+        
+    });
 });
+

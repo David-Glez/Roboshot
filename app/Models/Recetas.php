@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Recetas extends Model
 {
-    use HasFactory;
+    protected $connection = 'roboshot';
+    protected $table = 'recetas';
+    public $incrementing = false;
+    protected $fillable = [
+        'idReceta', 'nombre', 'descripcion', 'precio', 'activa', 'img', 'actualizado'
+    ];
 }

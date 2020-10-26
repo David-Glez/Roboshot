@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Roboshots;
+use App\Models\Clientes;
+use App\Models\User;
+use App\Clases\Roboshot;
+
+class RoboshotController extends Controller
+{
+    //  ver la lista de roboshots registrados
+    public function inicio(){
+        $lista = Roboshots::all();
+        return response()->json($lista);
+    }
+
+    //  consulta lista de esquemas
+    public function disponibles(Request $request){
+
+        //  cuenta las coincidencias dentro de la BD
+        $busca = Clientes::where('esquema', $request->esquema)->count();
+        
+        if($busca > 0){
+
+            //  genera la sugerencia 1
+            $cadena = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $longitud = strlen($cadena);
+            $codigo = '';
+
+            for($i = 0; $i < 5; $i++){
+                $codigo .= $cadena[rand(0, $longitud-1)];
+            }
+
+            $sugerencia1 = $request->esquema.'_'.$codigo;
+
+            // genera sugerencia 2
+            $num = rand(0,1000);
+            $sugerencia2 = $request->esquema.'_'.$num;
+
+            $resultado = array(
+                'mensaje' => 'El nombre de BD ya existe',
+                'sugerencia1' => $sugerencia1,
+                'sugerencia2' => $sugerencia2
+            );
+        }else{
+            $resultado = array(
+                'mensaje' => 'Nombre disponible',
+                'sugerencia1' => '',
+                'sugerencia2' => ''
+            );
+        }
+        
+        return response()->json($resultado);
+    }
+
+    // registrar roboshot
+    public function anadir(Request $request){
+        return response()->json($request);
+    }
+
+    //  actualizar roboshot
+    public function actualizarLocal(Request $request){
+        //  verifica si los campos usuario y esquema estan definidos
+        if(isset($request->usuarioWeb) && isset($request->esquema)){
+            //$usuario = User::where('nombre', $request->usuarioweb)->first();
+            if(isset($request->tablaReceta)){
+                $data =Roboshot::recetasWeb($request);
+            }else{
+                $data = 'no definido';
+            }
+        }else{
+            $data = array(
+                'estado' => false,
+                'mensaje' => 'Usuario y/o esquema no definidos'
+            );
+        }
+
+        return response()->json($data);
+    }
+}

@@ -7,5 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Roboshots extends Model
 {
-    use HasFactory;
+    protected $table = 'roboshots';
+    protected $primaryKey = 'idRoboshot';
+    protected $fillable = [
+        'idUsuario', 'MAC', 'nombre', 'esquema'
+    ];
 }

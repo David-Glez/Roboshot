@@ -15,8 +15,9 @@ class CreateRoboshotsTable extends Migration
     {
         Schema::create('roboshots', function (Blueprint $table) {
             $table->bigIncrements('idRoboshot')->unique();
-            $table->integer('idUsuario')->nullable();
-            $table->string('esquema')->nullable();
+            $table->integer('idCliente')->nullable();
+            $table->string('MAC');
+            $table->string('nombre');
             $table->timestamps();
         });
     }
