@@ -3,6 +3,7 @@
 namespace App\Clases;
 
 use App\Models\Clientes;
+use Illuminate\Support\Facades\DB;
 
 class Conexion{
 
@@ -25,5 +26,13 @@ class Conexion{
         $conecta = config('database.connections.roboshot');
 
         return $conecta; 
+    }
+
+    //  cierra la conexion
+    public static function desconecta(){
+        config(['database.connections.roboshot.schema' => '']);
+        $conecta = config('database.connections.roboshot');
+        
+        return $conecta;
     }
 }

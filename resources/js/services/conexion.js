@@ -8,11 +8,11 @@ class Accion{
     }
 
     /****** Trae los datos de una receta en especifico ******/
-    traeReceta(id){
-        return http.get('/receta/'+id);
+    traeReceta(id, cliente){
+        return http.get('/receta/'+id+'/'+cliente);
     }
 
-    /****** Trae la lista de ingredientes registrados ******/
+    /****** Trae la lista de categorias ******/
     traeIngredientes(){
         return http.get('/ingredientes');
     }

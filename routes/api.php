@@ -15,12 +15,27 @@ use Illuminate\Support\Facades\Route;
 | https://www.twilio.com/blog/build-secure-api-php-laravel-passport
 */
 
+//  rutas para vista principal de roboshot
+Route::group([
+    'prefix' => 'web'
+], function(){
+    //  trae todas las recetas de la BD
+    Route::get('/inicio', 'WebController@inicio');
+
+    //  trae una receta en especifico
+    Route::get('/receta/{idReceta}/{idCliente}', 'WebController@receta');
+
+    //  captura el pedido, lo guarda y genera el codigo para canjear
+    Route::post('/pedido/nuevo', 'WebController@pedido');
+});
+
 //rutas de login y administracion
 // rutas con la forma localhost/api/auth/
-
 Route::group([
     'prefix' => 'auth'
 ], function(){
+
+    //  rutas para inicio de sesion
     Route::post('/login', 'InicioController@inicio');
     Route::get('/sesion', 'InicioController@vidaSesion');
 
@@ -31,6 +46,7 @@ Route::group([
     Route::group([
         'middleware' => 'auth:api'
     ], function(){
+
         // rutas para funciones destinadas a usuarios
         Route::get('/usuarios', 'UsuariosController@inicio');
         Route::get('/clientes', 'UsuariosController@clientes');

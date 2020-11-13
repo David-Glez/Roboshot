@@ -34,6 +34,7 @@ const AnadirCliente = (props) =>{
     const [apellidoPaterno, setApellidoPat] = useState('');
     const [apellidoMaterno, setApellidoMat] = useState('');
     const [rfc, setRFC] = useState('');
+    const [razon, setRazon] = useState('');
     const [email, setEmail] = useState('');
     const [usuario, setUsuario] = useState('');
     const [contrasena, setContrasena] = useState('');
@@ -64,6 +65,12 @@ const AnadirCliente = (props) =>{
     const onChangeRFC = (e) => {
         const RFC = e.target.value;
         setRFC(RFC);
+    };
+
+    //captura de razón social
+    const onChangeRazon = (e) => {
+        const razonSocial = e.target.value;
+        setRazon(razonSocial);
     };
 
     //captura del email
@@ -127,6 +134,7 @@ const AnadirCliente = (props) =>{
             apellidoPaterno: apellidoPaterno,
             apellidoMaterno: apellidoMaterno,
             rfc: rfc,
+            razon: razon,
             email: email,
             esquema: esquema,
             usuario: usuario,
@@ -240,6 +248,19 @@ const AnadirCliente = (props) =>{
                                 name = 'email'
                                 value = {email}
                                 onChange = {onChangeEmail}
+                                validations = {[required]} 
+                            />
+                        </div>
+                        <div className = 'form-group col-sm-4'>
+                            <label>
+                                Razón Social
+                            </label>
+                            <Input
+                                className = 'form-control'
+                                type = 'text'
+                                name = 'razon'
+                                value = {razon}
+                                onChange = {onChangeRazon}
                                 validations = {[required]} 
                             />
                         </div>

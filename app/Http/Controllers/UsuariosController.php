@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Roles;
 use App\Models\Clientes;
 use App\Models\Roboshots;
 
 use App\Clases\Roboshot;
+
 
 class UsuariosController extends Controller
 {
@@ -65,7 +66,7 @@ class UsuariosController extends Controller
 
     //insertar clientes en bd
     public function anadirCliente(Request $request){
-       
+        
         //si el usuario que registra es el super administrador el rol a insertar es 2
         if(Auth::user()->idRol == 1){
 
@@ -83,15 +84,21 @@ class UsuariosController extends Controller
 
                 $id = $usuario->idUsuario;
 
+                //  se crea el directorio en el storage para el usuario
+                $dir = 'rob_cliente_'.$id;
+                Storage::makeDirectory('public/images/'.$dir);
+
                 //insertar registro en la tabla clientes
                 $cliente = new Clientes;
                 $cliente->idUsuario = $id;
+                $cliente->razonSocial = $request->razon;
                 $cliente->nombres = $request->nombres;
                 $cliente->apellidoPaterno = $request->apellidoPaterno;
                 $cliente->apellidoMaterno = $request->apellidoMaterno;
                 $cliente->RFC = $request->rfc;
                 $cliente->email = $request->email;
                 $cliente->esquema = $request->esquema;
+                $cliente->directorio = $dir;
                 $cliente->save();
 
                 // creacion de tablas dentro del esquema nuevo
@@ -100,7 +107,7 @@ class UsuariosController extends Controller
                 
                 $resultado = array(
                     'insertado' => true,
-                    'mensaje' => 'request Insertados Correctamente.',
+                    'mensaje' => 'Datos insertados correctamente.',
                     'id' => $id
                 );
             }else{
@@ -118,4 +125,5 @@ class UsuariosController extends Controller
         }
         return response()->json($resultado);
     }
+
 }

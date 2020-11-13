@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Roboshots;
 use App\Models\Clientes;
-use App\Models\User;
 use App\Clases\Roboshot;
 
 class RoboshotController extends Controller
@@ -66,10 +65,27 @@ class RoboshotController extends Controller
         if(isset($request->usuarioWeb) && isset($request->esquema)){
             //$usuario = User::where('nombre', $request->usuarioweb)->first();
             if(isset($request->tablaReceta)){
-                $data =Roboshot::recetasWeb($request);
+                $estadoRec = Roboshot::recetasWeb($request);
             }else{
-                $data = 'no definido';
+                $estadoRec = 'No seleccionada';
             }
+            if(isset($request->tablaIngredientes)){
+                $estadoIng = Roboshot::ingredientesWeb($request);
+            }else{
+                $estadoIng = 'No seleccionada';
+            }
+            if(isset($request->tablaCategorias)){
+                $estadoCat = Roboshot::categoriasWeb($request);
+            }else{
+                $estadoCat = 'No seleccionada';
+            }
+            $data = array(
+                'estado' => true,
+                'mensaje' => 'Tablas actualizadas',
+                'tablaRecetas' => $estadoRec,
+                'tablaIngredientes' => $estadoIng,
+                'tablaCategorias' => $estadoCat
+            );
         }else{
             $data = array(
                 'estado' => false,

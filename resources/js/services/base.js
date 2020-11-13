@@ -2,8 +2,9 @@ import axios from 'axios';
 
 export default axios.create({
     //baseURL: 'https://roboshot-integra.herokuapp.com/api', 
-    baseURL: 'https://127.0.0.0:8081/api',
+    baseURL: 'http://localhost:8081/api/web',
     headers: {
-        'Content-type': 'application/json'
+        'Content-type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
     }
 });

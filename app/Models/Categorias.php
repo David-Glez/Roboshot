@@ -7,5 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Categorias extends Model
 {
-    use HasFactory;
+    protected $connection = 'roboshot';
+    protected $table = 'categorias';
+    protected $primaryKey = 'idCategoria';
+    public $incrementing = false;
+    public $timestamps = false;
+    protected $fillable = [
+        'idCategoria', 'nombre'
+    ];
 }

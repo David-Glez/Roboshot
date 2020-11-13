@@ -64,15 +64,33 @@ const Roboshot = () =>{
                                     <tr>
                                         <th>ID</th>
                                         <th>Nombre</th>
-                                        <th>Rol</th>
-                                        <th>Base de datos</th>
-                                        <th>Roboshots</th>
-                                        <th>Fecha de creación</th>
+                                        
+                                        <th>MAC</th>
                                         <th>Acción</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                </tbody> 
+                                <tbody className = 'text-center'>
+                            {roboshots.map((item, index) => {
+                                return(
+                                    <tr key ={index}>
+                                        <td>{item.idRoboshot}</td>
+                                        <td>{item.nombre}</td>
+                                        <td>{item.MAC}</td>
+                                        
+                                        <td>
+                                            <a className = 'btn btn-outline-secondary'>
+                                                <FontAwesomeIcon icon = {faEdit} />
+                                                <span className = 'customSpan'>Editar</span>
+                                            </a>
+                                            <a className = 'btn btn-outline-danger'>
+                                                <FontAwesomeIcon icon = {faTrashAlt} />
+                                                <span className = 'customSpan'>Eliminar</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
                             </Table>
                         )}
                         

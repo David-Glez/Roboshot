@@ -9,9 +9,13 @@ use Illuminate\Support\Facades\Schema;
 
 //  clase auxiliar
 use App\Clases\Conexion;
+use Carbon\Carbon;
 
 //  Modelos
+use App\Models\Categorias;
 use App\Models\Recetas;
+use App\Models\Ingredientes;
+use App\Models\RecetaIngredientes;
 
 class Roboshot{
 
@@ -25,7 +29,7 @@ class Roboshot{
 
         //  tabla para categorias
         Schema::connection('roboshot')->create('categorias', function(Blueprint $table){
-            $table->integer('idcategoria');
+            $table->integer('idCategoria');
             $table->string('nombre')->nullable();
             $table->date('actualizado');
         });
@@ -44,7 +48,7 @@ class Roboshot{
         //  tabla para ingredientes
         Schema::connection('roboshot')->create('ingredientes', function(Blueprint $table){
             $table->integer('idIngrediente');
-            $table->integer('nombre')->nullable();
+            $table->integer('categoria')->nullable();
             $table->string('marca')->nullable();
             $table->float('precio', 4, 2);
             $table->date('actualizado');
@@ -66,22 +70,134 @@ class Roboshot{
         //  establece la conexion a la base de datos de acuerdo al nombre
         Conexion::conectaNombre($datos->esquema);
 
-        $dataRecetas = $datos->tablaReceta;
-        $data = [];
+        //  se decodifica
+        $dataRecetas = json_decode($datos->tablaReceta);
         
         //  recorre el arreglo de recetas
         foreach($dataRecetas as $item){
-            $busca = Recetas::findOrFail($item->id);
-            if($busca){
-                $data[] = $busca;
+            $busca = Recetas::where('idReceta', $item->id)->first();
+            //  en el caso de que el campo sea nulo
+            if($item->image == null){
+                $imagen = '/images/camera.jpg';
+            }else{
+                $imagen = $item->image;
+            }
+
+            // si el campo no existe se añade a la tabla
+            if($busca == ''){
+                //   se añade a la tabla recetas
+                $ingresa = new Recetas;
+                $ingresa->idReceta = $item->id;
+                $ingresa->nombre = $item->name;
+                $ingresa->descripcion = $item->description;
+                $ingresa->precio = $item->price;
+                $ingresa->activa = true;
+                $ingresa->img = $imagen;
+                $ingresa->actualizado = Carbon::now();
+                $ingresa->save();
+
+                //  se actualizan los datos de los ingredientes
+                foreach($item->idIngr as $ing){
+                    $ingrediente = new RecetaIngredientes;
+                    $ingrediente->idReceta = $item->id;
+                    $ingrediente->idIngrediente = $ing->idIngrediente;
+                    $ingrediente->cantidad = $ing->cantidad;
+                    $ingrediente->actualizado = Carbon::now();
+                    $ingrediente->save();
+
+                }
+            }else{
+                //  se actualizan todos los campos
+                $busca->idReceta = $item->id;
+                $busca->nombre = $item->name;
+                $busca->descripcion = $item->description;
+                $busca->precio = $item->price;
+                $busca->activa = true;
+                $busca->img = $imagen;
+                $busca->actualizado = Carbon::now();
+                $busca->save();
+
+                //  elimina los registros previos para sustituirlos por los nuevos
+                $elimina = RecetaIngredientes::where('idReceta', $item->id)->delete();
+                foreach($item->idIngr as $updIng){
+                    $ingrediente = new RecetaIngredientes;
+                    $ingrediente->idReceta = $item->id;
+                    $ingrediente->idIngrediente = $updIng->idIngrediente;
+                    $ingrediente->cantidad = $updIng->cantidad;
+                    $ingrediente->actualizado = Carbon::now();
+                    $ingrediente->save();
+                }
             }
         }
-
-        return $data;
+        
+        
+        return true;
 
     }
 
     public static function ingredientesWeb($datos){
 
+        //  establece la conexion a la base de datos de acuerdo al nombre
+        Conexion::conectaNombre($datos->esquema);
+
+        //  se decodifica
+        $dataIngre = json_decode($datos->tablaIngredientes);
+
+        //  se recorren los datos
+        foreach($dataIngre as $item){
+            //  se busca el elemento
+            $busca = Ingredientes::where('idIngrediente', $item->id)->first();
+
+            //   si el campo no existe se añade a la tabla
+            if($busca == ''){
+                $ingrediente = new Ingredientes;
+                $ingrediente->idIngrediente = $item->id;
+                $ingrediente->categoria = $item->category;
+                $ingrediente->marca = $item->marca;
+                $ingrediente->precio = $item->price;
+                $ingrediente->actualizado = Carbon::now();
+                $ingrediente->save();
+            }else{
+                $busca->categoria = $item->category;
+                $busca->marca = $item->marca;
+                $busca->precio = $item->price;
+                $busca->actualizado = Carbon::now();
+                $busca->save();
+            }
+        }
+
+        return $datos;
+
+    }
+
+    public static function categoriasWeb($datos){
+
+        //  establece la conexion a la base de datos de acuerdo al nombre
+        Conexion::conectaNombre($datos->esquema);
+
+        //  se decodifica
+        $dataCategoria = json_decode($datos->tablaCategorias);
+
+        //  se recorren los datos
+        foreach($dataCategoria as $item){
+
+            //  se bsuca el elemento
+            $busca = Categorias::where('idCategoria', $item->id)->first();
+
+            //  si no existe se añade a la tabla
+            if($busca == ''){
+                $categoria = New Categorias;
+                $categoria->idCategoria = $item->id;
+                $categoria->nombre = $item->nombre;
+                $categoria->actualizado = Carbon::now();
+                $categoria->save();
+            }else{
+                $busca->nombre = $item->nombre;
+                $busca->actualizado = Carbon::now();
+                $busca->save();
+            }
+        }
+
+        return true;
     }
 }
