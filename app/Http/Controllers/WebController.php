@@ -14,12 +14,21 @@ use App\Models\Pedidos;
 
 class WebController extends Controller
 {
-    //  muestra todas las recetas de la bd
+    //  muestra todos los clientes registrados en la bd
     public function inicio(){
+        $data = [];
 
         $clientes = Clientes::all();
+        foreach($clientes as $i){
+            $datos = array(
+                'idCliente' => $i->idCliente,
+                'razonSocial' => $i->razonSocial
+            );
 
-        $data = [];
+            $data[] = $datos;
+        }
+        return response()->json($data);
+        /*$data = [];
 
         foreach($clientes as $i){
             $card = [];
@@ -42,7 +51,7 @@ class WebController extends Controller
             
         }
 
-        return response()->json($data);
+        return response()->json($data);*/
     }
 
     //  trae una receta en especifico

@@ -14,11 +14,11 @@ import './css/admin.css';
 import './css/preloader.css';
 
 
-//componentes
+//  componentes
 import Home from './components/home';
 import Inicio from './components/admin/index';
 import Login from './components/auth/login';
-import Prueba from './components/prueba';
+import Roboshot from './components/roboshot';
 
 class Index extends Component{
     render(){
@@ -28,7 +28,7 @@ class Index extends Component{
                     <Route exact path='/' component = {Home} />
                     <Route path = '/admin' component = {Inicio} />
                     <Route path = '/login' component = {Login} />
-                    <Route exact path = '/alertas' component = {Prueba} />
+                    <Route path = '/roboshot' component = {Roboshot} />
                 </Switch>       
             </BrowserRouter>
         )
