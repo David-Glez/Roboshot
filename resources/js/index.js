@@ -18,7 +18,7 @@ import './css/preloader.css';
 import Home from './components/home';
 import Inicio from './components/admin/index';
 import Login from './components/auth/login';
-import Roboshot from './components/roboshot';
+import Register from './components/auth/register';
 
 class Index extends Component{
     render(){
@@ -28,7 +28,8 @@ class Index extends Component{
                     <Route exact path='/' component = {Home} />
                     <Route path = '/admin' component = {Inicio} />
                     <Route path = '/login' component = {Login} />
-                    <Route path = '/roboshot' component = {Roboshot} />
+                    <Route path = '/registro' component = {Register} />
+                    <Route path = '/roboshot' component = {Home} />
                 </Switch>       
             </BrowserRouter>
         )

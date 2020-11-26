@@ -19,8 +19,14 @@ use Illuminate\Support\Facades\Route;
 Route::group([
     'prefix' => 'web'
 ], function(){
-    //  trae todas las recetas de la BD
+    //  trae todas los clientes registrados
     Route::get('/inicio', 'WebController@inicio');
+
+    //  trae todas las recetas de un solo cliente
+    Route::get('/receta/{idCliente}', 'WebController@recetasCliente');
+
+    //  trae todos los ingredientes de un cliente
+    Route::get('/ingredientes/{idCliente}', 'WebController@ingredientes');
 
     //  trae una receta en especifico
     Route::get('/receta/{idReceta}/{idCliente}', 'WebController@receta');
@@ -37,6 +43,7 @@ Route::group([
 
     //  rutas para inicio de sesion
     Route::post('/login', 'InicioController@inicio');
+    Route::post('/registrar', 'InicioController@registro');
     Route::get('/sesion', 'InicioController@vidaSesion');
 
     //  ruta para roboshot local

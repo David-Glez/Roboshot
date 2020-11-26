@@ -21,13 +21,34 @@ class Web{
     //  trae todas las recetas de un cliente
     public static function inicio($datos){
         
-        Conexion::conectaNombre($datos);
+        Conexion::conectaID($datos);
         $recipes = Recetas::all();
 
         DB::purge('roboshot');
 
         return $recipes;
         
+    }
+
+    //  trae los ingredientes de un cliente
+    public static function ingredientes($idCliente){
+
+        //  conexion con el esquema del cliente
+        Conexion::conectaID($idCliente);
+
+        //  extrae todas las categorias
+        $categorias = Categorias::all();
+
+        //  extrae todos los ingredientes
+        $ingredientes = Ingredientes::all();
+
+        //  arreglo con todos los datos
+        $data = array(
+            'categorias' => $categorias,
+            'ingredientes' => $ingredientes
+        );
+
+        return $data;
     }
 
     // trae una receta de la bd de un cliente
@@ -42,9 +63,10 @@ class Web{
         //  ingredientes de la receta
         $lista = [];
         $ingredientes = RecetaIngredientes::where('idReceta', $idReceta)->get();
+        
         foreach($ingredientes as $item){
             $ing = Ingredientes::where('idIngrediente', $item->idIngrediente)->first();
-            $cat = Categorias::where('idCategoria', $ing->nombre)->first();
+            $cat = Categorias::where('idCategoria', $ing->categoria)->first();
             $data = array(
                 'idIngrediente' => $ing->idIngrediente,
                 'nombre' => $ing->marca,
@@ -56,13 +78,8 @@ class Web{
             $lista[] = $data;
         }
 
-        //  datos del cliente
-        $cliente = Clientes::find($idCliente);
-
         $datos = array(
             'idReceta' => $recipes->idReceta,
-            'idCliente' => $idCliente,
-            'cliente' => $cliente->nombres,
             'nombre' => $recipes->nombre,
             'descripcion' => $recipes->descripcion,
             'precio' => $recipes->precio,

@@ -1,14 +1,20 @@
 import React, {useState, useRef} from 'react';
+
+//  imagenes
 import user from '../../img/user.png';
 import logo from '../../img/roboshot-logo-1.png'
 
-//elementos y validacion de formulario
+//  elementos y validacion de formulario
 import Form from 'react-validation/build/form';
 import Input from 'react-validation/build/input';
 import CheckButton from 'react-validation/build/button';
 
-//api para control de login y registro
+//  api para control de login y registro
 import AuthService from '../../services/auth/autenticacion';
+
+//  libreria toast
+import { ToastContainer, toast, Flip } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const required = (value) =>{
     if(!value){
@@ -28,7 +34,6 @@ const Login = (props) =>{
     const [usuario, setUsuario] = useState("");
     const [contrasena, setContrasena] = useState("");
     const [loading, setLoading] = useState(false);
-    const [mensaje, setMensaje] = useState("");
 
     const onChangeUsuario = (e) =>{
         const username = e.target.value;
@@ -44,7 +49,6 @@ const Login = (props) =>{
         //evita que la pagina se recargue
         e.preventDefault();
         
-        setMensaje("");
         setLoading(true);
 
         let credenciales = {
@@ -61,12 +65,27 @@ const Login = (props) =>{
             envio.then((response) =>{
                 
                 if(response.autorizado){
-                    props.history.push('/admin');
-                    //window.location.reload();
+                    if(response.idRol == 4){
+                        props.history.push('/');
+                    }else{
+                        props.history.push('/admin');
+                        //window.location.reload();
+                    }
+                    
                 }else{
                     let error = 'Usuario y/o contraseña incorrectos';
                     setLoading(false);
-                    setMensaje(error);
+                    toast.warning(error,{
+                        position: toast.POSITION.TOP_CENTER,
+                        autoClose: 4000,
+                        hideProgressBar: false,
+                        newestOnTop: false,
+                        closeOnClick: true,
+                        rtl: false,
+                        draggable: true,
+                        pauseOnHover: true,
+                        progress: undefined
+                    });
                 }
             });    
         }else{
@@ -76,6 +95,7 @@ const Login = (props) =>{
 
     return(
         <>
+        <ToastContainer />
         <nav className = 'navbar nabvar-expanded-md navbar-dark bg-light'>
             <div className = 'container'>
                 <div className = 'col-md-8'>
@@ -123,13 +143,6 @@ const Login = (props) =>{
                                 </button>
                             </div>
 
-                            {mensaje && (
-                                <div className="form-group">
-                                    <div className="alert alert-danger" role="alert">
-                                        {mensaje}
-                                    </div>
-                                </div>
-                            )}
                             <CheckButton style={{ display: "none" }} ref={checkBtn} />
                         </Form>
                     </div>

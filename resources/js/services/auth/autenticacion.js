@@ -15,6 +15,12 @@ const login = (credenciales) =>{
         });
 };
 
+//  funcion para registrar a los clientes
+const registrar = (data) => {
+    return axios
+        .post(API_URL + '/registrar', data)
+};
+
 //funcion para ver el tiempo de vida de la sesion
 const sessionLive = () =>{
     return axios.get(API_URL+'/sesion');
@@ -33,6 +39,7 @@ const getCurrentUser = () =>{
 //exportacion de funciones
 export default{
     login,
+    registrar,
     logout,
     sessionLive,
     getCurrentUser

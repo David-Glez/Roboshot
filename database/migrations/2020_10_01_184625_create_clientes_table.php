@@ -20,7 +20,7 @@ class CreateClientesTable extends Migration
             $table->string('logo')->nullable();
             $table->string('nombres');
             $table->string('apellidoPaterno');
-            $table->string('apellidoMaterno');
+            $table->string('apellidoMaterno')->nullable();
             $table->string('RFC')->nullable();
             $table->string('email');
             $table->string('esquema')->nullable();

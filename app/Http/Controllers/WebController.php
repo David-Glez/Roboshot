@@ -18,40 +18,34 @@ class WebController extends Controller
     public function inicio(){
         $data = [];
 
-        $clientes = Clientes::all();
+        $clientes = Clientes::where('esquema', '!=', '')->get();
         foreach($clientes as $i){
             $datos = array(
                 'idCliente' => $i->idCliente,
-                'razonSocial' => $i->razonSocial
+                'razonSocial' => $i->razonSocial,
+                'logo' => $i->logo
             );
 
             $data[] = $datos;
         }
         return response()->json($data);
-        /*$data = [];
+     
+    }
 
-        foreach($clientes as $i){
-            $card = [];
-            $x = Web::inicio($i->esquema);
+    //  selecciona todas las recetas de un cliente
+    public function recetasCliente($idCliente){
 
-            foreach($x as $recipe){
-                
-                $info = array(
-                    'idReceta' => $recipe->idReceta,
-                    'nombre' => $recipe->nombre,
-                    'idCliente' => $i->idCliente,
-                    'cliente' => $i->nombres,
-                    'descripcion' => $recipe->descripcion,
-                    'precio' => $recipe->precio,
-                    'img' => $recipe->img, 
-                );
-                $card[] = $info;
-            }
-            $data[] = $card;
-            
-        }
+        $x = Web::inicio($idCliente);
 
-        return response()->json($data);*/
+        return response()->json($x);
+    }
+
+    //  trae los ingredientes y categorias de un ingrediente
+    public function ingredientes($idCliente){
+
+        $x = Web::ingredientes($idCliente);
+        
+        return response()->json($x);
     }
 
     //  trae una receta en especifico

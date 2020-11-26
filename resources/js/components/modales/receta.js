@@ -10,8 +10,8 @@ import Accion from '../../services/conexion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
-//  Estilos extra
-import {Spinner}from 'react-bootstrap';
+//  componentes
+import Loader from '../alertas/loader';
 
 const Contenido = (props) =>{
 
@@ -66,10 +66,8 @@ const Contenido = (props) =>{
             
             <div className = 'mb-3'>
                 {loading ? (
-                    <div className = 'text-center'>
-                        <Spinner animation = 'border' variant = 'primary' role = 'status'>
-                            <span className = 'sr-only'>Cargando...</span>
-                        </Spinner>
+                    <div className = 'row superior'>
+                        <Loader />
                     </div>
                 ):(
                     <div className = 'row no-gutters'>
