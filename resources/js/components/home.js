@@ -21,7 +21,7 @@ import ModalCarrito from '../components/modales/carrito';
 import ModalCodigo from '../components/modales/codigo';
 import Recipe from '../components/assets/recipe-card';
 import RoboshotCard from '../components/assets/roboshot-card';
-
+import Ordenes from '../components/assets/orders';
 
 function Home(props){
 
@@ -216,6 +216,7 @@ function Home(props){
     function pedirCarrito(){
 
         let data = {
+            cliente: idCliente,
             total: total,
             lista: carrito
         };
@@ -225,8 +226,9 @@ function Home(props){
         const enviar = Accion.pedido(data);
 
         enviar.then(resp => {
+            console.log(resp)
             //  muestra el modal del codigo
-            setModalCodigo(true);
+            //setModalCodigo(true);
             //  almacena el codigo generado
             setCodigo(resp.data);
             //  vacia el carrito y pone el contador en 0
@@ -263,10 +265,16 @@ function Home(props){
                         abrirManual = {(e) => abrirManual(e)}
                     />
                 </Route>
+                <Route exact path = '/ordenes'>
+                    <Ordenes 
+                        logueado = {login}
+                        usuario = {dataUser}
+                    />
+                </Route>
             </Switch>
             
         </div>
-        <ModalReceta 
+            <ModalReceta 
                 activo = {modalReceta} 
                 inactivo = {(e) => cerrarReceta(e)} 
                 idReceta = {idReceta}

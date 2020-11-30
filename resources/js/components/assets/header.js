@@ -7,7 +7,7 @@ import logo from '../../img/roboshot-logo-1.png';
 
 //  iconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faShoppingCart, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { faShoppingCart, faUserAlt, faSignOutAlt, faShoppingBasket} from "@fortawesome/free-solid-svg-icons";
 
 const Header = (props) => {
 
@@ -29,9 +29,9 @@ const Header = (props) => {
         <nav className = 'navbar nabvar-expanded-md navbar-dark bg-light'>
             <div className = 'container'>
                 <div className = 'col-md-8'>
-                    <a className = 'navbar-brand'>
+                    <Link to = '/' className = 'navbar-brand'>
                         <img className = 'logo' src = {logo}  alt = '' />
-                    </a>
+                    </Link>
                 </div>
                 
                 <div className = 'col-md-4'>
@@ -39,16 +39,41 @@ const Header = (props) => {
                         <FontAwesomeIcon icon={faShoppingCart} /> <span className="badge badge-light" id="NumCarrito">{props.counter}</span>
                     </button>
                     {login ? (
-                        <button className = 'btn btn-outline-secondary btn-radius float-right' onClick = {(e) => cerrarSesion(e)}>
-                            <div className = ' flexContainer'>
-                                <div>
-                                    <FontAwesomeIcon icon = {faSignOutAlt} />
+                        <div className="dropleft float-right">
+                            <button className="btn btn-outline-secondary " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div className = 'flexContainer'>
+                                    <div className = 'dropdown-toggle'>
+                                        <FontAwesomeIcon icon = {faUserAlt} />
+                                    </div>
+                                    <div className = 'customSpan'>
+                                        {data.usuario}
+                                    </div>
                                 </div>
-                                <div className = 'customSpan'>
-                                    Cerrar Sesión
-                                </div> 
-                            </div> 
-                        </button>
+                            </button>
+                            <div className="dropdown-menu">
+                                <Link to = '/ordenes' className = 'dropdown-item'>
+                                    <div className = 'flexContainer'>
+                                        <div>
+                                            <FontAwesomeIcon icon = {faShoppingBasket} />
+                                        </div>
+                                        <div className = 'customSpan'>
+                                            Ordenes
+                                        </div>
+                                    </div>
+                                </Link>
+                                <div className="dropdown-divider"></div>
+                                <button className="dropdown-item" onClick = {(e) => cerrarSesion(e)}>
+                                    <div className = 'flexContainer'>
+                                        <div>
+                                            <FontAwesomeIcon icon = {faSignOutAlt} />
+                                        </div>
+                                        <div className = 'customSpan'>
+                                            Cerrar Sesión
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
                     ):(
                         <>
                             <Link to = {"/registro"} className = 'btn btn-outline-primary btn-radius'>Registrate</Link>

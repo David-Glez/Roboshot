@@ -58,9 +58,9 @@ class WebController extends Controller
 
     //  captura el pedido y genera el codigo para canjear
     public function pedido(Request $request){
-        
+        return response()->json($request);
         //  se genera el código del pedido
-        $cadena = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        /*$cadena = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $longitud = strlen($cadena);
         $codigo = 'rob-web-';
 
@@ -75,6 +75,6 @@ class WebController extends Controller
         $pedidos->save();
 
         //  devuelve el codigo del pedido
-        return response()->json($codigo);
+        return response()->json($codigo);*/
     }
 }

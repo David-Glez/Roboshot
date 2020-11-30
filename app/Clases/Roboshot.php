@@ -30,6 +30,7 @@ class Roboshot{
         //  tabla para categorias
         Schema::connection('roboshot')->create('categorias', function(Blueprint $table){
             $table->integer('idCategoria');
+            $table->integer('roboshot')->nullable();
             $table->string('nombre')->nullable();
             $table->date('actualizado');
         });
@@ -37,6 +38,7 @@ class Roboshot{
         //  tabla para recetas
         Schema::connection('roboshot')->create('recetas', function(Blueprint $table){
             $table->integer('idReceta');
+            $table->integer('roboshot')->nullable();
             $table->string('nombre')->nullable();
             $table->string('descripcion')->nullable();
             $table->float('precio', 4, 2);
@@ -48,7 +50,9 @@ class Roboshot{
         //  tabla para ingredientes
         Schema::connection('roboshot')->create('ingredientes', function(Blueprint $table){
             $table->integer('idIngrediente');
+            $table->integer('roboshot')->nullable();
             $table->integer('categoria')->nullable();
+            $table->integer('posicion')->nullable();
             $table->string('marca')->nullable();
             $table->float('precio', 4, 2);
             $table->date('actualizado');
@@ -153,12 +157,14 @@ class Roboshot{
                 $ingrediente = new Ingredientes;
                 $ingrediente->idIngrediente = $item->id;
                 $ingrediente->categoria = $item->category;
+                $ingrediente->posicion = $item->pos;
                 $ingrediente->marca = $item->marca;
                 $ingrediente->precio = $item->price;
                 $ingrediente->actualizado = Carbon::now();
                 $ingrediente->save();
             }else{
                 $busca->categoria = $item->category;
+                $busca->posicion = $item->pos;
                 $busca->marca = $item->marca;
                 $busca->precio = $item->price;
                 $busca->actualizado = Carbon::now();

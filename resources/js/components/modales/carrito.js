@@ -14,6 +14,9 @@ import { Modal, Spinner }from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
+//  componentes
+import SinElementos from '../alertas/vacio';
+
 const Contenido = (props) => {
 
     const lista = props.lista;
@@ -35,40 +38,48 @@ const Contenido = (props) => {
         <>
         <Modal.Body>
             <div className = 'container'>
-                <div className = 'row'>
-                    <div className = 'col-md-12'>
-                        <ul className = 'list-group scrollDiv'>
-                            
-                            {lista.map((item, index) => {
-                                return(
-                                    <li className = 'list-group-item d-flex justify-content-between align-items-center' key = {index}>
-                                        <div className = 'image-parent'>
-                                            <img className = 'img-fluid' src = {window.location.origin+''+item.img} />
-                                        </div>
-                                        <div>
-                                            {item.nombre}
-                                        </div>
-                                        <div>
-                                            <label className = 'primaryText'>
-                                                Precio:
-                                            </label>
-                                            <span className = 'text-success'>${parseFloat(item.precio).toFixed(2)}</span>
-                                        </div>
-                                        <a className = 'btn btn-danger' onClick = {() => eliminaReceta(item.prod) } >
-                                            <FontAwesomeIcon icon={faTrashAlt} />
-                                        </a>
-                                    </li>
-                                )
-                            })}
-                        </ul>
+                {(lista == '') ? (
+                    <div className = 'row superior'>
+                        <SinElementos />
                     </div>
-                </div>
-                <div className = 'form-group'>
-                    <label className = 'primaryText'>
-                        Total:
-                    </label>
-                    <span className = 'text-success'>${parseFloat(precio).toFixed(2)}</span>
-                </div>
+                ):(
+                    <>
+                    <div className = 'row'>
+                        <div className = 'col-md-12'>
+                            <ul className = 'list-group scrollDiv'>
+                                {lista.map((item, index) => {
+                                    return(
+                                        <li className = 'list-group-item d-flex justify-content-between align-items-center' key = {index}>
+                                            <div className = 'image-parent'>
+                                                <img className = 'img-fluid' src = {window.location.origin+''+item.img} />
+                                            </div>
+                                            <div>
+                                                {item.nombre}
+                                            </div>
+                                            <div>
+                                                <label className = 'primaryText'>
+                                                    Precio:
+                                                </label>
+                                                <span className = 'text-success'>${parseFloat(item.precio).toFixed(2)}</span>
+                                            </div>
+                                            <a className = 'btn btn-danger' onClick = {() => eliminaReceta(item.prod) } >
+                                                <FontAwesomeIcon icon={faTrashAlt} />
+                                            </a>
+                                        </li>
+                                    )
+                                })}
+                            </ul>
+                        </div>
+                    </div>
+                    <div className = 'form-group'>
+                        <label className = 'primaryText'>
+                            Total:
+                        </label>
+                        <span className = 'text-success'>${parseFloat(precio).toFixed(2)}</span>
+                    </div>
+                </>
+                )}
+                
             </div>
         </Modal.Body>
         <Modal.Footer>

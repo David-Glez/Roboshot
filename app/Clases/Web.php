@@ -72,14 +72,17 @@ class Web{
                 'nombre' => $ing->marca,
                 'idCategoria' => $cat->idCategoria,
                 'categoria' => $cat->nombre,
-                'cantidad' => $item->cantidad
+                'posicion' => $ing->posicion,
+                'cantidad' => $item->cantidad,
+                'precio' => $ing->precio
             );
 
             $lista[] = $data;
         }
-
+ 
         $datos = array(
             'idReceta' => $recipes->idReceta,
+            'idCliente' => $idCliente,
             'nombre' => $recipes->nombre,
             'descripcion' => $recipes->descripcion,
             'precio' => $recipes->precio,

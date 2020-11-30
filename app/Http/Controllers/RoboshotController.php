@@ -61,6 +61,7 @@ class RoboshotController extends Controller
 
     //  actualizar roboshot
     public function actualizarLocal(Request $request){
+        
         //  verifica si los campos usuario y esquema estan definidos
         if(isset($request->usuarioWeb) && isset($request->esquema)){
             //$usuario = User::where('nombre', $request->usuarioweb)->first();

@@ -191,6 +191,7 @@ const Contenido = (props) => {
                 nombre: ing[0].marca,
                 idCategoria: categoria,
                 categoria: cat[0].nombre,
+                posicion: ing[0].posicion,
                 cantidad: cantidad,
                 precio: precioBebida
             };
