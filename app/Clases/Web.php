@@ -10,10 +10,12 @@ use Carbon\Carbon;
 
 //  modelos
 use App\Models\Recetas;
-use App\Models\Clientes;
 use App\Models\Ingredientes;
 use App\Models\RecetaIngredientes;
 use App\Models\Categorias;
+use App\Models\RecetaPedidos;
+use App\Models\IngredientePedidos;
+use App\Models\Pedidos;
 
 
 class Web{
@@ -91,6 +93,61 @@ class Web{
         );
 
         return $datos;
+    }
+
+    public static function codigo($codigo){
+        $recetaPedido = [];
+        
+        //  busca el pedido con el codigo
+        $pedido = Pedidos::where('codigo', $codigo->codigo)->first();
+
+        //  busca las recetas del pedido
+        $recetas = RecetaPedidos::where('codigo', $codigo->codigo)->get();
+
+        //  busca los ingredientes
+        foreach($recetas as $recipe){
+
+            //  llave compuesta
+            $id = $codigo->codigo.'-'.$recipe->idProd;
+            $ingredientePedido = [];
+
+            $ingredientes = IngredientePedidos::where('codigoProd', $id)->get();
+
+            //  genera la lista de ingredientes por receta
+            foreach($ingredientes as $ing){
+                $ingr = array(
+                    'idIngrediente' => $ing->idIngrediente,
+                    'idCategoria' => $ing->idCategoria,
+                    'posicion' => $ing->posicion,
+                    'marca' => $ing->marca,
+                    'cantidad' => $ing->cantidad,
+                    'precio' => $ing->precio
+                );
+                $ingredientePedido[] = $ingr;
+            }
+
+            $rec = array(
+                'idProd' => $recipe->idProd,
+                'idReceta' => $recipe->idReceta,
+                'idCliente' => $recipe->idCliente,
+                'nombre' => $recipe->nombre,
+                'precio' => $recipe->precio,
+                'ingredientes' => $ingredientePedido
+            );
+
+            $recetaPedido[] = $rec;
+            
+        }
+
+        $data = array(
+            'codigo' => $codigo->codigo,
+            'idUsuario' => $pedido->idUsuario,
+            'total' => $pedido->total,
+            'cliente' => '-',
+            'lista'=> $recetaPedido
+        );
+
+        return $data;
     }
 
 }

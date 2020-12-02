@@ -11,6 +11,7 @@ use App\Models\Clientes;
 use App\Models\Roboshots;
 
 use App\Clases\Roboshot;
+use App\Clases\ClientesWeb;
 
 
 class UsuariosController extends Controller
@@ -124,6 +125,17 @@ class UsuariosController extends Controller
             );
         }
         return response()->json($resultado);
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //          funciones para usuarios comunes
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    public function usuario($id){
+
+        $x = ClientesWeb::dataUsuario($id);
+
+        return response()->json($x);
     }
 
 }

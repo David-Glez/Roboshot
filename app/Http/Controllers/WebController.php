@@ -11,6 +11,8 @@ use App\Clases\Web;
 use App\Models\Clientes;
 use App\Models\Recetas;
 use App\Models\Pedidos;
+use App\Models\RecetaPedidos;
+use App\Models\IngredientePedidos;
 
 class WebController extends Controller
 {
@@ -58,9 +60,9 @@ class WebController extends Controller
 
     //  captura el pedido y genera el codigo para canjear
     public function pedido(Request $request){
-        return response()->json($request);
+        
         //  se genera el código del pedido
-        /*$cadena = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $cadena = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $longitud = strlen($cadena);
         $codigo = 'rob-web-';
 
@@ -71,10 +73,52 @@ class WebController extends Controller
         //  se inserta el codigo de pedido en la base de datos
         $pedidos = new Pedidos;
         $pedidos->codigo = $codigo;
+        $pedidos->idUsuario = $request->usuario;
         $pedidos->total = $request->total;
         $pedidos->save();
 
+        //  se decodifican las recetas solicitadas
+        $arrayRecetas = json_decode($request->lista);
+
+        //  se recorre el arreglo para insertar en bd
+        foreach($arrayRecetas as $receta){
+
+            $recetaPedido = new RecetaPedidos;
+            $recetaPedido->codigo = $codigo;
+            $recetaPedido->idProd = $receta->prod;
+            $recetaPedido->idReceta = $receta->idReceta;
+            $recetaPedido->idCliente = $receta->idCliente;
+            $recetaPedido->nombre = $receta->nombre;
+            $recetaPedido->precio = $receta->precio;
+            $recetaPedido->save();
+
+            //  se decodifican los ingredientes de la receta
+            $arrayIngredientes = json_decode($receta->ingredientes);
+
+            //  se insertan los ingredientes de la receta
+            foreach($arrayIngredientes as $ingredientes){
+                $ingredientesPedidos = new IngredientePedidos;
+                $ingredientesPedidos->codigoProd = $codigo.'-'.$receta->prod;
+                $ingredientesPedidos->idIngrediente = $ingredientes->idIngrediente;
+                $ingredientesPedidos->idCategoria = $ingredientes->idCategoria;
+                $ingredientesPedidos->marca = $ingredientes->nombre;
+                $ingredientesPedidos->posicion = $ingredientes->posicion;
+                $ingredientesPedidos->cantidad = $ingredientes->cantidad;
+                $ingredientesPedidos->precio = $ingredientes->precio;
+                $ingredientesPedidos->save();
+            }
+            
+        }
+
         //  devuelve el codigo del pedido
-        return response()->json($codigo);*/
+       return response()->json($codigo);
+    }
+
+    //  consulta del codigo para estacion local
+    public function codigo(Request $request){
+
+        $x = Web::codigo($request);
+
+        return response()->json($x);
     }
 }

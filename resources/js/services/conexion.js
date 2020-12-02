@@ -1,4 +1,6 @@
 import http from './base';
+
+import authHeader from './auth/header-auth';
  
 class Accion{
 
@@ -25,6 +27,15 @@ class Accion{
     /****** Crea un nuevo pedido ******/
     pedido(data){
         return http.post('/pedido/nuevo', data);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    //          RUTAS CON MIDDLEWARE
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*****  Trae los datos del usuario  *****/
+    datosUsuario(id){
+        return http.get('/usuario/data/'+id, {headers: authHeader()});
     }
 }
 

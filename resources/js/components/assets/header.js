@@ -51,13 +51,13 @@ const Header = (props) => {
                                 </div>
                             </button>
                             <div className="dropdown-menu">
-                                <Link to = '/ordenes' className = 'dropdown-item'>
+                                <Link to = '/perfil' className = 'dropdown-item'>
                                     <div className = 'flexContainer'>
                                         <div>
-                                            <FontAwesomeIcon icon = {faShoppingBasket} />
+                                            <FontAwesomeIcon icon = {faUserAlt} />
                                         </div>
                                         <div className = 'customSpan'>
-                                            Ordenes
+                                            Perfil
                                         </div>
                                     </div>
                                 </Link>

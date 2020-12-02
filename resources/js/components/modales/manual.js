@@ -193,7 +193,7 @@ const Contenido = (props) => {
                 categoria: cat[0].nombre,
                 posicion: ing[0].posicion,
                 cantidad: cantidad,
-                precio: precioBebida
+                precio: precioU
             };
 
             setCantidadBebida(cantidadBebida + cantidadU);

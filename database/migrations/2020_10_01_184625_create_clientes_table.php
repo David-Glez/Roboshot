@@ -21,6 +21,7 @@ class CreateClientesTable extends Migration
             $table->string('nombres');
             $table->string('apellidoPaterno');
             $table->string('apellidoMaterno')->nullable();
+            $table->date('fechaNacimiento')->nullable();
             $table->string('RFC')->nullable();
             $table->string('email');
             $table->string('esquema')->nullable();

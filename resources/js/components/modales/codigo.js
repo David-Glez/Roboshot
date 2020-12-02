@@ -3,10 +3,13 @@ import React from 'react';
 //  Estilos
 import { Modal}from 'react-bootstrap';
 
+//  componentes
+import QRGenerator from '../assets/qr-generator';
 
 const ModalCodigo = (props) => {
     const ver = props.activo;
     const cerrar = props.inactivo;
+    const codigo = props.codigo;
 
     if(ver){
         return(
@@ -28,16 +31,17 @@ const ModalCodigo = (props) => {
                     </button>
                 </Modal.Header>
                 <Modal.Body>
-                    <div className = 'form-group'>
-                        <label className = 'primaryText'>
-                            Código:
-                        </label>
-                        <h3>{props.codigo}</h3>
+                    <div className = 'row'>
+                        <div className = 'col-md-6'>
+                            <QRGenerator 
+                                codigo = {codigo}
+                            />
+                        </div>
+                        <div className = 'col-md-6'>
+                            <p>Escanea este QR en la estación Roboshot y disfruta tus bebidas!</p>
+                            <small>** Verifica disponibilidad</small>
+                        </div>
                     </div>
-                    <p>
-                        Este código es canjeable en cualquier estación Roboshot, sientete libre de usarlo
-                        (Verifica la disponibilidad de tu bebida en la estación)
-                    </p>
                 </Modal.Body>
                 <Modal.Footer>
                     <button className = 'btn btn-success float-center' onClick = {props.inactivo}>

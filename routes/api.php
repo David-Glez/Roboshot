@@ -22,6 +22,9 @@ Route::group([
     //  trae todas los clientes registrados
     Route::get('/inicio', 'WebController@inicio');
 
+    //  consulta a bd remota desde estacion local para codigo QR
+    Route::post('/codigo', 'WebController@codigo');
+
     //  trae todas las recetas de un solo cliente
     Route::get('/receta/{idCliente}', 'WebController@recetasCliente');
 
@@ -33,6 +36,13 @@ Route::group([
 
     //  captura el pedido, lo guarda y genera el codigo para canjear
     Route::post('/pedido/nuevo', 'WebController@pedido');
+
+    //  rutas para la modificacion y consulta de los datos del usuario
+    Route::group([
+        'middleware' => 'auth:api'
+    ], function(){
+        Route::get('/usuario/data/{id}', 'UsuariosController@usuario');
+    });
 });
 
 //rutas de login y administracion

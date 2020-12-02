@@ -30,7 +30,7 @@ class Index extends Component{
                     <Route path = '/login' component = {Login} />
                     <Route path = '/registro' component = {Register} />
                     <Route path = '/roboshot' component = {Home} />
-                    <Route path = '/ordenes' component = {Home} />
+                    <Route path = '/perfil' component = {Home} />
                 </Switch>       
             </BrowserRouter>
         )
