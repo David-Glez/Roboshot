@@ -20,7 +20,7 @@ class CreateIngredientePedidosTable extends Migration
             $table->string('marca');
             $table->integer('posicion');
             $table->integer('cantidad');
-            $table->float('precio', 4,2);
+            $table->float('precio');
             $table->timestamps();
         });
     }

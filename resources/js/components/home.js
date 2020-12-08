@@ -71,21 +71,26 @@ function Home(props){
 
     //  cerrar sesion para clientes
     const logOut = () => {
-        AuthService.logout();
-        setLogin(false);
-        setDataUser('');
-        //  toast de carrito vacio
-        toast.warning('Sesión cerrada',{
-            position: toast.POSITION.TOP_CENTER,
-            autoClose: 4000,
-            hideProgressBar: false,
-            newestOnTop: false,
-            closeOnClick: true,
-            rtl: false,
-            draggable: true,
-            pauseOnHover: true,
-            progress: undefined
+        const envio = AuthService.logout();
+        envio.then(resp => {
+            if(resp.data.status == true){
+                setLogin(false);
+                setDataUser('');
+                //  toast de sesion cerrada
+                toast.warning(resp.data.mensaje,{
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    newestOnTop: false,
+                    closeOnClick: true,
+                    rtl: false,
+                    draggable: true,
+                    pauseOnHover: true,
+                    progress: undefined
+                });
+            }
         });
+        
     };
 
     //  abrir modal de usuario
@@ -321,6 +326,7 @@ function Home(props){
             <ModalUsuario 
                 activo = {modalUsuario}
                 inactivo = {(e) => cerrarUsuario(e)}
+                id = {dataUser.id}
             />
 
             <ModalPedido 

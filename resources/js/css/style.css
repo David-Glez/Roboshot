@@ -69,6 +69,12 @@ nav ul{
   height: 300px;
 }
 
+.modalTransparente .modal-content{
+  background-color: transparent;
+  border: 0px;
+  border-color: transparent;
+}
+
 .new-recipe{
   position: fixed;
   padding: 20px;
@@ -170,6 +176,11 @@ nav ul{
 
 .card-containerLogin.card {
   max-width: 350px !important;
+  padding: 40px 40px;
+}
+
+.card-containerEdit.card {
+  max-width: 520px !important;
   padding: 40px 40px;
 }
 

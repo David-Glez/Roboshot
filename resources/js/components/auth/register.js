@@ -7,6 +7,7 @@ import logo from '../../img/roboshot-logo-1.png'
 import Form from 'react-validation/build/form';
 import Input from 'react-validation/build/input';
 import CheckButton from 'react-validation/build/button';
+import Select from 'react-validation/build/select';
 
 //  api para control de login y registro
 import AuthService from '../../services/auth/autenticacion';
@@ -14,6 +15,10 @@ import AuthService from '../../services/auth/autenticacion';
 //  libreria toast
 import { ToastContainer, toast, Flip } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+//  datepicker
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 const required = (value) =>{
     if(!value){
@@ -38,7 +43,28 @@ const Register = (props) => {
     const [email, setEmail] = useState("");
     const [usuario, setUsuario] = useState("");
     const [contrasena, setContrasena] = useState("");
+    const [diaN, setDiaN] = useState(0);
+    const [mesN, setMesN] = useState(0);
+    const [yearN, setYearN] = useState();
     const [loading, setLoading] = useState(false);
+    const [dias, setDias] = useState([1,2,3,4,5,6,7,8,9,10,
+                                    11,12,13,14,15,16,17,18,19,20,
+                                    21,22,23,24,25,26,27,28,29,30,31]);
+    const [meses, setMeses] = useState([
+        {m:1, n:'Enero'},
+        {m:2, n:'Febrero'},
+        {m:3, n:'Marzo'},
+        {m:4, n:'Abril'},
+        {m:5, n:'Mayo'},
+        {m:6, n:'Junio'},
+        {m:7, n:'Julio'},
+        {m:8, n:'Agosto'},
+        {m:9, n:'Septiembre'},
+        {m:10, n:'Octubre'},
+        {m:11, n:'Noviembre'},
+        {m:12, n:'Diciembre'},
+    ]);
+    
 
     //  funcion que guarda el nombre
     const onChangeNombre = (e) => {
@@ -70,9 +96,49 @@ const Register = (props) => {
         setContrasena(password);
     };
 
+    //  funcion que guarda el dia selecionado
+    const onChangeDia = (e) => {
+        const day = e.target.value;
+        setDiaN(day);
+    };
+
+    //  funcion que guarda el mes seleccionado
+    const onChangeMes = (e) => {
+        const month = e.target.value;
+        setMesN(month);
+    }
+
+    //  funcion que guarda el año escrito
+    const onChangeYear = (e) => {
+        const year = e.target.value;
+        setYearN(year);
+    };
+
     //cerrar toast
     const cerrarToast = () =>{
         props.history.push('/');
+    };
+
+    //  dias para el select
+    const diasSelect = () => {
+        return dias.map((number) => {
+            return(
+                <option key = {number} value = {number}>
+                    {number}
+                </option>
+            )
+        })
+    };
+
+    //  meses para el select
+    const mesesSelect = () => {
+        return meses.map((item, index) => {
+            return(
+                <option key = {index} value = {item.m}>
+                    {item.n}
+                </option>
+            )
+        })
     };
 
     //  funcion que envia los datos a insertar en la bd
@@ -87,13 +153,18 @@ const Register = (props) => {
             apellido: apellido,
             correo: email,
             usuario: usuario,
-            contrasena: contrasena
+            contrasena: contrasena,
+            diaN: diaN,
+            mesN: mesN,
+            yearN: yearN
         };
 
         //  validacion del formulario
         form.current.validateAll();
 
         if(checkBtn.current.context._errors.length == 0){
+
+            console.log(data)
             //  envio de los datos al backend
             const envio = AuthService.registrar(data);
             
@@ -197,6 +268,54 @@ const Register = (props) => {
                                             value = {email}
                                             onChange = {onChangeEmail}
                                             validations = {[required]} 
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className = 'row'>
+                                <div className = 'col-sm-12'>
+                                    <div className = 'form-group'>
+                                        <small>Fecha de Nacimiento</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className = 'row'>
+                                <div className = 'col-sm-3'>
+                                    <div className = 'form-group'>
+                                        <Select
+                                            className = 'form-control'
+                                            name = 'dia'
+                                            validations = {[required]} 
+                                            onChange = {onChangeDia}
+                                        >
+                                            <option value = ''>Día</option>
+                                            {diasSelect()}
+                                        </Select>
+                                    </div>
+                                </div>
+                                <div className = 'col-sm-6'>
+                                    <div className = 'form-group'>
+                                        <Select
+                                            className = 'form-control'
+                                            name = 'mes'
+                                            validations = {[required]} 
+                                            onChange = {onChangeMes}
+                                        >
+                                            <option value = ''>Mes</option>
+                                            {mesesSelect()}
+                                        </Select>
+                                    </div>
+                                </div>
+                                <div className = 'col-sm-3'>
+                                    <div className = 'form-group'>
+                                        <Input
+                                            type = 'text'
+                                            className = 'form-control '
+                                            name = 'yearN'
+                                            placeholder = 'Año' 
+                                            value = {yearN}
+                                            onChange = {onChangeYear}
+                                            validations = {[required]}
                                         />
                                     </div>
                                 </div>

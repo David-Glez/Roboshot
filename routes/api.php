@@ -41,7 +41,12 @@ Route::group([
     Route::group([
         'middleware' => 'auth:api'
     ], function(){
+
+        //  trae los datos de un solo usuario
         Route::get('/usuario/data/{id}', 'UsuariosController@usuario');
+
+        //  actualiza los datos del usuario
+        Route::post('/usuario/data/actualizar', 'UsuariosController@actualizaUsuario');
     });
 });
 
@@ -55,6 +60,7 @@ Route::group([
     Route::post('/login', 'InicioController@inicio');
     Route::post('/registrar', 'InicioController@registro');
     Route::get('/sesion', 'InicioController@vidaSesion');
+    Route::post('/logout', 'InicioController@cerrarSesion');
 
     //  ruta para roboshot local
     Route::post('/roboshots/local/actualizar', 'RoboshotController@actualizarLocal');

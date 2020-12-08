@@ -28,7 +28,15 @@ const sessionLive = () =>{
 
 //funcion para cerrar sesion
 const logout = () =>{
-    localStorage.removeItem('user');
+    
+    return axios
+            .post(API_URL + '/logout')
+            .then((response) =>{
+                if(response.data.status){
+                    localStorage.removeItem('user');
+                }
+                return response;
+            });
 };
 
 //funcion para tomar los elementos del usuario

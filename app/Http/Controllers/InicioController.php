@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 use App\Models\Roles;
 use App\Models\User;
 use App\Models\Clientes;
@@ -53,37 +54,50 @@ class InicioController extends Controller
         //  cuenta las veces que esta repetido el nombre de usuario
         $count = User::where('nombre', $request->usuario)->count();
 
+        //  calcula la edad del usuario
+        $fechaHoy = Carbon::now();
+        $fechaNacimiento = Carbon::create($request->yearN, $request->mesN, $request->diaN);
+        $edad = Carbon::parse($fechaNacimiento)->floatDiffInYears($fechaHoy);
+
         if($count > 0){
             $data = array(
                 'status' => false,
                 'mensaje' => 'El nombre de usuario ya existe. Elige otro.'
             );
         }else{
+            if($edad > 18){
+                //   se añade el usuario a la tabla usuarios
+                $user = new User;
+                $user->nombre = $request->usuario;
+                $user->password = bcrypt($request->contrasena);
+                $user->idRol = 4; #id de rol por defecto para clientes
+                $user->save();
+                
+                //  id del usuario recien creado
+                $id = $user->idUsuario;
 
-            //   se añade el usuario a la tabla usuarios
-            $user = new User;
-            $user->nombre = $request->usuario;
-            $user->password = bcrypt($request->contrasena);
-            $user->idRol = 4; #id de rol por defecto para clientes
-            $user->save();
+                //  se añade a la tabla clientes
+                $general = new Clientes;
+                $general->idUsuario = $id;
+                $general->nombres = $request->nombres;
+                $general->apellidoPaterno = $request->apellido;
+                $general->fechaNacimiento = $fechaNacimiento;
+                $general->apellidoMaterno = '-'; # valor temporal, en la tabla es nulo
+                $general->email = $request->correo;
+                $general->logo = '/images/camera.jpg';  #   valor por defecto, personalizado por el usuario
+                $general->save();
+
+                $data = array(
+                    'status' => true,
+                    'mensaje' => 'Usuario Registrado :D ya puedes iniciar sesion'
+                );
+            }else{
+                $data = array(
+                    'status' => false,
+                    'mensaje' => 'Usted es menor de edad. No puede registrarse'
+                );
+            }
             
-            //  id del usuario recien creado
-            $id = $user->idUsuario;
-
-            //  se añade a la tabla clientes
-            $general = new Clientes;
-            $general->idUsuario = $id;
-            $general->nombres = $request->nombres;
-            $general->apellidoPaterno = $request->apellido;
-            $general->apellidoMaterno = '-'; # valor temporal, en la tabla es nulo
-            $general->email = $request->correo;
-            $general->logo = '/images/camera.jpg';  #   valor por defecto, personalizado por el usuario
-            $general->save();
-
-            $data = array(
-                'status' => true,
-                'mensaje' => 'Usuario Registrado :D ya puedes iniciar sesion'
-            );
         }
 
         return response()->json($data);
@@ -96,5 +110,19 @@ class InicioController extends Controller
         return response()->json($activo);
     }
 
+
+    //  funcion para cerrar sesion
+    public function cerrarSesion(Request $request){
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        $data = array(
+            'mensaje' => 'Sesión cerrada',
+            'status' => true
+        );
+        
+        return response()->json($data);
+    }
 
 }

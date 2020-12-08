@@ -193,14 +193,12 @@ const Contenido = (props) => {
                 categoria: cat[0].nombre,
                 posicion: ing[0].posicion,
                 cantidad: cantidad,
-                precio: precioU
+                precio: parseFloat(precioU)
             };
 
             setCantidadBebida(cantidadBebida + cantidadU);
             setPrecioReceta(precioReceta + precioBebida);
             setPedido(pedido => [...pedido, pedidos]);
-
-            console.log(pedido)
 
         }else{
             toast.warning('Éste ingrediente ya está añadido',{

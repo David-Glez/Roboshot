@@ -55,6 +55,7 @@ class ClientesWeb{
                 foreach($ingredientePedido as $i){
 
                     $dataIngr = array(
+                        'codProd' => $cod,
                         'idIngrediente' => $i->idIngrediente,
                         'idCategoria' => $i->idCategoria,
                         'marca' => $i->marca,

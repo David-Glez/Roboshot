@@ -37,6 +37,11 @@ class Accion{
     datosUsuario(id){
         return http.get('/usuario/data/'+id, {headers: authHeader()});
     }
+
+    /*****  Actualiza los datos del usuario *****/
+    actualizaUsuario(data){
+        return http.post('/usuario/data/actualizar', data, {headers: authHeader()})
+    }
 }
 
 export default new Accion();

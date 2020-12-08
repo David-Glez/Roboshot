@@ -19,7 +19,7 @@ class CreateRecetaPedidosTable extends Migration
             $table->integer('idReceta');
             $table->integer('idCliente');
             $table->string('nombre');
-            $table->float('precio', 4, 2);
+            $table->float('precio');
             $table->timestamps();
         });
     }

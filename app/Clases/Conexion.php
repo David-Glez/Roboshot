@@ -13,7 +13,10 @@ class Conexion{
         $nombre = $esquema;
 
         //  asigna el nombre de la base de datos en la configuracion de base de datos
-        config(['database.connections.roboshot.schema' => ''.$nombre.'']);
+        //  para postgresql
+        //config(['database.connections.roboshot.schema' => ''.$nombre.'']);
+        //  para mysql
+        config(['database.connections.roboshot.database' => ''.$nombre.'']);
         $conecta = config('database.connections.roboshot');
 
         return $conecta;
@@ -22,7 +25,10 @@ class Conexion{
      //conexion por ID de cliente
      public static function conectaID($id){
         $esquemas = Clientes::where('idCliente', $id)->first();
-        config(['database.connections.roboshot.schema' => ''.$esquemas->esquema.'']);
+        //  para postgresql
+        //config(['database.connections.roboshot.schema' => ''.$esquemas->esquema.'']);
+        //  para mysql
+        config(['database.connections.roboshot.database' => ''.$esquemas->esquema.'']);
         $conecta = config('database.connections.roboshot');
 
         return $conecta; 
@@ -30,7 +36,11 @@ class Conexion{
 
     //  cierra la conexion
     public static function desconecta(){
-        config(['database.connections.roboshot.schema' => '']);
+
+        //  para postgresql
+        //config(['database.connections.roboshot.schema' => '']);
+        //  para mysql
+        config(['database.connections.roboshot.database' => '']);
         $conecta = config('database.connections.roboshot');
         
         return $conecta;
