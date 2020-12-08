@@ -26,5 +26,9 @@ class RolSeeder extends Seeder
         DB::table('roles')->insert([
             'rol' => 'Empleado'
         ]);
+
+        DB::table('roles')->insert([
+            'rol' => 'Cliente'
+        ]);
     }
 }
