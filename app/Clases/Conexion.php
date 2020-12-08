@@ -14,9 +14,9 @@ class Conexion{
 
         //  asigna el nombre de la base de datos en la configuracion de base de datos
         //  para postgresql
-        //config(['database.connections.roboshot.schema' => ''.$nombre.'']);
+        config(['database.connections.roboshot.schema' => ''.$nombre.'']);
         //  para mysql
-        config(['database.connections.roboshot.database' => ''.$nombre.'']);
+        //config(['database.connections.roboshot.database' => ''.$nombre.'']);
         $conecta = config('database.connections.roboshot');
 
         return $conecta;
