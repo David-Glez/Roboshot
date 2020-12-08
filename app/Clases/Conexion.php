@@ -26,9 +26,9 @@ class Conexion{
      public static function conectaID($id){
         $esquemas = Clientes::where('idCliente', $id)->first();
         //  para postgresql
-        //config(['database.connections.roboshot.schema' => ''.$esquemas->esquema.'']);
+        config(['database.connections.roboshot.schema' => ''.$esquemas->esquema.'']);
         //  para mysql
-        config(['database.connections.roboshot.database' => ''.$esquemas->esquema.'']);
+        //config(['database.connections.roboshot.database' => ''.$esquemas->esquema.'']);
         $conecta = config('database.connections.roboshot');
 
         return $conecta; 
@@ -38,9 +38,9 @@ class Conexion{
     public static function desconecta(){
 
         //  para postgresql
-        //config(['database.connections.roboshot.schema' => '']);
+        config(['database.connections.roboshot.schema' => '']);
         //  para mysql
-        config(['database.connections.roboshot.database' => '']);
+        //config(['database.connections.roboshot.database' => '']);
         $conecta = config('database.connections.roboshot');
         
         return $conecta;
