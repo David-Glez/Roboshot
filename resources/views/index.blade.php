@@ -9,7 +9,7 @@
     <title>RoboShot</title>
     <link href="{{ secure_asset('css/app.css') }}" rel="stylesheet">
     <!--<link href="{{ asset('css/app.css') }}" rel="stylesheet">-->
-    <link rel="shortcut icon" href="{{ asset('images/beer.svg')}}">
+    <link rel="shortcut icon" href="{{ secure_asset('images/beer.svg')}}">
 </head>
 
 <body>
