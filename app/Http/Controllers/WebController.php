@@ -115,9 +115,9 @@ class WebController extends Controller
     }
 
     //  consulta del codigo para estacion local
-    public function codigo(Request $request){
+    public function codigo($codigo){
 
-        $x = Web::codigo($request);
+        $x = Web::codigo($codigo);
 
         return response()->json($x);
     }

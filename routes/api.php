@@ -23,7 +23,7 @@ Route::group([
     Route::get('/inicio', 'WebController@inicio');
 
     //  consulta a bd remota desde estacion local para codigo QR
-    Route::post('/codigo', 'WebController@codigo');
+    Route::get('/codigo/{codigo}', 'WebController@codigo');
 
     //  trae todas las recetas de un solo cliente
     Route::get('/receta/{idCliente}', 'WebController@recetasCliente');
