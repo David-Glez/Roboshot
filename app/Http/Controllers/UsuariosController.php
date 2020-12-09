@@ -101,6 +101,7 @@ class UsuariosController extends Controller
                 $cliente->email = $request->email;
                 $cliente->esquema = $request->esquema;
                 $cliente->directorio = $dir;
+                $cliente->logo = '/images/camera.jpg';
                 $cliente->save();
 
                 // creacion de tablas dentro del esquema nuevo
