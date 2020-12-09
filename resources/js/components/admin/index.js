@@ -60,7 +60,9 @@ function Inicio(){
     };
 
     //cerrar sesion
-    const logOut = () => {
+    const logOut = (e) => {
+        e.preventDefault();
+        setLogueado(false);
         AuthService.logout();
       };
 
@@ -82,7 +84,7 @@ function Inicio(){
                     </ul>
                     <ul className = 'navbar-nav ml-auto'>
                         <li className = 'nav-item'>
-                            <a href='/' onClick = {logOut}>
+                            <a href='#' onClick = {(e) => logOut(e)}>
                                 <div className = ' flexContainer'>
                                     <div>
                                         <FontAwesomeIcon icon = {faSignOutAlt} />
