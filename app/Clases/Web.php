@@ -99,16 +99,16 @@ class Web{
         $recetaPedido = [];
         
         //  busca el pedido con el codigo
-        $pedido = Pedidos::where('codigo', $codigo->codigo)->first();
+        $pedido = Pedidos::where('codigo', $codigo)->first();
 
         //  busca las recetas del pedido
-        $recetas = RecetaPedidos::where('codigo', $codigo->codigo)->get();
+        $recetas = RecetaPedidos::where('codigo', $codigo)->get();
 
         //  busca los ingredientes
         foreach($recetas as $recipe){
 
             //  llave compuesta
-            $id = $codigo->codigo.'-'.$recipe->idProd;
+            $id = $codigo.'-'.$recipe->idProd;
             $ingredientePedido = [];
 
             $ingredientes = IngredientePedidos::where('codigoProd', $id)->get();
@@ -140,7 +140,7 @@ class Web{
         }
 
         $data = array(
-            'codigo' => $codigo->codigo,
+            'codigo' => $codigo,
             'idUsuario' => $pedido->idUsuario,
             'total' => $pedido->total,
             'cliente' => '-',
