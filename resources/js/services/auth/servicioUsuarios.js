@@ -2,8 +2,11 @@ import axios from 'axios';
 
 import authHeader from './header-auth';
 
-//direccion para el control de sistema de administracion 
-const API_URL = "http://localhost:8081/api/auth";
+// direccion para el control de sistema de administracion local
+//const API_URL = "http://localhost:8081/api/auth";
+
+//  pruebas en heroku
+const API_URL = "https://roboshot-integra.herokuapp.com/api/auth";
 
 /*****      FUNCIONES PARA MANEJO DE USUARIOS       *****/
 
