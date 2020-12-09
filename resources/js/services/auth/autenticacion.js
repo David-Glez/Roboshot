@@ -4,7 +4,7 @@ import axios from 'axios';
 //const API_URL = 'http://localhost:8081/api/auth';
 
 //  pruebas en heroku
-const API_URL = 'https://roboshot-integra.herokuapp.com/api/auth';
+const API_URL = 'https://roboshot-integra.herokuapp.com/api/auth'; 
 
 //funcion para el login y acceder a sistema de administracion
 const login = (credenciales) =>{
