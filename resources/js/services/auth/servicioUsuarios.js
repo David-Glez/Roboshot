@@ -17,10 +17,20 @@ const nuevoCliente = (data) => {
   return axios.post(API_URL + '/usuarios/anadir', data, {headers: authHeader()});
 }
 
-// ver lista de clientes
-const clientes = () => {
-  return axios.get(API_URL + '/clientes', {headers: authHeader()});
-};
+//  ver datos de un cliente
+const infoCliente = (id) => {
+  return axios.get(API_URL + '/usuarios/'+id, {headers: authHeader()})
+}
+
+//  editar datos del cliente
+const editarCliente = (data) => {
+  return axios.post(API_URL + '/usuarios/editar', data, {headers: authHeader()});
+}
+
+//  eliminar un cliente
+const eliminarCliente = (data) => {
+  return axios.post(API_URL + '/usuarios/eliminar', data, {headers: authHeader()});
+}
 
 /**************************************************/
 
@@ -53,8 +63,10 @@ const disponible = (data) => {
     verUsuarios,
     verRoboshots,
     disponible,
-    clientes,
     nuevoCliente,
+    infoCliente,
+    editarCliente,
+    eliminarCliente,
     getModeratorBoard,
     getAdminBoard,
   };

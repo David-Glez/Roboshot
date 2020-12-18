@@ -30,7 +30,7 @@ const Header = (props) => {
             <div className = 'container'>
                 <div className = 'col-md-8'>
                     <Link to = '/' className = 'navbar-brand'>
-                        <img className = 'logo' src = {logo}  alt = '' />
+                        <img className = 'logoHome' src = {logo}  alt = '' />
                     </Link>
                 </div>
                 

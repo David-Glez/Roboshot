@@ -194,8 +194,12 @@ nav ul{
   border-radius: 50%;
 }
 
-.logo {
+.logoHome{
   height: 50px;
+}
+
+.logoAdmin {
+  height: 30px;
 }
 .icon{
 	width: 27px;

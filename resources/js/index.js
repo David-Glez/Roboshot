@@ -13,7 +13,6 @@ import './css/style.css';
 import './css/admin.css';
 import './css/preloader.css';
 
-
 //  componentes
 import Home from './components/home';
 import Inicio from './components/admin/index';

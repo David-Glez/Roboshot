@@ -72,8 +72,10 @@ Route::group([
 
         // rutas para funciones destinadas a usuarios
         Route::get('/usuarios', 'UsuariosController@inicio');
-        Route::get('/clientes', 'UsuariosController@clientes');
         Route::post('/usuarios/anadir', 'UsuariosController@anadirCliente');
+        Route::get('/usuarios/{id}', 'UsuariosController@infoCliente');
+        Route::post('/usuarios/editar', 'UsuariosController@editarCliente');
+        Route::post('/usuarios/eliminar', 'UsuariosController@eliminarCliente');
 
         // rutas para funciones destinadas a roboshots
         Route::get('/roboshots', 'RoboshotController@inicio');

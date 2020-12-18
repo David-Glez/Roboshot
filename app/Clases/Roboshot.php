@@ -1,8 +1,6 @@
 <?php
 namespace App\Clases;
 
-use Illuminate\Support\Facades\Artisan;
-
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -67,6 +65,18 @@ class Roboshot{
         });
 
         return true;
+    }
+
+    //  elimina la base de datos del roboshot
+    public static function eliminarRoboshot($esquema){
+        //eliminar esquema
+        $eliminarEsquema = DB::statement('DROP SCHEMA '.$esquema.' CASCADE');
+        
+        if($eliminarEsquema){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public static function recetasWeb($datos){

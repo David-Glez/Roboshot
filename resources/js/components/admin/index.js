@@ -7,12 +7,13 @@ import {
 }from 'react-router-dom';
 
 //componentes
-import SideBar from './sidebar/sidebar';
-import Home from './home/home';
+import Sidebar from '../admin/admin-components/sidebar/sidebar';
+import AdminNavBar from '../admin/admin-components/navbar/navbar';
+import AdminFooter from '../admin/admin-components/footer/footer';
+import DashBoard from '../admin/views/dashboard';
+import UsersAdmin from '../admin/views/users';
 import Roboshot from './roboshot/home';
 import AnadirRoboshot from './roboshot/anadirRoboshot';
-import ListaUsuarios from './usuarios/home';
-import AnadirCliente from './usuarios/anadirCliente';
 
 //libreria de iconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -25,7 +26,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 //servicio de autenticacion
 import AuthService from '../../services/auth/autenticacion';
 
-function Inicio(){
+function Inicio(props){
 
     const [usuario, setUsuario] = useState(undefined);
     const [logueado, setLogueado] = useState(true);
@@ -52,59 +53,39 @@ function Inicio(){
             }*/
         }
         inicio();
-    }, []);
-
-    //cambio de clase
-    const cambioClase = () =>{
-        setClase(!clase);
-    };
+    }, [])
 
     //cerrar sesion
     const logOut = () => {
         AuthService.logout();
-      };
+    };
+
+    //  texto del navbar
+    const getBrandText = () => {
+        return props.location.pathname;
+    }
 
     if(logueado){
         return(
             <>
-            <div className = 'wrapper'>
-                
-                <SideBar idRol ={rol} clase ={clase}/>
-                <div id = 'content'>
-                <nav className = 'navbar navbar-expand-lg navbar-light bg-light'>
-                    <ul className = 'navbar-nav'>
-                        <li className = 'nav-item'>
-                            <a href="#" onClick={cambioClase} id='sidebarCollapse' className = 'nav-link'>
-                                <FontAwesomeIcon icon={faBars} />
-                            </a>
-                            
-                        </li>
-                    </ul>
-                    <ul className = 'navbar-nav ml-auto'>
-                        <li className = 'nav-item'>
-                            <a href='/' onClick = {logOut}>
-                                <div className = ' flexContainer'>
-                                    <div>
-                                        <FontAwesomeIcon icon = {faSignOutAlt} />
-                                    </div>
-                                    <div className = 'customSpan'>
-                                        Cerrar Sesión
-                                    </div> 
-                                </div>
-                            </a>
-                            
-                        </li>
-                    </ul>
-                </nav>
+            <div className = 'wrapperAdmin'>
+                <Sidebar idRol ={rol} clase ={clase}/>
+                <div className = 'mainPanel' id = 'mainPanel'>
+                    <AdminNavBar
+                        brandText = {getBrandText()} 
+                    />
                     <Switch>
-                        <Route exact path = '/admin' component = {Home} />
-                        <Route exact path = '/admin/clientes' component = {ListaUsuarios} />
-                        <Route exact path = '/admin/clientes/anadir' component = {AnadirCliente} />
+                        <Route exact path = '/admin' component = {DashBoard} />
+                        <Route exact path = '/admin/usuarios' component = {UsersAdmin} />
+                        <Route exact path = '/admin/usuarios/anadir' component = {UsersAdmin} />
+                        <Route exact path = '/admin/usuarios/editar' component = {UsersAdmin} />
                         <Route exact path = '/admin/roboshot' component = {Roboshot} />
                         <Route exact path = "/admin/roboshot/anadir" component = {AnadirRoboshot} />
                     </Switch>
+                    <AdminFooter />
                 </div>
             </div>
+
             </>
         )
     }else{
