@@ -130,8 +130,6 @@ const UsersAdd = (props) => {
         if(checkBtn.current.context._errors.length == 0){
             const envio = UserService.nuevoCliente(data);
             envio.then(response => {
-                setLoading(false);
-                console.log(response.data);
                 if(response.data.status == true){
                     toast.success(response.data.mensaje,{
                         position: toast.POSITION.TOP_CENTER,
@@ -146,34 +144,24 @@ const UsersAdd = (props) => {
                         onClose: () => cerrarToast()
                     });
                 }else{
-                    toast.warning(response.data.mensaje,{
-                        position: toast.POSITION.TOP_CENTER,
-                        autoClose: 4000,
-                        hideProgressBar: false,
-                        newestOnTop: false,
-                        closeOnClick: true,
-                        rtl: false,
-                        draggable: true,
-                        pauseOnHover: true,
-                        progress: undefined
+                    let mensajes = response.data.mensaje;
+                    mensajes.forEach((item) => {
+                        toast.warning(item,{
+                            position: toast.POSITION.TOP_CENTER,
+                            autoClose: 4000,
+                            hideProgressBar: false,
+                            newestOnTop: false,
+                            closeOnClick: true,
+                            rtl: false,
+                            draggable: true,
+                            pauseOnHover: true,
+                            progress: undefined
+                        });
                     });
                     setLoading(false);
                 }
             })
-            .catch(function (error) {
-                setLoading(false);
-                toast.warning(error.response.mensaje,{
-                    position: toast.POSITION.TOP_CENTER,
-                    autoClose: 4000,
-                    hideProgressBar: false,
-                    newestOnTop: false,
-                    closeOnClick: true,
-                    rtl: false,
-                    draggable: true,
-                    pauseOnHover: true,
-                    progress: undefined
-                });
-              });
+            
         }else{
             setLoading(false);
         }

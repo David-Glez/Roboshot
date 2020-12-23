@@ -104,7 +104,7 @@ const UsersTable = (props) => {
             }
         };
         inicio();
-    },[]);
+    },[usuarios]);
 
     return(
         <>

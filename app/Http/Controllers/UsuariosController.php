@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Hash;
+
 use App\Models\User;
-use App\Models\Roles;
 use App\Models\Clientes;
 use App\Models\Roboshots;
 
@@ -17,6 +15,59 @@ use Carbon\Carbon;
 
 class UsuariosController extends Controller
 {
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //          informacion en dashboard
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    //  trae informacion para las cards
+    public function statsCard(){
+        if(Auth::user()->idRol == 1){
+            $dataUser = 'No hay registros';
+            $dataClient = 'No hay registros';
+            $dataRoboshot = 'No hay registros';
+            $ultimoRob = '';
+            $ultimoUsuario = '';
+            $ultimoCliente = '';
+            $usuarios = User::all()->count();
+            if($usuarios > 0){
+                $lastUser = User::all()->last();
+                $ultimoUsuario = Carbon::parse($lastUser->updated_at);
+                $dataUser = $ultimoUsuario->diffForHumans();
+            }
+            
+            $clientes = User::where('idRol', 2)->count();
+            if($clientes > 0){
+                $lastClient = Clientes::all()->last();
+                $ultimoCliente = Carbon::parse($lastClient->updated_at);
+                $dataClient = $ultimoCliente->diffForHumans();
+            }
+            
+            $roboshots = Roboshots::all()->count();
+            if($roboshots > 0){
+                $lastRob = Roboshots::all()->last();
+                $ultimoRob = Carbon::parse($lastRob->updated_at);
+                $dataRoboshot = $ultimoRob->diffForHumans();
+            }
+           
+            $data = array(
+                'usuarios' => $usuarios,
+                'fechaUsuario' => $ultimoUsuario,
+                'mensajeUsuario' => $dataUser,
+                'clientes' => $clientes,
+                'fechaCliente' => $ultimoCliente,
+                'mensajeCliente' => $dataClient,
+                'roboshots' => $roboshots,
+                'fechaRoboshot' => $ultimoRob,
+                'mensajeRoboshot' => $dataRoboshot
+
+            );
+        }
+        return response()->json($data);
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //          funciones para usuarios clientes
+    //////////////////////////////////////////////////////////////////////////////////////////
     //ver usuarios del sistema con los request correspondientes
     public function inicio(){
         if(Auth::user()->idRol == 1){
@@ -89,72 +140,9 @@ class UsuariosController extends Controller
     //  actualiza los datos del usuario
     public function actualizaUsuario(Request $request){
 
-        //  verifica que la sesion este iniciada
-        $activo = Auth::check();
-        if($activo){
+        $x = ClientesWeb::updateUsuario($request);
 
-            //  verifica que la contraseña sea igual que en la base de datos
-            $confirmPassword = Hash::check($request->contrasena, $request->user()->password);
-            if($confirmPassword){
-                
-                if($request->hasFile('img')){
-                    //  en el caso de que haya cargada una imagen desde el formulario
-                    $this->validate($request, [
-                        'img' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                    ]);
-
-                    $fecha = Carbon::now()->format('Y-m-d');
-                    $img = $request->file('img');
-                    $extension = $img->getClientOriginalExtension();
-
-                    //  nombre del archivo nuevo
-                    $nombre = $fecha.'-'.Auth::user()->idUsuario.'-'.Auth::user()->nombre.'.'.$extension;
-                    
-                    //  se mueve el archivo al storage local
-                    $path = Storage::putFileAs('public/img-users', $img, $nombre);
-
-                    //  direccion publica de la img
-                    $dir = '/storage/img-users/'.$nombre;
-
-                    //  actualizacion de datos
-                    $cliente = Clientes::where('idUsuario', Auth::user()->idUsuario)->first();
-                    $cliente->nombres = $request->nombres;
-                    $cliente->apellidoPaterno = $request->apellidos;
-                    $cliente->email = $request->email;
-                    $cliente->logo = $dir;
-                    $cliente->update();
-
-                    $data = array(
-                        'status' => true,
-                        'mensaje' => 'Datos actualizados'
-                    );
-                }else{
-                    //  en el caso de que la imagen de perfil no se vaya a actualizar
-                    $usuario = Clientes::where('idUsuario', Auth::user()->idUsuario)->first();
-                    $usuario->nombres = $request->nombres;
-                    $usuario->apellidoPaterno = $request->apellidos;
-                    $usuario->email = $request->email;
-                    $usuario->update();
-
-                    $data = array(
-                        'status' => true,
-                        'mensaje' => 'Datos actualizados'
-                    );
-                }
-            }else{
-                $data = array(
-                    'status' => false,
-                    'mensaje' => 'La contraseña es incorrecta'
-                );
-            }
-        }else{
-            $data = array(
-                'status' => false,
-                'mensaje' => 'La sesión no esta iniciada'
-            );
-        }
-
-        return response()->json($data);
+        return response()->json($x);
     }
 
 }

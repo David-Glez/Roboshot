@@ -7,7 +7,7 @@ const AdminFooter = (props) => {
 
     return(
         <>
-        <footer className=" footer footerAdmin">
+        <footer className="  footerAdmin">
             <div className = 'container-fluid'>
                 <p className="copyright pull-right">
                     &copy; {new Date().getFullYear()}{" "}

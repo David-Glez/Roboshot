@@ -34,6 +34,15 @@ const eliminarCliente = (data) => {
 
 /**************************************************/
 
+/*****      FUNCIONES GENERALES       *****/
+
+//  informacion para cards
+const statsCard = () => {
+  return axios.get(API_URL + '/general/stats', {headers: authHeader()});
+}
+
+/**************************************************/
+
 /*****      FUNCIONES PARA MANEJO DE ROBOSHOTS      *****/
 
 // Mostrar la lista de roboshots registrados
@@ -60,6 +69,7 @@ const disponible = (data) => {
   };
   
   export default {
+    statsCard,
     verUsuarios,
     verRoboshots,
     disponible,

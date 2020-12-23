@@ -100,7 +100,7 @@ const Login = (props) =>{
             <div className = 'container'>
                 <div className = 'col-md-8'>
                     <a className = 'navbar-brand'>
-                        <img className = 'logo' src = {logo}  alt = '' />
+                        <img className = 'logoHome' src = {logo}  alt = '' />
                     </a>
                 </div>
                 

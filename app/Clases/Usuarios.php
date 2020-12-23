@@ -13,7 +13,6 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use App\Clases\Roboshot;
-use Illuminate\Support\Facades\Hash;
 
 class Usuarios{
 
@@ -65,7 +64,7 @@ class Usuarios{
             ]);
 
             //  nombre del directorio
-            $dir = 'rob_cliente_'.$datos->user;
+           $dir = 'rob_cliente_'.$datos->user;
 
             if($datos->hasFile('img')){
                 try{
@@ -83,12 +82,17 @@ class Usuarios{
                     $path = Storage::putFileAs('public/images/'.$dir, $image, $nombre);
 
                 }catch(ValidationException $e){
+                    $errors = [];
+                    foreach($e->errors() as $item) {
+                        foreach($item as $x){
+                            $errors[] = $x;
+                        }
+                    }
                     $data = array(
                         'status' => false,
-                        'mensaje' => 'Error al insertar',
-                        'errors' => $e->errors()
+                        'mensaje' => $errors,
                     );
-                    
+                     return $data;
                 }
             }else{
                 Storage::makeDirectory('public/images/'.$dir);
@@ -127,11 +131,18 @@ class Usuarios{
             );
 
         }catch(ValidationException $exception){
+            $errors = [];
+            foreach($exception->errors() as $item) {
+                foreach($item as $x){
+                    $errors[] = $x;
+                }
+            }
             $data = array(
                 'status' => false,
-                'mensaje' => 'Error al insertar',
-                'errors' => $exception->errors()
+                'mensaje' => $errors
             );
+
+            return $data;
             
         }
 
@@ -188,12 +199,18 @@ class Usuarios{
                 
 
             }catch(ValidationException $exception){
+                $errors = [];
+                foreach($exception->errors() as $item) {
+                    foreach($item as $x){
+                        $errors[] = $x;
+                    }
+                }
                 $data = array(
                     'status' => false,
-                    'mensaje' => 'El archivo debe ser de tipo jpeg, png, jpg o svg',
-                    'errors' => $exception->errors()
+                    'mensaje' => $errors
                 );
                 
+                return $data;
             }
         }
         $cliente->razonSocial = $datos->razonSocial;
@@ -222,16 +239,44 @@ class Usuarios{
                 'password' => ['required', 'password:api']
             ]);
 
-            $data = array(
-                'status' => true,
-                'mensaje' => 'Todo en orden'
-            );
+            //  datos del cliente
+            $cliente = Clientes::where('idUsuario', $datos->id)->first();
+
+            $eliminarEsquema = Roboshot::eliminarRoboshot($cliente->esquema);
+
+            if($eliminarEsquema){
+                //  se eliminan los datos del cliente y todo su contenido
+                //  elimina directorio
+                Storage::deleteDirectory('public/images/'.$cliente->directorio);
+
+                //  Elimina los datos generales
+                $cliente->delete();
+
+                //  elimina datos de inicio de sesion
+                $usuario = User::find($datos->id);
+                $usuario->delete();
+                
+                $data = array(
+                    'status' => true,
+                    'mensaje' => 'Todo en orden'
+                );
+            }else{
+                $data = array(
+                    'status' => false,
+                    'mensaje' => 'Error al eliminar.'
+                );
+            }
 
         }catch(ValidationException $e){
+            $errors = [];
+            foreach($e->errors() as $item) {
+                foreach($item as $x){
+                    $errors[] = $x;
+                }
+            }
             $data = array(
                 'status' => false,
-                'mensaje' => 'Error',
-                'errors' => $e->errors()
+                'mensaje' => $errors
             );
             
         }

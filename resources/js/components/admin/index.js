@@ -82,7 +82,7 @@ function Inicio(props){
                         <Route exact path = '/admin/roboshot' component = {Roboshot} />
                         <Route exact path = "/admin/roboshot/anadir" component = {AnadirRoboshot} />
                     </Switch>
-                    <AdminFooter />
+                    
                 </div>
             </div>
 

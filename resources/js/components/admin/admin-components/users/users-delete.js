@@ -46,7 +46,7 @@ const Contenido = (props) => {
 
     //  cerrar toast y redireccionar
     const cerrarToast = () => {
-        props.history.push('/admin/usuarios');
+        props.cerrar();
     }
 
     //  envio del formulario
@@ -65,8 +65,6 @@ const Contenido = (props) => {
         if(checkBtn.current.context._errors.length == 0){
             const envio = UserService.eliminarCliente(data);
             envio.then(response => {
-                setLoading(false);
-                console.log(response.data)
                 if(response.data.status == true){
                     toast.success(response.data.mensaje,{
                         position: toast.POSITION.TOP_CENTER,
@@ -78,39 +76,26 @@ const Contenido = (props) => {
                         draggable: true,
                         pauseOnHover: true,
                         progress: undefined,
-                        //onClose: () => cerrarToast()
+                        onClose: () => cerrarToast()
                     });
                 }else{
-                    toast.warning(response.data.mensaje,{
-                        position: toast.POSITION.TOP_CENTER,
-                        autoClose: 4000,
-                        hideProgressBar: false,
-                        newestOnTop: false,
-                        closeOnClick: true,
-                        rtl: false,
-                        draggable: true,
-                        pauseOnHover: true,
-                        progress: undefined
+                    let mensajes = response.data.mensaje;
+                    mensajes.forEach((item) => {
+                        toast.warning(item,{
+                            position: toast.POSITION.TOP_CENTER,
+                            autoClose: 4000,
+                            hideProgressBar: false,
+                            newestOnTop: false,
+                            closeOnClick: true,
+                            rtl: false,
+                            draggable: true,
+                            pauseOnHover: true,
+                            progress: undefined
+                        });
                     });
                     setLoading(false);
                 }
             })
-            .catch(function (error) {
-                setLoading(false);
-                toast.warning(error.response.mensaje,{
-                    position: toast.POSITION.TOP_CENTER,
-                    autoClose: 4000,
-                    hideProgressBar: false,
-                    newestOnTop: false,
-                    closeOnClick: true,
-                    rtl: false,
-                    draggable: true,
-                    pauseOnHover: true,
-                    progress: undefined
-                });
-
-            });
-
         }else{
             setLoading(false);
         }

@@ -7,7 +7,7 @@ import logo from '../../../../img/roboshot-logo-1.png'
 
 //libreria de iconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faUsers, faBeer } from "@fortawesome/free-solid-svg-icons";
 
 const Sidebar = (props) => {
 
@@ -38,6 +38,14 @@ const Sidebar = (props) => {
                             <FontAwesomeIcon icon = {faUsers} />
                             <span className = 'customSpanAdmin'>
                                 Usuarios
+                            </span>
+                        </Link>
+                    </li>
+                    <li className = ''>
+                        <Link to = '/admin/usuarios' className = 'nav-link'>
+                            <FontAwesomeIcon icon = {faBeer} />
+                            <span className = 'customSpanAdmin'>
+                                Roboshots
                             </span>
                         </Link>
                     </li>

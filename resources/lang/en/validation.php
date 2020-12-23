@@ -96,7 +96,8 @@ return [
     'not_in' => 'The selected :attribute is invalid.',
     'not_regex' => 'The :attribute format is invalid.',
     'numeric' => 'The :attribute must be a number.',
-    'password' => 'The password is incorrect.',
+    //'password' => 'The password is incorrect.',
+    'password' => 'La contraseña es incorrecta.',
     'present' => 'The :attribute field must be present.',
     'regex' => 'The :attribute format is invalid.',
     'required' => 'The :attribute field is required.',
@@ -153,6 +154,7 @@ return [
     'attributes' => [
         'bd' => 'base de datos',
         'password' => 'contraseña',
+        'contrasena' => 'contraseña',
         'user' => 'usuario',
         'img' => 'imagen',
         'new_img' => 'imagen'

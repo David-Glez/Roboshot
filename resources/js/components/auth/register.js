@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 
 //  imagenes
 import logo from '../../img/roboshot-logo-1.png'
@@ -16,10 +16,6 @@ import AuthService from '../../services/auth/autenticacion';
 import { ToastContainer, toast, Flip } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-//  datepicker
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
-
 const required = (value) =>{
     if(!value){
         
@@ -36,6 +32,7 @@ const Register = (props) => {
 
     const form = useRef();
     const checkBtn = useRef();
+    const fecha = useRef();
 
     //  variables a enviar
     const [nombres, setNombres] = useState("");
@@ -45,7 +42,7 @@ const Register = (props) => {
     const [contrasena, setContrasena] = useState("");
     const [diaN, setDiaN] = useState(0);
     const [mesN, setMesN] = useState(0);
-    const [yearN, setYearN] = useState();
+    const [yearN, setYearN] = useState(undefined);
     const [loading, setLoading] = useState(false);
     const [dias, setDias] = useState([1,2,3,4,5,6,7,8,9,10,
                                     11,12,13,14,15,16,17,18,19,20,
@@ -64,7 +61,19 @@ const Register = (props) => {
         {m:11, n:'Noviembre'},
         {m:12, n:'Diciembre'},
     ]);
-    
+    const [year, setYear] = useState([]);
+
+    useEffect(() => {
+
+        //  arreglo con los años hasta 1950
+        let actualYear = (new Date()).getFullYear();
+        let allYears = [];
+        for(let x = 0; x <= 70; x++) {
+            allYears.push(actualYear - x)
+        }
+        setYear(allYears);
+
+    },[]);
 
     //  funcion que guarda el nombre
     const onChangeNombre = (e) => {
@@ -141,30 +150,38 @@ const Register = (props) => {
         })
     };
 
+    //  años para el select
+    const yearSelect = () => {
+        return year.map((number) => {
+            return(
+                <option key = {number} value = {number}>
+                    {number}
+                </option>
+            )
+        })
+    }
+
     //  funcion que envia los datos a insertar en la bd
     const onSubmitForm = (e) => {
         //  previe la recarga de la pagina
         e.preventDefault();
 
         setLoading(true);
-
+        let fechaNacimiento = new Date(yearN, mesN-1, diaN);
+        
         let data = {
             nombres: nombres,
             apellido: apellido,
             correo: email,
             usuario: usuario,
             contrasena: contrasena,
-            diaN: diaN,
-            mesN: mesN,
-            yearN: yearN
+            fechaNacimiento: fechaNacimiento
         };
 
         //  validacion del formulario
         form.current.validateAll();
 
         if(checkBtn.current.context._errors.length == 0){
-
-            console.log(data)
             //  envio de los datos al backend
             const envio = AuthService.registrar(data);
             
@@ -172,6 +189,7 @@ const Register = (props) => {
             envio.then((response) => {
                 
                 if(response.data.status){
+                    setLoading(false)
                     toast.success(response.data.mensaje,{
                         position: toast.POSITION.TOP_CENTER,
                         autoClose: 4000,
@@ -185,16 +203,19 @@ const Register = (props) => {
                         onClose: () => cerrarToast()
                     });
                 }else{
-                    toast.warning(response.data.mensaje,{
-                        position: toast.POSITION.TOP_CENTER,
-                        autoClose: 4000,
-                        hideProgressBar: false,
-                        newestOnTop: false,
-                        closeOnClick: true,
-                        rtl: false,
-                        draggable: true,
-                        pauseOnHover: true,
-                        progress: undefined
+                    let mensajes = response.data.mensaje;
+                    mensajes.forEach((item) => {
+                        toast.warning(item,{
+                            position: toast.POSITION.TOP_CENTER,
+                            autoClose: 4000,
+                            hideProgressBar: false,
+                            newestOnTop: false,
+                            closeOnClick: true,
+                            rtl: false,
+                            draggable: true,
+                            pauseOnHover: true,
+                            progress: undefined
+                        });
                     });
 
                     setLoading(false);
@@ -215,7 +236,7 @@ const Register = (props) => {
             <div className = 'container'>
                 <div className = 'col-md-8'>
                     <a className = 'navbar-brand'>
-                        <img className = 'logo' src = {logo}  alt = '' />
+                        <img className = 'logoHome' src = {logo}  alt = '' />
                     </a>
                 </div>
                 
@@ -308,15 +329,15 @@ const Register = (props) => {
                                 </div>
                                 <div className = 'col-sm-3'>
                                     <div className = 'form-group'>
-                                        <Input
-                                            type = 'text'
+                                        <Select
                                             className = 'form-control '
                                             name = 'yearN'
-                                            placeholder = 'Año' 
-                                            value = {yearN}
                                             onChange = {onChangeYear}
                                             validations = {[required]}
-                                        />
+                                        >
+                                            <option value = ''>Año</option>
+                                            {yearSelect()}
+                                        </Select>
                                     </div>
                                 </div>
                             </div>
