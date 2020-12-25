@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Alert from '../../img/exclamation-mark.svg';
+import Alert from '../../assets/img/exclamation-mark.svg';
 
 const SinElementos = () => {
 

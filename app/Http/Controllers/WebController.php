@@ -13,6 +13,7 @@ use App\Models\Recetas;
 use App\Models\Pedidos;
 use App\Models\RecetaPedidos;
 use App\Models\IngredientePedidos;
+use Illuminate\Support\Facades\Storage;
 
 class WebController extends Controller
 {
@@ -22,10 +23,11 @@ class WebController extends Controller
 
         $clientes = Clientes::where('esquema', '!=', '')->get();
         foreach($clientes as $i){
+            $logo = Storage::url($i->logo);
             $datos = array(
                 'idCliente' => $i->idCliente,
                 'razonSocial' => $i->razonSocial,
-                'logo' => $i->logo
+                'logo' => $logo
             );
 
             $data[] = $datos;
