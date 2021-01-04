@@ -108,6 +108,8 @@ class Usuarios{
             $usuario->idRol = 2;
             $usuario->save();
 
+            $id = $usuario->idUsuario;
+
             //  se inserta los datos del cliente
             $cliente = new Clientes;
             $cliente->idUsuario = $id;

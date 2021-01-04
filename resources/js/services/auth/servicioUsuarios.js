@@ -3,7 +3,7 @@ import axios from 'axios';
 import authHeader from './header-auth';
 
 //direccion para el control de sistema de administracion 
-const API_URL = "http://localhost:8081/api/auth";
+const API_URL = "http://localhost/api/auth";
 
 /*****      FUNCIONES PARA MANEJO DE USUARIOS       *****/
 

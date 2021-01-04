@@ -9,6 +9,7 @@ import Accion from '../../services/conexion';
 //  componentes
 import Loader from '../../components/alertas/loader';
 import SinElementos from '../../components/alertas/vacio';
+import CardDataUser from '../../components/principal/cards/card-data-usuario';
 
 //  card para mostrar los datos del usuario
 const DatosUsuario = (props) => {
@@ -35,8 +36,7 @@ const DatosUsuario = (props) => {
     }, []);
 
     //  abre el modal para datos del usuario
-    const abrirModalUsuario = (e) => {
-        e.preventDefault();
+    const abrirModalUsuario = () => {
         props.abrirUsuario();
     }
 
@@ -98,37 +98,10 @@ const DatosUsuario = (props) => {
         ):(
             <>
             <div className = 'col-md-4'>
-                <div className = 'cardLogin card-containerLogin'>
-                    <img src = {dataUsuario.img} alt="profil-img" className="profile-img-card" />
-                    <h5 className="card-title">{dataUsuario.nombres} {dataUsuario.apellidoP} {dataUsuario.apellidoM}</h5>
-                    <div className = 'row'>
-                        <div className = 'form-group row'>
-                            <label htmlFor = 'emailUser' className="col-sm-4 col-form-label">Email</label>
-                            <div className = 'col-sm-8'>
-                                <span id = 'emailUser' className = 'primaryText form-control-plaintext'>
-                                    {dataUsuario.email}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className = 'row'>
-                        <div className = 'form-group row'>
-                            <label htmlFor = 'registro' className="col-sm-4 col-form-label">Creado</label>
-                            <div className = 'col-sm-8'>
-                                <span id = 'registro' className = 'primaryText form-control-plaintext'>
-                                    {dataUsuario.alta}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className = 'row'>
-                        <div className = 'col-sm-12 d-flex justify-content-center'>
-                            <button onClick = {(e) => abrirModalUsuario(e)} className = 'btn btn-success'>
-                                Modificar Datos
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <CardDataUser
+                    dataUsuario = {dataUsuario}
+                    abrirModal = {(e) => abrirModalUsuario(e)}
+                />
             </div>
             <div className = 'col-md-8'>
                 {listaPedidos()}

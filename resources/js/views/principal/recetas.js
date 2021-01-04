@@ -11,7 +11,7 @@ import Loader from '../../components/alertas/loader';
 import SinElementos from '../../components/alertas/vacio';
 
 const Recipe = (props) => {
-    let location = useLocation();
+    const idCliente = props.location.idCliente;
     
     const [recetas, setRecetas] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -19,7 +19,7 @@ const Recipe = (props) => {
     //  carga de las recetas al abrir roboshot del cliente
     useEffect(() =>{
         const inicio = async() =>{
-            const result = await Accion.recetasCliente(location.state.id);
+            const result = await Accion.recetasCliente(idCliente);
             setRecetas(result.data);
             if(result){
                 setLoading(false);
@@ -86,7 +86,7 @@ const Recipe = (props) => {
         )}
 
         <div className="new-recipe">
-            <button onClick = {(e) => manual(location.state.id, e)} >nueva receta</button>
+            <button onClick = {(e) => manual(idCliente, e)} >nueva receta</button>
         </div>
         </>
     )

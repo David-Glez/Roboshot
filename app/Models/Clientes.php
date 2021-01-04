@@ -10,6 +10,7 @@ class Clientes extends Model
     protected $table = 'clientes';
     protected $primaryKey = 'idCliente';
     protected $fillable = [
-        'idUsuario', 'nombre', 'apellidoPaterno', 'apellidoMaterno', 'RFC', 'email'
+        'idUsuario', 'nombre', 'apellidoPaterno', 'apellidoMaterno', 'RFC', 'email',
+        'fechaNacimiento', 'logo', 'esquema', 'directorio'
     ];
 }

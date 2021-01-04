@@ -17,7 +17,7 @@ class UsuarioSeeder extends Seeder
         //
         DB::table('usuarios')->insert([
             'nombre' => 'admin',
-            'password' => bcrypt('integra2020'),
+            'password' => bcrypt('integra'),
             'idRol' => 1
         ]);
     }

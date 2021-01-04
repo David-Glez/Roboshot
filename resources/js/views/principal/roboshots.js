@@ -26,12 +26,12 @@ const RoboshotCard = (props) => {
                             <div className = 'card-body'>
                                 <h5 className = 'card-title'>{x.razonSocial}</h5>
                                 <div className = 'text-center'>
-                                    <Link to = {{
-                                        pathname: `/roboshot/${x.idCliente}`,
-                                        state: {
-                                            id: x.idCliente
-                                        }
-                                    }} className = 'btn pedir'>
+                                    <Link 
+                                        to = {{
+                                            pathname: '/roboshot',
+                                            idCliente: x.idCliente
+                                        }}
+                                        className = 'btn pedir'>
                                         Ver
                                     </Link>
                                 </div>

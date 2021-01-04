@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8081/api/auth';
+const API_URL = 'http://localhost/api/auth';
 
 //funcion para el login y acceder a sistema de administracion
 const login = (credenciales) =>{

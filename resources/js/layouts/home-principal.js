@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {
     Route,
-    BrowserRouter,
-    Switch, Link
+    Switch
 }from 'react-router-dom';
  
 //  URL's API
@@ -307,12 +306,14 @@ function Home(props){
                     <RoboshotCard
                         load = {loading}
                         roboshot = {roboshots} 
+                        location = {props.location}
                     />
                 </Route>
-                <Route exact path = '/roboshot/:id' >
+                <Route exact path = '/roboshot' >
                     <Recipe
                         abrirReceta = {(e, i) => abrirReceta(e, i)} 
                         abrirManual = {(e) => abrirManual(e)}
+                        location = {props.location}
                     />
                 </Route>
                 <Route exact path = '/perfil'>
