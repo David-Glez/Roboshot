@@ -10,6 +10,7 @@ import Accion from '../../services/conexion';
 import Loader from '../../components/alertas/loader';
 import SinElementos from '../../components/alertas/vacio';
 import CardDataUser from '../../components/principal/cards/card-data-usuario';
+import CardPedidos from '../../components/principal/cards/pedidos-card';
 
 //  card para mostrar los datos del usuario
 const DatosUsuario = (props) => {
@@ -41,52 +42,8 @@ const DatosUsuario = (props) => {
     }
 
     //  abre el modal con un pedido
-    const abrirModalPedido = (e, item) => {
-        e.preventDefault();
+    const abrirModalPedido = ( item) => {
         props.abrirPedido(item);
-    };
-
-    //  lista los pedidos del usuario
-    const listaPedidos = () => {
-        return(
-            <>
-            <div className = 'card'>
-                <div className = 'card-header'>
-                    <h5 className="card-title">Tus Pedidos</h5>
-                </div>
-                <div className = 'card-body'>
-                    {(pedidosUsuario == '') ? (
-                        <>
-                        <div className = 'row superior'>
-                            <SinElementos />
-                        </div>
-                        </>
-                    ):(
-                        <ul className = 'list-group  scrollDiv'>
-                            {pedidosUsuario.map((item, index) => {
-                                return(
-                                    <li className = 'list-group-item' key = {index} >
-                                        <a href = '#' onClick = {(e) => abrirModalPedido(e, item)}>
-                                            <div className = 'row'>
-                                                <div className = 'col-sm-6'>
-                                                    {item.codigo}
-                                                </div>
-                                                <div className = 'col-sm-6'>
-                                                    <span className = 'text-success'>
-                                                        ${parseFloat(item.total).toFixed(2)}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                    )}
-                </div>
-            </div>
-            </>
-        )
     };
 
     return(
@@ -104,7 +61,10 @@ const DatosUsuario = (props) => {
                 />
             </div>
             <div className = 'col-md-8'>
-                {listaPedidos()}
+                <CardPedidos
+                    pedidos = {pedidosUsuario}
+                    abrirPedido = {(e) => abrirModalPedido(e)} 
+                />
             </div>
         </>
         )}

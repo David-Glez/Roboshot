@@ -106,7 +106,7 @@ class ClientesWeb{
     public static function addUsuario($datos){
         try{
             $datos->validate([
-                'usuario' => ['required', 'unique:usuarios,nombre', 'min:8'],
+                'usuario' => ['required', 'unique:usuarios,nombre', 'min:6'],
                 'contrasena' => ['required', 'min:8'],
                 'fechaNacimiento' => ['required', new MayorEdad]
             ]);

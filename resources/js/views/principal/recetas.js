@@ -1,14 +1,12 @@
 import React, {useState, useEffect} from 'react';
 
-//  navegacion rutas react
-import {useLocation} from 'react-router-dom';
-
 //  URL's API
 import Accion from '../../services/conexion';
 
 //  components
 import Loader from '../../components/alertas/loader';
 import SinElementos from '../../components/alertas/vacio';
+import CardRecipe from '../../components/principal/cards/recipe-card';
 
 const Recipe = (props) => {
     const idCliente = props.location.idCliente;
@@ -28,42 +26,8 @@ const Recipe = (props) => {
         inicio();
     }, []);
 
-    //  funcion que muestra las recetas en cards
-    const cards = () => {
-        if(recetas == ''){
-            return(
-                <div className = 'col-md-12 superior'>
-                    <SinElementos />
-                </div>
-            );
-        }else{
-            return recetas.map(data => {
-                return(
-                    <div className = 'col-sm-3 my-sm-2' key = {data.idReceta}>
-                        <div className = 'card mb-4 mb-sm-1'>
-                            <img className = 'card-img-top img-fluid' src = {window.location.origin+''+data.img} style = {{maxHeight: 255}} alt = 'Card image cap' />
-                            <div className = 'card-body'>
-                                <h5 className = 'card-title'>{data.nombre}</h5>
-                                <span className = 'price'>${data.precio}</span>
-                                <p className = 'card-text text-muted'>{data.descripcion}</p>
-                                <div className = 'text-center'>
-                                    <button 
-                                        className = 'btn pedir'
-                                        onClick = {(e) => abrir(data.idReceta, location.state.id, e)}>
-                                            Pedir 
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ) 
-            });
-        }
-    };
-
     //  funcion para abrir las recetas
-    const abrir = (idReceta, idCliente, e) => {
-        e.preventDefault();
+    const abrir = (idReceta, idCliente) => {
         props.abrirReceta(idReceta, idCliente)
     };
     
@@ -81,7 +45,24 @@ const Recipe = (props) => {
             </div>
         ):(
             <div className = 'row'>
-                {cards()}
+                {(recetas == '') ? (
+                    <>
+                    <div className = 'col-md-12 superior'>
+                        <SinElementos />
+                    </div>
+                    </>
+                ):(
+                    <>
+                    {recetas.map((x) =>
+                        <CardRecipe
+                            key = {x.idReceta}
+                            datos = {x}
+                            cliente = {idCliente}
+                            abrirReceta = {(e,i) => abrir(e,i)} 
+                        /> 
+                    )}
+                    </>
+                )}
             </div>
         )}
 
