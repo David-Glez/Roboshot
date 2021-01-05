@@ -8,10 +8,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import {Switch, Link, Route} from 'react-router-dom';
 
 //  componentes
-import UsersTable from '../../components/admin/users/users-table';
-import UsersAdd from '../../components/admin/users/users-form';
-import UsersUpdate from '../../components/admin/users/users-update';
-import UsersDelete from '../../components/admin/users/users-delete';
+import UsersTable from '../../components/admin/tables/users-table';
+import UsersAdd from '../../components/admin/forms/users-register-form';
+import UsersUpdate from '../../components/admin/forms/users-edit-form';
+import UsersDelete from '../../components/admin/modales/users-delete-modal';
 
 const UsersAdmin = (props) => {
 

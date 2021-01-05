@@ -161,7 +161,7 @@ const UsersTable = (props) => {
                 ):(
                     <>
                     <BootstrapTable keyField='id' data={ usuarios } columns={ columnas } />
-                    
+
                     </>
                 )}
             </div>
