@@ -19,6 +19,7 @@ import UsersAdmin from '../views/admin/users';
 //bootstrap
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 
 //servicio de autenticacion
 import AuthService from '../services/auth/autenticacion';

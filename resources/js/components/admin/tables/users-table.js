@@ -1,93 +1,17 @@
 import React, {useState, useEffect} from 'react';
 
-//  redireccion react
-import {Link} from 'react-router-dom';
-
 //  Estilos
 import {Spinner} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 
 //  API url
 import UserService from '../../../services/auth/servicioUsuarios';
 
-//  libreria de iconos
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-
 //  componentes
 import SinElementos from '../../alertas/vacio';
-
-const TableContent = (props) => {
-
-    const usuarios = props.data;
-    const abrirModal = props.abrirModal;
-
-    //  abrir modal de eliminar usuario
-    const modalEliminar = (e, id, nombre, razon) => {
-        e.preventDefault();
-        props.abrirModal(id, nombre, razon)
-    }
-
-    return(
-        <>
-        {(usuarios == '') ? (
-            <>
-            <div className = 'row superior'>
-                <SinElementos />
-            </div>
-            </>
-        ):(
-            <table className = 'table'>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Razón Social</th>
-                        <th>Rol</th>
-                        <th>Base de datos</th>
-                        <th>Roboshots</th>
-                        <th>Fecha de creación</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody className = 'text-center'>
-                    {usuarios.map((item, index) => {
-                        return(
-                            
-                            <tr key = {index}>
-                                <td>{item.id}</td>
-                                <td>{item.usuario}</td>
-                                <td>{item.razonSocial}</td>
-                                <td>{item.rol}</td>
-                                <td>{item.esquema}</td>
-                                <td>{item.roboshots}</td>
-                                <td>{item.fechaCreacion}</td>
-                                <td>
-                                    <Link 
-                                        to = {{
-                                            pathname: '/admin/usuarios/editar',
-                                            idUsuario: item.id
-                                        }}
-                                        className = 'btn btn-outline-secondary'
-                                    >
-                                        <FontAwesomeIcon icon = {faEdit} />
-                                    </Link>
-                                    <a onClick = {(e) => modalEliminar(e, item.id, item.usuario, item.razonSocial)} className = 'btn btn-outline-danger'>
-                                        <FontAwesomeIcon icon = {faTrashAlt} />
-                                        
-                                    </a>
-                                </td>
-                            </tr>
-                            
-                        )
-                    })}
-                </tbody>
-            </table>
-        )}
-        
-        </>
-    )
-};
+import UsersTableButtons from '../buttons/users-table-buttons';
+import ClientAddButton from '../buttons/users-add-button';
 
 const UsersTable = (props) => {
     
@@ -106,6 +30,51 @@ const UsersTable = (props) => {
         };
         inicio();
     },[]);
+
+    const vacio = () => {
+        return(
+            <>
+            <div className = 'row superior'>
+                <SinElementos />
+            </div>
+            </>
+        )
+    }
+
+    const customTotal = (from, to, size) => (
+        <span className="react-bootstrap-table-pagination-total">
+          Mostrando { from } a { to } de { size } resultados
+        </span>
+    );
+    
+    const options = {
+        paginationSize: 5,
+        pageStartIndex: 1,
+        alwaysShowAllBtns: true, // Always show next and previous button
+        // withFirstAndLast: false, // Hide the going to First and Last page button
+        // hideSizePerPage: true, // Hide the sizePerPage dropdown always
+        // hidePageListOnlyOnePage: true, // Hide the pagination list when only one page
+        firstPageText: '<<-',
+        prePageText: '<',
+        nextPageText: '>',
+        lastPageText: '->>',
+        nextPageTitle: 'First page',
+        prePageTitle: 'Pre page',
+        firstPageTitle: 'Next page',
+        lastPageTitle: 'Last page',
+        showTotal: true,
+        paginationTotalRenderer: customTotal,
+        disablePageTitle: true,
+        sizePerPageList: [{
+            text: '5', value: 5
+        }, {
+            text: '10', value: 10
+        }, {
+            text: '15', value: 15
+        },{
+            text: 'Todos', value: usuarios.length
+        }] 
+      };
 
     //  columnas para la tabla
     const columnas = [{
@@ -129,6 +98,20 @@ const UsersTable = (props) => {
     },{
         dataField: 'fechaCreacion',
         text: 'Fecha de Alta'
+    },{
+        dataField: '',
+        text: "Acciones",
+        sort: false,
+        formatter: (cell, row, rowIndex, formatExtraData) =>{
+            return(
+                <UsersTableButtons
+                    id = {row.id}
+                    nombre = {row.usuario}
+                    razonSocial = {row.razonSocial}
+                    abrirModal = {props.abrirModalDelete} 
+                />
+            )
+        },
     }];
 
     return(
@@ -142,10 +125,7 @@ const UsersTable = (props) => {
                         </h3>
                     </div>
                     <div className = 'col-sm-8'>
-                        <Link to = '/admin/usuarios/anadir' className = 'btn btn-primary float-right'>
-                            <FontAwesomeIcon icon={faPlus} />
-                            <span className = 'customSpan'>Añadir Cliente</span>
-                        </Link>
+                        <ClientAddButton />
                     </div>
                 </div>
             </div>
@@ -160,8 +140,15 @@ const UsersTable = (props) => {
                     </>
                 ):(
                     <>
-                    <BootstrapTable keyField='id' data={ usuarios } columns={ columnas } />
-
+                    <BootstrapTable 
+                        keyField = 'id' 
+                        data = { usuarios } 
+                        columns = { columnas }
+                        bootstrap4 = {true} 
+                        noDataIndication={ vacio }
+                        pagination={ paginationFactory(options) }
+                        classes = 'table-striped'
+                    />
                     </>
                 )}
             </div>
