@@ -8,14 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Clases\ClientesWeb;
 use App\Models\Roles;
-use App\Models\Rutas;
 
 class InicioController extends Controller
 {
     //funcion para login
     public function inicio(Request $request){
-
-        $rutas = '';
 
         $validaUsuario = $request->only('nombre', 'password');
 
@@ -28,10 +25,6 @@ class InicioController extends Controller
             $nombre = Auth::user()->nombre;
             $rol = Roles::where('idRol', Auth::user()->idRol)->first();
 
-            if($idRol != 4){
-                $rutas = Rutas::where('idRol', $idRol)->get();
-            }
-
             $accessToken = $user->createToken('authToken')->accessToken;
 
             $datos = array(
@@ -41,7 +34,7 @@ class InicioController extends Controller
                 'idRol' => $idRol,
                 'accessToken' => $accessToken,
                 'autorizado' => $verificacion,
-                'rutas' => $rutas
+                
             );
         }else{
             $datos = array(

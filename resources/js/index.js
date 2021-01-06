@@ -35,12 +35,14 @@ import {
     faShoppingCart, 
     faUserAlt, 
     faSignOutAlt,
-    faTrashAlt 
+    faTrashAlt,
+    faCircle 
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
     faHome, faUsers, faBeer, faRoute, faCalendar, faClock, faTimes,
-    faUserTie, faPlus, faShoppingCart, faUserAlt, faSignOutAlt, faTrashAlt
+    faUserTie, faPlus, faShoppingCart, faUserAlt, faSignOutAlt, faTrashAlt,
+    faCircle
     ) 
 class Index extends Component{
     

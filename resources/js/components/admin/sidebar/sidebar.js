@@ -15,6 +15,9 @@ const Sidebar = (props) => {
     
     const rutas = props.rutas;
     const loading = props.loading;
+    const usuario = props.usuario;
+    const rol = props.rol;
+    const autorizado = props.autorizado;
     
     return(
         <>
@@ -27,6 +30,19 @@ const Sidebar = (props) => {
                 <Link to = '/admin' className="simple-text text-center">
                     <img src={logo} id='logoAdmin' className = 'logoAdmin'/>
                 </Link>
+            </div>
+            <div className = 'infoUser '>
+                <p>Usuario: {usuario}</p>
+                <p>Rol: {rol}</p>
+                <small>
+                    <FontAwesomeIcon 
+                        icon = 'circle' 
+                        className = {autorizado ? 'text-success' : 'text-warning'} 
+                    />
+                    <span className = 'customSpanAdmin'>
+                        {autorizado ? 'Activo' : 'En espera'}
+                    </span>
+                </small>
             </div>
             <div className="sidebarAdmin-wrapper">
                 <ul className ='navAdmin'>

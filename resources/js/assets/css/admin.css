@@ -61,6 +61,18 @@ a, a:hover, a:focus {
       border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       position: relative;
       z-index: 4; }
+    .sidebarAdmin .infoUser {
+      padding: 10px 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      z-index: 4; }
+    .sidebarAdmin .infoUser p {
+      float: center;
+      font-size: 15px;
+      margin: 10px 10px;
+      color: #FFFFFF;
+      line-height: 20px;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
       .sidebarAdmin .logo p {
         float: left;
         font-size: 20px;

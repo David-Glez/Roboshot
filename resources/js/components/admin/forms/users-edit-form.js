@@ -110,6 +110,7 @@ const UsersUpdate = (props) => {
 
     //  cerrar toast y redireccionar
     const cerrarToast = () => {
+        props.cerrarLoading();
         props.history.push('/admin/usuarios');
     }
 
@@ -117,7 +118,7 @@ const UsersUpdate = (props) => {
     const onSubmitForm = (e) => {
         e.preventDefault();
         setLoading(true);
-
+        props.abrirLoading();
         const data = new FormData();
         data.append('id', idUser);
         data.append('nombre', nombre);

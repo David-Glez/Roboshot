@@ -5,6 +5,11 @@ import {Nav, NavDropdown,} from 'react-bootstrap';
 
 const NavItems = (props) => {
 
+    const salir = (e) => {
+        e.preventDefault();
+        props.logout();
+    }
+
     return(
         <>
             <Nav >
@@ -19,8 +24,8 @@ const NavItems = (props) => {
                     <NavDropdown.Item >Another notifications</NavDropdown.Item>
                 </NavDropdown>
                 <Nav.Item>
-                    <Nav.Link>
-                        Log Out
+                    <Nav.Link onClick = {(e) => salir(e)}>
+                        Cerrar Sesión
                     </Nav.Link>
                 </Nav.Item>
             </Nav>

@@ -82,7 +82,7 @@ Route::group([
         Route::post('/roboshots/revisar', 'RoboshotController@disponibles');
 
         //  rutas para funciones generales
-        Route::get('/general/stats', 'UsuariosController@statsCard');
+        Route::get('/general/stats', 'GeneralController@statsCard');
         Route::get('/general/rutas', 'GeneralController@rutas');
         
     });

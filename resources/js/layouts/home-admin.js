@@ -9,7 +9,13 @@ import {
 //  componentes
 import Sidebar from '../components/admin/sidebar/sidebar';
 import AdminNavBar from '../components/admin/navbar/navbar';
+import LogOutModal from '../components/admin/modales/general-logout-modal';
+import LoadingModal from '../components/admin/modales/general-loading-modal'
 //import AdminFooter from '../admin/admin-components/footer/footer';
+
+//  toast
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 //  vistas
 import DashBoard from '../views/admin/dashboard';
@@ -29,30 +35,62 @@ function Inicio(props){
     const [rutas, setRutas] = useState([]);
     const [logueado, setLogueado] = useState(true);
     const [loading, setLoading] = useState(true);
+    const [modalLog, setModalLog] = useState(false);
+    const [modalLoading, setModalLoading] = useState(true);
+    const [user, setUser] = useState({
+        id: 0,
+        idRol: 0,
+        usuario: '',
+        rol: '',
+        autorizado: null
+    });
 
     //carga del state
     useEffect(()=>{
-        
+        //  datos en localstorage
+        const resp = AuthService.getCurrentUser();
+        if(resp != null){
+            setUser({
+                id: resp.id,
+                idRol: resp.idRol, 
+                usuario: resp.usuario,
+                rol: resp.rol,
+                autorizado: resp.autorizado
+            })
+        }else{
+            setLogueado(false)
+        }
+
+        //  datos de la API
         const inicio = async() =>{
             const result = await UserService.rutasRol();
             if(result){
                 setRutas(result.data);
-                setLoading(false)
+                setLoading(false);
+                setModalLoading(false);
             }
-            //console.log(result);
-            //if(result.data == true){
-            
-            /*}else{
-                //const salir = AuthService.logout();
-                //setLogueado(false);
-            }*/
         }
         inicio();
     }, [])
 
     //cerrar sesion
     const logOut = () => {
-        AuthService.logout();
+        setModalLog(true);
+        const salir = AuthService.logout();
+        salir.then(resp => {
+            if(resp.data.status){
+                setRutas([]);
+                setUser({
+                    id: 0,
+                    idRol: 0,
+                    usuario: '',
+                    rol: '',
+                    autorizado: null
+                })
+                setModalLog(false)
+                props.history.push('/')
+            }
+        })
     };
 
     //  texto del navbar
@@ -63,26 +101,36 @@ function Inicio(props){
     if(logueado){
         return(
             <>
+            <ToastContainer />
             <div className = 'wrapperAdmin'>
                 <Sidebar 
                     rutas = {rutas}
                     loading = {loading}
+                    usuario = {user.usuario}
+                    rol = {user.rol}
+                    autorizado = {user.autorizado}
                 />
                 <div className = 'mainPanel' id = 'mainPanel'>
                     <AdminNavBar
                         brandText = {getBrandText()} 
+                        logout = {(e) => logOut(e)}
                     />
                     <Switch>
                         <Route exact path = '/admin' component = {DashBoard} />
                         <Route exact path = '/admin/usuarios' component = {UsersAdmin} />
-                        <Route exact path = '/admin/usuarios/anadir' component = {UsersAdmin} />
+                        <Route exact path = '/admin/usuarios/anadir'component = {UsersAdmin} />
                         <Route exact path = '/admin/usuarios/editar' component = {UsersAdmin} />
                         
                     </Switch>
                     
                 </div>
             </div>
-
+            <LogOutModal
+                ver = {modalLog} 
+            />
+            <LoadingModal
+                ver = {modalLoading}
+            />
             </>
         )
     }else{

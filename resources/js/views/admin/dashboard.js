@@ -11,21 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const DashBoard = (props) => {
 
-    const [noUsers, setNoUsers] = useState({
-        noUsuarios: 0,
-        mensaje: '',
-        fechaUsuario: ''
-    });
-    const [noClients, setNoClients] = useState({
-        noClientes: 0,
-        mensaje: '',
-        fechaCliente: ''
-    });
-    const [noRoboshots, setNoRoboshots] = useState({
-        noRoboshots: 0,
-        mensaje: '',
-        fechaRoboshot: ''
-    });
+    const [card, setCard] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -33,22 +19,9 @@ const DashBoard = (props) => {
             const resp =  await UserService.statsCard();
             if(resp){
                 setLoading(false)
+                setCard(resp.data)
+                console.log(resp.data)
             }
-            setNoUsers({
-                noUsuarios: resp.data.usuarios,
-                mensaje: resp.data.mensajeUsuario,
-                fechaUsuario: resp.data.fechaUsuario
-            });
-            setNoClients({
-                noClientes: resp.data.clientes,
-                mensaje: resp.data.mensajeCliente,
-                fechaCliente: resp.data.fechaCliente
-            });
-            setNoRoboshots({
-                noRoboshots: resp.data.roboshots,
-                mensaje: resp.data.mensajeRoboshot,
-                fechaUsuario: resp.data.fechaRoboshot
-            })
         }
         inicio();
     },[]);
@@ -60,7 +33,27 @@ const DashBoard = (props) => {
         <div className = 'content'>
             <div className = 'container-fluid'>
                 <div className = 'row'>
-                    <div className = 'col-md-4'>
+                    {card.map((x, item) =>
+                    <div className = 'col-md-4' key = {item}>
+                        <StatsCard 
+                            loading = {loading}
+                            statsText = {x.nombre}
+                            statsValue = {x.total}
+                            bigIcon = {<FontAwesomeIcon icon = {x.icono} className = 'text-primary'/>}
+                            statsIcon = {x.fecha}
+                            statsIconText = {x.mensaje}
+                        />
+                    </div>
+                    )}
+                </div>
+            </div>
+        </div>
+        </>
+    )
+}
+
+/*
+<div className = 'col-md-4'>
                         <StatsCard 
                             loading = {loading}
                             statsText = 'Usuarios'
@@ -69,32 +62,5 @@ const DashBoard = (props) => {
                             statsIcon = {noUsers.fechaUsuario}
                             statsIconText = {noUsers.mensaje}
                         />
-                    </div>
-                    <div className = 'col-md-4'>
-                        <StatsCard 
-                            loading = {loading}
-                            statsText = 'Clientes'
-                            statsValue = {noClients.noClientes}
-                            bigIcon = {<FontAwesomeIcon icon = 'user-tie' className = 'text-primary'/>}
-                            statsIcon = {noClients.fechaCliente}
-                            statsIconText = {noClients.mensaje}
-                        />
-                    </div>
-                    <div className = 'col-md-4'>
-                        <StatsCard 
-                            loading = {loading}
-                            statsText = 'Roboshots'
-                            statsValue = {noRoboshots.noRoboshots}
-                            bigIcon = {<FontAwesomeIcon icon = 'beer' className = 'text-warning'/>}
-                            statsIcon = {noRoboshots.fechaRoboshot}
-                            statsIconText = {noRoboshots.mensaje}
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
-        </>
-    )
-}
-
+                    </div>*/
 export default DashBoard;
