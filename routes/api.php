@@ -83,6 +83,7 @@ Route::group([
 
         //  rutas para funciones generales
         Route::get('/general/stats', 'UsuariosController@statsCard');
+        Route::get('/general/rutas', 'GeneralController@rutas');
         
     });
 });

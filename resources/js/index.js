@@ -20,7 +20,30 @@ import Home from './layouts/home-principal';
 import Inicio from './layouts/home-admin';
 import SignUpIn from './layouts/home-signup-singin';
 
+//  iconos
+import { library } from '@fortawesome/fontawesome-svg-core'
+import {
+    faHome, 
+    faUsers,
+    faUserTie, 
+    faBeer, 
+    faRoute, 
+    faCalendar, 
+    faClock, 
+    faTimes,
+    faPlus,
+    faShoppingCart, 
+    faUserAlt, 
+    faSignOutAlt,
+    faTrashAlt 
+} from "@fortawesome/free-solid-svg-icons";
+
+library.add(
+    faHome, faUsers, faBeer, faRoute, faCalendar, faClock, faTimes,
+    faUserTie, faPlus, faShoppingCart, faUserAlt, faSignOutAlt, faTrashAlt
+    ) 
 class Index extends Component{
+    
     render(){
         return(
             <BrowserRouter>
@@ -42,6 +65,6 @@ export default Index;
 if (document.getElementById('App')) {
     ReactDOM.render(<Index />, 
         document.getElementById('App'),
-        
+         
     );
 }

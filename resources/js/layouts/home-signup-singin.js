@@ -28,7 +28,8 @@ const SignUpIn = (props) => {
                         props.history.push('/admin');
                     break;
                     case 2:
-                        console.log('En construccion');
+                        //console.log('En construccion');
+                        props.history.push('/admin');
                     break;
                     case 4:
                         props.history.push('/');

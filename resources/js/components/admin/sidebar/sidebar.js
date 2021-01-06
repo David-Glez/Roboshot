@@ -7,10 +7,15 @@ import logo from '../../../assets/img/roboshot-logo-1.png'
 
 //libreria de iconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faUsers, faBeer } from "@fortawesome/free-solid-svg-icons";
+
+//  components
+import ItemSidebar from './sidebar-list-item';
 
 const Sidebar = (props) => {
-
+    
+    const rutas = props.rutas;
+    const loading = props.loading;
+    
     return(
         <>
         <div
@@ -27,28 +32,27 @@ const Sidebar = (props) => {
                 <ul className ='navAdmin'>
                     <li className = ''>
                         <Link to = '/admin' className = 'nav-link'>
-                            <FontAwesomeIcon icon = {faHome} />
+                            <FontAwesomeIcon icon = 'home' />
                             <span className = 'customSpanAdmin'>
                                 Inicio
                             </span>
                         </Link>
                     </li>
-                    <li className = ''>
-                        <Link to = '/admin/usuarios' className = 'nav-link'>
-                            <FontAwesomeIcon icon = {faUsers} />
-                            <span className = 'customSpanAdmin'>
-                                Usuarios
-                            </span>
-                        </Link>
-                    </li>
-                    <li className = ''>
-                        <Link to = '/admin/usuarios' className = 'nav-link'>
-                            <FontAwesomeIcon icon = {faBeer} />
-                            <span className = 'customSpanAdmin'>
-                                Roboshots
-                            </span>
-                        </Link>
-                    </li>
+                {loading ? (
+                    <div></div>
+                ):(
+                    <>
+                    {rutas.map((x) =>
+                        <ItemSidebar
+                            key = {x.idRuta}
+                            nombre = {x.nombre}
+                            ruta = {x.ruta}
+                            icono = {x.icono}
+                        /> 
+                    )}
+                    </>
+                )}   
+                        
                 </ul>
             </div>
         </div>

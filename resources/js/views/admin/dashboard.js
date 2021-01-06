@@ -8,7 +8,6 @@ import UserService from '../../services/auth/servicioUsuarios';
 
 //libreria de iconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUsers, faUserTie, faBeer } from "@fortawesome/free-solid-svg-icons";
 
 const DashBoard = (props) => {
 
@@ -66,7 +65,7 @@ const DashBoard = (props) => {
                             loading = {loading}
                             statsText = 'Usuarios'
                             statsValue = {noUsers.noUsuarios}
-                            bigIcon = {<FontAwesomeIcon icon = {faUsers} className = 'text-primary'/>}
+                            bigIcon = {<FontAwesomeIcon icon = 'users' className = 'text-primary'/>}
                             statsIcon = {noUsers.fechaUsuario}
                             statsIconText = {noUsers.mensaje}
                         />
@@ -76,7 +75,7 @@ const DashBoard = (props) => {
                             loading = {loading}
                             statsText = 'Clientes'
                             statsValue = {noClients.noClientes}
-                            bigIcon = {<FontAwesomeIcon icon = {faUserTie} className = 'text-primary'/>}
+                            bigIcon = {<FontAwesomeIcon icon = 'user-tie' className = 'text-primary'/>}
                             statsIcon = {noClients.fechaCliente}
                             statsIconText = {noClients.mensaje}
                         />
@@ -86,7 +85,7 @@ const DashBoard = (props) => {
                             loading = {loading}
                             statsText = 'Roboshots'
                             statsValue = {noRoboshots.noRoboshots}
-                            bigIcon = {<FontAwesomeIcon icon = {faBeer} className = 'text-warning'/>}
+                            bigIcon = {<FontAwesomeIcon icon = 'beer' className = 'text-warning'/>}
                             statsIcon = {noRoboshots.fechaRoboshot}
                             statsIconText = {noRoboshots.mensaje}
                         />

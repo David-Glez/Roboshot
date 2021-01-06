@@ -6,8 +6,7 @@ import {Link}from 'react-router-dom';
 import logo from '../../../assets/img/roboshot-logo-1.png';
 
 //  iconos
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faShoppingCart, faUserAlt, faSignOutAlt} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Header = (props) => {
 
@@ -36,14 +35,14 @@ const Header = (props) => {
                 
                 <div className = 'col-md-4'>
                     <button type="button" className="btn btn-outline-warning" onClick = {(e) => carrito(e)}>
-                        <FontAwesomeIcon icon={faShoppingCart} /> <span className="badge badge-light" id="NumCarrito">{props.counter}</span>
+                        <FontAwesomeIcon icon = 'shopping-cart' /> <span className="badge badge-light" id="NumCarrito">{props.counter}</span>
                     </button>
                     {login ? (
                         <div className="dropleft float-right">
                             <button className="btn btn-outline-secondary " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <div className = 'flexContainer'>
                                     <div className = 'dropdown-toggle'>
-                                        <FontAwesomeIcon icon = {faUserAlt} />
+                                        <FontAwesomeIcon icon = 'user-alt' />
                                     </div>
                                     <div className = 'customSpan'>
                                         {data.usuario}
@@ -54,7 +53,7 @@ const Header = (props) => {
                                 <Link to = '/perfil' className = 'dropdown-item'>
                                     <div className = 'flexContainer'>
                                         <div>
-                                            <FontAwesomeIcon icon = {faUserAlt} />
+                                            <FontAwesomeIcon icon = 'user-alt' />
                                         </div>
                                         <div className = 'customSpan'>
                                             Perfil
@@ -65,7 +64,7 @@ const Header = (props) => {
                                 <button className="dropdown-item" onClick = {(e) => cerrarSesion(e)}>
                                     <div className = 'flexContainer'>
                                         <div>
-                                            <FontAwesomeIcon icon = {faSignOutAlt} />
+                                            <FontAwesomeIcon icon = 'sign-out-alt' />
                                         </div>
                                         <div className = 'customSpan'>
                                             Cerrar Sesión

@@ -4,8 +4,7 @@ import React from 'react';
 import {Spinner} from 'react-bootstrap'
 
 //libreria de iconos
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendar, faClock, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const StatsCard = (props) => {
     const loading = props.loading;
@@ -24,17 +23,16 @@ const StatsCard = (props) => {
             const diffDays = (diffTime / (1000 * 60 * 60)); 
             if(diffDays < 24){
                 return(
-                    <FontAwesomeIcon icon = {faClock} />
+                    <FontAwesomeIcon icon = 'clock' />
                 )
             }else{
                 return(
-                    <FontAwesomeIcon icon = {faCalendar} />
+                    <FontAwesomeIcon icon = 'calendar' />
                 )
             }
-            
         }else{
             return(
-                <FontAwesomeIcon icon = {faTimes} />
+                <FontAwesomeIcon icon = 'times' />
             )
         }
         

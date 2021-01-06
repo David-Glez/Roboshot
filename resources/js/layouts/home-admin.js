@@ -15,7 +15,6 @@ import AdminNavBar from '../components/admin/navbar/navbar';
 import DashBoard from '../views/admin/dashboard';
 import UsersAdmin from '../views/admin/users';
 
-
 //bootstrap
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -23,28 +22,26 @@ import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.m
 
 //servicio de autenticacion
 import AuthService from '../services/auth/autenticacion';
+import UserService from '../services/auth/servicioUsuarios';
 
 function Inicio(props){
 
-    const [usuario, setUsuario] = useState(undefined);
+    const [rutas, setRutas] = useState([]);
     const [logueado, setLogueado] = useState(true);
-    const [rol, setRol] = useState(false);
-    const [clase, setClase] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     //carga del state
     useEffect(()=>{
+        
         const inicio = async() =>{
-            
-            //const result = await AuthService.sessionLive();
+            const result = await UserService.rutasRol();
+            if(result){
+                setRutas(result.data);
+                setLoading(false)
+            }
             //console.log(result);
             //if(result.data == true){
-                const user = AuthService.getCurrentUser();
-                if(user){
-                    setUsuario(user);
-                    if(user.idRol == 1){
-                        setRol(true);
-                    }
-                }
+            
             /*}else{
                 //const salir = AuthService.logout();
                 //setLogueado(false);
@@ -67,7 +64,10 @@ function Inicio(props){
         return(
             <>
             <div className = 'wrapperAdmin'>
-                <Sidebar idRol ={rol} clase ={clase}/>
+                <Sidebar 
+                    rutas = {rutas}
+                    loading = {loading}
+                />
                 <div className = 'mainPanel' id = 'mainPanel'>
                     <AdminNavBar
                         brandText = {getBrandText()} 

@@ -41,6 +41,11 @@ const statsCard = () => {
   return axios.get(API_URL + '/general/stats', {headers: authHeader()});
 }
 
+//  devuelve las rutas que le corresponden a cada usuario
+const rutasRol = () => {
+  return axios.get(API_URL + '/general/rutas', {headers: authHeader()});
+}
+
 /**************************************************/
 
 /*****      FUNCIONES PARA MANEJO DE ROBOSHOTS      *****/
@@ -77,6 +82,7 @@ const disponible = (data) => {
     infoCliente,
     editarCliente,
     eliminarCliente,
+    rutasRol,
     getModeratorBoard,
     getAdminBoard,
   };

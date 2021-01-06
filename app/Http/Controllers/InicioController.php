@@ -4,17 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Carbon;
+
 
 use App\Clases\ClientesWeb;
 use App\Models\Roles;
-use App\Models\User;
-use App\Models\Clientes;
+use App\Models\Rutas;
 
 class InicioController extends Controller
 {
     //funcion para login
     public function inicio(Request $request){
+
+        $rutas = '';
 
         $validaUsuario = $request->only('nombre', 'password');
 
@@ -27,8 +28,11 @@ class InicioController extends Controller
             $nombre = Auth::user()->nombre;
             $rol = Roles::where('idRol', Auth::user()->idRol)->first();
 
+            if($idRol != 4){
+                $rutas = Rutas::where('idRol', $idRol)->get();
+            }
+
             $accessToken = $user->createToken('authToken')->accessToken;
-            //$accessToken = $user->createToken('authToken')->accessToken;
 
             $datos = array(
                 'id' => $idUsuario,
@@ -36,7 +40,8 @@ class InicioController extends Controller
                 'rol' => $rol->rol,
                 'idRol' => $idRol,
                 'accessToken' => $accessToken,
-                'autorizado' => $verificacion
+                'autorizado' => $verificacion,
+                'rutas' => $rutas
             );
         }else{
             $datos = array(

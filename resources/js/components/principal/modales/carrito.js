@@ -5,7 +5,6 @@ import { Modal }from 'react-bootstrap';
 
 //  iconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 //  componentes
 import SinElementos from '../../alertas/vacio';
@@ -56,7 +55,7 @@ const Contenido = (props) => {
                                                 <span className = 'text-success'>${parseFloat(item.precio).toFixed(2)}</span>
                                             </div>
                                             <a className = 'btn btn-danger' onClick = {() => eliminaReceta(item.prod) } >
-                                                <FontAwesomeIcon icon={faTrashAlt} />
+                                                <FontAwesomeIcon icon = 'trash-alt' />
                                             </a>
                                         </li>
                                     )
