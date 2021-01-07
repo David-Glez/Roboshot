@@ -35,7 +35,6 @@ const StatsCard = (props) => {
                 <FontAwesomeIcon icon = 'times' />
             )
         }
-        
     }
 
     return(
@@ -73,7 +72,6 @@ const StatsCard = (props) => {
                     </div>
                     </> 
                 )}
-                
             </div>
         </div>
         </>

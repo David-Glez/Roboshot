@@ -34,14 +34,14 @@ class RutasSeeder extends Seeder
             'idRol' => 2,
             'ruta' => '/admin/recetas',
             'nombre' => 'Recetas',
-            'icono' => 'beer'
+            'icono' => 'cocktail'
         ]);
 
         DB::table('rutas')->insert([
             'idRol' => 2,
             'ruta' => '/admin/ingredientes',
             'nombre' => 'Ingredientes',
-            'icono' => 'beer'
+            'icono' => 'wine-bottle'
         ]);
     }
 }

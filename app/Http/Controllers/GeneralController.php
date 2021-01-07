@@ -98,7 +98,7 @@ class GeneralController extends Controller
                 $noRecetas = Recetas::all()->count();
                 $fechaReceta = '';
                 $mensajeReceta = 'No hay registros';
-                $iconoReceta = 'user-tie';
+                $iconoReceta = 'cocktail';
                 if($noRecetas > 0){
                     $fechaReceta = Carbon::parse(Recetas::all()->last()->actualizado);
                     $mensajeReceta = $fechaReceta->diffForHumans();
@@ -116,7 +116,7 @@ class GeneralController extends Controller
                 $noIng = Ingredientes::all()->count();
                 $fechaIng = '';
                 $mensajeIng = 'No hay registros';
-                $iconoIng = 'user-tie';
+                $iconoIng = 'wine-bottle';
                 if($noIng > 0){
                     $fechaIng = Carbon::parse(Ingredientes::all()->last()->actualizado);
                     $mensajeIng = $fechaIng->diffForHumans();

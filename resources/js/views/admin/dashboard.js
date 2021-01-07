@@ -20,13 +20,10 @@ const DashBoard = (props) => {
             if(resp){
                 setLoading(false)
                 setCard(resp.data)
-                console.log(resp.data)
             }
         }
         inicio();
     },[]);
-
-    
 
     return (
         <>
@@ -52,15 +49,4 @@ const DashBoard = (props) => {
     )
 }
 
-/*
-<div className = 'col-md-4'>
-                        <StatsCard 
-                            loading = {loading}
-                            statsText = 'Usuarios'
-                            statsValue = {noUsers.noUsuarios}
-                            bigIcon = {<FontAwesomeIcon icon = 'users' className = 'text-primary'/>}
-                            statsIcon = {noUsers.fechaUsuario}
-                            statsIconText = {noUsers.mensaje}
-                        />
-                    </div>*/
 export default DashBoard;
