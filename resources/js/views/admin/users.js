@@ -5,7 +5,7 @@ import { ToastContainer, toast, Flip } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 //  navegation
-import {Switch, Link, Route} from 'react-router-dom';
+import {Switch, Route} from 'react-router-dom';
 
 //  componentes
 import UsersTable from '../../components/admin/tables/users-table';

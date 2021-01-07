@@ -24,10 +24,11 @@ class RutasSeeder extends Seeder
 
         DB::table('rutas')->insert([
             'idRol' => 1,
-            'ruta' => '/admin/usuarios',
+            'ruta' => '/admin/roboshots',
             'nombre' => 'Roboshots',
             'icono' => 'beer'
         ]);
+        
 
         //  rutas para adminitrador
         DB::table('rutas')->insert([

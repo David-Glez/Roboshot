@@ -55,9 +55,9 @@ const verRoboshots = () =>{
   return axios.get(API_URL + '/roboshots', {headers: authHeader()});
 };
 
-//   muestra si el nombre de la base de datos esta disponible
-const disponible = (data) => {
-  return axios.post(API_URL + '/roboshots/revisar', data, {headers: authHeader()});
+//  inserta una nueva estacion fisica
+const anadirRoboshot = (data) => {
+  return axios.post(API_URL + '/roboshots/anadir', data, {headers: authHeader()});
 }
 
 /**************************************************/
@@ -77,7 +77,7 @@ const disponible = (data) => {
     statsCard,
     verUsuarios,
     verRoboshots,
-    disponible,
+    anadirRoboshot,
     nuevoCliente,
     infoCliente,
     editarCliente,

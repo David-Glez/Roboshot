@@ -326,7 +326,7 @@ const UsersAdd = (props) => {
                             <div className = 'col-sm-8'>
                                 <div className = 'custom-file'>
                                     <input type = 'file' id = 'img' className = 'custom-file-input' ref = {imgRef} onChange = {onChangeFile}/>
-                                    <label className="custom-file-label" htmlFor="img">Choose file...</label>
+                                    <label className="custom-file-label" htmlFor="img">Seleccionar...</label>
                                 </div>
                             </div>
                         </div>

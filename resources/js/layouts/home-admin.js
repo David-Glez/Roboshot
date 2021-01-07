@@ -20,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 //  vistas
 import DashBoard from '../views/admin/dashboard';
 import UsersAdmin from '../views/admin/users';
+import RoboshotsAdmin from '../views/admin/roboshots';
 
 //bootstrap
 import 'bootstrap/dist/js/bootstrap.min.js';
@@ -120,7 +121,8 @@ function Inicio(props){
                         <Route exact path = '/admin/usuarios' component = {UsersAdmin} />
                         <Route exact path = '/admin/usuarios/anadir'component = {UsersAdmin} />
                         <Route exact path = '/admin/usuarios/editar' component = {UsersAdmin} />
-                        
+                        <Route exact path = '/admin/roboshots' component = {RoboshotsAdmin} />
+                        <Route exact path = '/admin/roboshots/anadir' component = {RoboshotsAdmin} />
                     </Switch>
                     
                 </div>

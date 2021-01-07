@@ -79,7 +79,7 @@ Route::group([
 
         // rutas para funciones destinadas a roboshots
         Route::get('/roboshots', 'RoboshotController@inicio');
-        Route::post('/roboshots/revisar', 'RoboshotController@disponibles');
+        Route::post('/roboshots/anadir', 'RoboshotController@anadir');
 
         //  rutas para funciones generales
         Route::get('/general/stats', 'GeneralController@statsCard');

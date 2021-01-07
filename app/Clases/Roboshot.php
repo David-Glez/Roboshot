@@ -14,8 +14,31 @@ use App\Models\Categorias;
 use App\Models\Recetas;
 use App\Models\Ingredientes;
 use App\Models\RecetaIngredientes;
+use App\Models\Roboshots;
+use App\Models\Clientes;
 
 class Roboshot{
+
+    //  ver lista de roboshots registrados
+    public static function inicio(){
+        $data = [];
+        $rob = Roboshots::all();
+        foreach($rob as $i){
+            $cliente = Clientes::where('idCliente', $i->idCliente)->first();
+            $fecha = new Carbon($i->created_at);
+            $datos = array(
+                'id' => $i->idRoboshot,
+                'nombre' => $i->nombre,
+                'cliente' => $cliente->nombres.' '.$cliente->apellidoPaterno.' '.$cliente->apellidoMaterno,
+                'MAC' => $i->MAC,
+                'estado' => $i->estado,
+                'creado' => $fecha->format('Y-m-d')
+            );
+            $data[] = $datos;
+        }
+
+        return $data;
+    }
 
     public static function CrearRoboshot($nombre){
 

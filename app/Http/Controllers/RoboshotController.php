@@ -11,8 +11,15 @@ class RoboshotController extends Controller
 {
     //  ver la lista de roboshots registrados
     public function inicio(){
-        $lista = Roboshots::all();
-        return response()->json($lista);
+
+        $x = Roboshot::inicio();
+        
+        return response()->json($x);
+    }
+
+    // registrar roboshot
+    public function anadir(Request $request){
+        return response()->json($request);
     }
 
     //  consulta lista de esquemas
@@ -54,10 +61,7 @@ class RoboshotController extends Controller
         return response()->json($resultado);
     }
 
-    // registrar roboshot
-    public function anadir(Request $request){
-        return response()->json($request);
-    }
+    
 
     //  actualizar roboshot
     public function actualizarLocal(Request $request){
