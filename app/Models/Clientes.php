@@ -13,4 +13,9 @@ class Clientes extends Model
         'idUsuario', 'nombre', 'apellidoPaterno', 'apellidoMaterno', 'RFC', 'email',
         'fechaNacimiento', 'logo', 'esquema', 'directorio'
     ];
+
+    public function usuario(){
+        return $this->hasOne(User::class, 'idUsuario', 'idUsuario');
+    }
+    
 }

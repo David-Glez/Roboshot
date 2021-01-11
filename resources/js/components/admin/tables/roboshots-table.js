@@ -24,7 +24,6 @@ const RoboshotsTable = (props) => {
     useEffect(() => {
         const inicio = async() => {
             const resp = await UserService.verRoboshots();
-            console.log(resp.data)
             if(resp){
                 setLoading(false);
             }

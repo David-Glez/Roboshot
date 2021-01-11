@@ -84,6 +84,7 @@ Route::group([
         //  rutas para funciones generales
         Route::get('/general/stats', 'GeneralController@statsCard');
         Route::get('/general/rutas', 'GeneralController@rutas');
+        Route::get('/general/clientes', 'GeneralController@clientes');
         
     });
 });

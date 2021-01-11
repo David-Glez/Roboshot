@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 
 //  API url
 import UserService from '../../../services/auth/servicioUsuarios';
@@ -7,6 +7,7 @@ import UserService from '../../../services/auth/servicioUsuarios';
 import Form from 'react-validation/build/form';
 import Input from 'react-validation/build/input';
 import CheckButton from 'react-validation/build/button';
+import Select from 'react-validation/build/select';
 
 //  libreria toast
 import { toast } from 'react-toastify';
@@ -24,17 +25,75 @@ const required = (value) =>{
 
 const RoboshotsAdd = (props) => {
 
+    const checkRef = useRef();
+    const form = useRef();
+
+    const nuevo = props.nuevoRob;
+
     const [loading, setLoading] = useState(false);
     const [mac, setMac] = useState('');
+    const [cliente, setCliente] = useState(0);
+    const [nombre, setNombre] = useState('');
+    const [clientes, setClientes] = useState([]);
+
+    useEffect(() => {
+        const inicio = async() => {
+            const resp = await UserService.clientes();
+            if(resp){
+                setClientes(resp.data);
+            }
+        }
+        inicio()
+    },[]);
+
+    const selectClientes = () => {
+       return clientes.map((data, item) => {
+           return(
+               <option key  = {item} value = {data.idCliente}>
+                   {data.nombre}
+               </option>
+           )
+       })
+    }
 
     const onChangeMac = (e) => {
         const dir = e.target.value;
         setMac(dir)
     }
+
+    const onChangeCliente = (e) => {
+        const id = e.target.value;
+        setCliente(id)
+    }
+    const onChangeNombre = (e) => {
+        const name = e.target.value;
+        setNombre(name)
+    }
+
+    const onSubmitForm = (e) => {
+        e.preventDefault();
+        setLoading(true);
+        form.current.validateAll();
+
+        if(checkRef.current.context._errors.length == 0){
+            let data = {
+                idCliente: cliente,
+                mac: mac,
+                nombre: nombre
+            }
+            const status = nuevo(data)
+            if(status == false){
+                setLoading(false)
+            }
+        }else{
+            setLoading(false);
+        }
+    }
+
     return(
         <>
         <div className = 'card'>
-            <Form encType="multipart/form-data" >
+            <Form onSubmit = {onSubmitForm} ref = {form} encType="multipart/form-data" >
             <div className = 'card-header'>
                 <div className = 'row'>
                     <div className = 'col-sm-4'>
@@ -60,14 +119,16 @@ const RoboshotsAdd = (props) => {
                                 Cliente
                             </label>
                             <div className = 'col-sm-8'>
-                                <Input
-                                    type = 'text'
+                                <Select
                                     className = 'form-control'
-                                    id = 'cliente'
                                     name = 'cliente'
                                     disabled = {loading}
                                     validations = {[required]}
-                                />
+                                    onChange = {onChangeCliente}
+                                >
+                                    <option value = ''>Seleccione cliente</option>
+                                    {selectClientes()}
+                                </Select>
                             </div>
                         </div>
                         <div className = 'form-group row'>
@@ -80,7 +141,7 @@ const RoboshotsAdd = (props) => {
                                     value = {mac}
                                     onChange = {onChangeMac}
                                     disabled = {loading}
-                                    
+                                    validations = {[required]}
                                 />
                             </div>
                         </div>
@@ -96,6 +157,7 @@ const RoboshotsAdd = (props) => {
                                     name = 'nombre'
                                     disabled = {loading}
                                     validations = {[required]}
+                                    onChange = {onChangeNombre}
                                 />
                             </div>
                         </div>
@@ -107,7 +169,7 @@ const RoboshotsAdd = (props) => {
                     </div>
                 </div>
             </div>
-            <CheckButton style={{ display: "none" }}  />
+            <CheckButton style={{ display: "none" }} ref = {checkRef} />
             </Form>
         </div>
         </>

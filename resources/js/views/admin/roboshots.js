@@ -3,8 +3,11 @@ import React, {useState} from 'react';
 //  navegation
 import {Switch, Route} from 'react-router-dom';
 
+//  API 
+import UserService from '../../services/auth/servicioUsuarios';
+
 //  toast
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 //  componentes
@@ -27,9 +30,33 @@ const RoboshotsAdmin = (props) => {
         console.log(eliminarRob)
     }
 
+    //  guardar datos de roboshot
+    const nuevo = (data) => {
+        const resp = UserService.anadirRoboshot(data);
+        resp.then((response) => {
+            console.log(response.data)
+            toast.success('todo en orden',{
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 4000,
+                hideProgressBar: false,
+                newestOnTop: false,
+                closeOnClick: true,
+                rtl: false,
+                draggable: true,
+                pauseOnHover: true,
+                progress: undefined,
+                //onClose: () => cerrar()
+            });
+            return false;
+        })
+        
+    }
+
+    const cerrar = () => {
+        props.history.push('/admin/roboshots')
+    }
     return(
         <>
-        <ToastContainer />
         <div className = 'content'>
             <div className = 'row'>
                 <div className = 'col-md-12'>
@@ -39,7 +66,11 @@ const RoboshotsAdmin = (props) => {
                                 abrirModalDelete = {(e) => abrirModalEliminar(e)} 
                             />
                         </Route>
-                        <Route exact path = '/admin/roboshots/anadir' component = {RoboshotsAdd} />
+                        <Route exact path = '/admin/roboshots/anadir'>
+                            <RoboshotsAdd 
+                                nuevoRob = {(e) => nuevo(e)}
+                            />
+                        </Route>
                     </Switch>
                 </div>
             </div>

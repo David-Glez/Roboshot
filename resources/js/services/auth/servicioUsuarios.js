@@ -46,6 +46,11 @@ const rutasRol = () => {
   return axios.get(API_URL + '/general/rutas', {headers: authHeader()});
 }
 
+//  devuelve la lista de clientes
+const clientes = () => {
+  return axios.get(API_URL + '/general/clientes', {headers: authHeader()});
+}
+
 /**************************************************/
 
 /*****      FUNCIONES PARA MANEJO DE ROBOSHOTS      *****/
@@ -78,6 +83,7 @@ const anadirRoboshot = (data) => {
     verUsuarios,
     verRoboshots,
     anadirRoboshot,
+    clientes,
     nuevoCliente,
     infoCliente,
     editarCliente,

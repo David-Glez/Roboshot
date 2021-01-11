@@ -147,4 +147,25 @@ class GeneralController extends Controller
         return response()->json($rutas);
     }
 
+    //  consulta una lista de clientes
+    public function clientes(){
+        $data = [];
+        $clientes = Clientes::whereHas('usuario', function($query){
+            $query->where('idRol', 2);
+        })->get();
+
+        foreach($clientes as $i){
+
+            $x = array(
+                'idCliente' => $i->idCliente,
+                'nombre' => $i->nombres.' '.$i->apellidoPaterno.' '.$i->apellidoMaterno
+            );
+            $data[] = $x;
+        }
+
+        return response()->json($data);
+    }
+
+    
+
 }
