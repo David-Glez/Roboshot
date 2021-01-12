@@ -60,9 +60,19 @@ const verRoboshots = () =>{
   return axios.get(API_URL + '/roboshots', {headers: authHeader()});
 };
 
+//  informacion de una estacion
+const infoRoboshot = (id) => {
+  return axios.get(API_URL + '/roboshots/'+id, {headers: authHeader()})
+}
+
 //  inserta una nueva estacion fisica
 const anadirRoboshot = (data) => {
   return axios.post(API_URL + '/roboshots/anadir', data, {headers: authHeader()});
+}
+
+//  elimina una estacion
+const eliminarRoboshot = (data) => {
+  return axios.post(API_URL + '/roboshots/eliminar', data, {headers: authHeader()})
 }
 
 /**************************************************/
@@ -82,7 +92,9 @@ const anadirRoboshot = (data) => {
     statsCard,
     verUsuarios,
     verRoboshots,
+    infoRoboshot,
     anadirRoboshot,
+    eliminarRoboshot,
     clientes,
     nuevoCliente,
     infoCliente,

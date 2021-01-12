@@ -23,6 +23,18 @@ const required = (value) =>{
     }
 };
 
+const macAddress = (value) => {
+    var regex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
+    const isMac = regex.test(value);
+    if(!isMac){
+        return(
+            <small className = 'text-danger' role = 'alert'>
+                Formato inválido
+            </small>
+        )
+    }
+}
+
 const RoboshotsAdd = (props) => {
 
     const checkRef = useRef();
@@ -58,7 +70,7 @@ const RoboshotsAdd = (props) => {
 
     const onChangeMac = (e) => {
         const dir = e.target.value;
-        setMac(dir)
+        setMac(dir.toUpperCase())
     }
 
     const onChangeCliente = (e) => {
@@ -139,10 +151,15 @@ const RoboshotsAdd = (props) => {
                                 <Input
                                     className = 'form-control'
                                     value = {mac}
+                                    placeholder = 'AA:BB:CC:DD:EE:FF'
+                                    maxLength = '17'
                                     onChange = {onChangeMac}
                                     disabled = {loading}
-                                    validations = {[required]}
+                                    validations = {[macAddress]}
                                 />
+                                <small>
+                                    ingrese : o - entre dos caracteres
+                                </small>
                             </div>
                         </div>
                         <div className = 'form-group row'>

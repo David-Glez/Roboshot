@@ -16,6 +16,7 @@ use App\Models\Ingredientes;
 use App\Models\RecetaIngredientes;
 use App\Models\Roboshots;
 use App\Models\Clientes;
+use Illuminate\Validation\ValidationException;
 
 class Roboshot{
 
@@ -35,6 +36,91 @@ class Roboshot{
                 'creado' => $fecha->format('Y-m-d')
             );
             $data[] = $datos;
+        }
+
+        return $data;
+    }
+
+    //  informacion de una estacion
+    public static function info($id){
+        $rob = Roboshots::find($id);
+        $cliente = Clientes::find($rob->idCliente);
+
+        $data = array(
+            'idCliente' => $cliente->idCliente,
+            'cliente' => $cliente->nombres.' '.$cliente->apellidoPaterno.' '.$cliente->apellidoMaterno,
+            'nombre' => $rob->nombre,
+            'mac' => $rob->MAC,
+            'estado' => $rob->estado
+        );
+
+        return $data;
+    }
+
+    //  registrar estacion 
+    public static function registrar($datos){
+        try{
+            $datos->validate([
+                'mac' => ['required', 'unique:roboshots,MAC', 'min:17'],
+                'nombre' => ['required', 'unique:roboshots,nombre']
+            ]);
+
+            $roboshot = Roboshots::create([
+                'idCliente' => $datos->idCliente,
+                'MAC' => $datos->mac,
+                'nombre' => $datos->nombre,
+                'estado' => true
+            ]);
+            
+
+            $data = array(
+                'status' => true,
+                'mensaje' => 'Estación registrada con éxito',
+            );
+
+        }catch(ValidationException $e){
+            $errors = [];
+            foreach($e->errors() as $item) {
+                foreach($item as $x){
+                    $errors[] = $x;
+                }
+            }
+            $data = array(
+                'status' => false,
+                'mensaje' => $errors,
+            );
+            return $data;
+        }
+
+        return $data;
+    }
+
+    //  elimina el registro de una estacion roboshot
+    public static function eliminar($datos){
+        try{
+            $datos->validate([
+                'password' => ['required', 'password:api']
+            ]);
+
+            $eliminar = Roboshots::find($datos->id)->delete();
+
+            $data = array(
+                'status' => true,
+                'mensaje' => 'Estación eliminada',
+            );
+
+        }catch(ValidationException $e){
+            $errors = [];
+            foreach($e->errors() as $item) {
+                foreach($item as $x){
+                    $errors[] = $x;
+                }
+            }
+            $data = array(
+                'status' => false,
+                'mensaje' => $errors,
+            );
+            return $data;
         }
 
         return $data;

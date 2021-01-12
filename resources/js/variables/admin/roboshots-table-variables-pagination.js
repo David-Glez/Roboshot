@@ -2,6 +2,7 @@ import React from 'react';
 
 import SinElementos from '../../components/alertas/vacio';
 import RoboshotsTableButtons from '../../components/admin/buttons/roboshots-table-buttons';
+import SpanRoboshot from '../../components/admin/buttons/roboshots-span'
 
 //  informacion de las columnas de la tabla clientes
 const columnas = (abrirModal) => {
@@ -20,7 +21,14 @@ const columnas = (abrirModal) => {
         text: 'Dirección Física'
     },{
         dataField: 'estado',
-        text: 'Estado'
+        text: 'Estado',
+        formatter: (cell, row, rowIndex, formatExtraData) => {
+            return(
+                <SpanRoboshot
+                    estado = {row.estado} 
+                />
+            )
+        }
     },{
         dataField: 'creado',
         text: 'Fecha Alta'
@@ -32,7 +40,7 @@ const columnas = (abrirModal) => {
             return(
                 <RoboshotsTableButtons
                     id = {row.id}
-                    nombre = {row.usuario}
+                    nombre = {row.nombre}
                     cliente = {row.cliente}
                     abrirModal = {abrirModal} 
                 />

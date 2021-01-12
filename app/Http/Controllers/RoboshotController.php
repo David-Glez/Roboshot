@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Roboshots;
 use App\Models\Clientes;
 use App\Clases\Roboshot;
+use Illuminate\Support\Facades\Auth;
 
 class RoboshotController extends Controller
 {
@@ -17,9 +17,32 @@ class RoboshotController extends Controller
         return response()->json($x);
     }
 
+    //  informacion de un roboshot
+    public function info($id){
+        $x = Roboshot::info($id);
+        return response()->json($x);
+    }
+
     // registrar roboshot
     public function anadir(Request $request){
-        return response()->json($request);
+
+        $x = Roboshot::registrar($request);
+
+        return response()->json($x);
+    }
+
+    //  elimina un roboshot
+    public function eliminar(Request $request){
+
+        if(Auth::user()->idRol== 1){
+            $x = Roboshot::eliminar($request);
+        }else{
+            $x = array(
+                'status' => false,
+                'mensaje' => 'No tiene permisos para eliminar estaciones',
+            );
+        }
+        return response()->json($x);
     }
 
     //  consulta lista de esquemas

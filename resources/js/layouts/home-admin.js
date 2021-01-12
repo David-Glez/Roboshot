@@ -123,6 +123,7 @@ function Inicio(props){
                         <Route exact path = '/admin/usuarios/editar' component = {UsersAdmin} />
                         <Route exact path = '/admin/roboshots' component = {RoboshotsAdmin} />
                         <Route exact path = '/admin/roboshots/anadir' component = {RoboshotsAdmin} />
+                        <Route exact path = '/admin/roboshots/editar' component = {RoboshotsAdmin} />
                     </Switch>
                     
                 </div>

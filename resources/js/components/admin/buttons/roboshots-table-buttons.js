@@ -11,18 +11,26 @@ const RoboshotsTableButtons = (props) => {
     const nombre = props.nombre;
     const cliente = props.cliente;
 
+    //  abrir modal de eliminar usuario
+    const modalEliminar = (e, id, nombre, cliente) => {
+        e.preventDefault();
+        props.abrirModal(id, nombre, cliente)
+    }
+
     return(
         <>
         <Link 
             to = {{
-                pathname: '/admin/usuarios/editar',
-                idUsuario: 0
+                pathname: '/admin/roboshots/editar',
+                idRob: id
             }}
             className = 'btn btn-outline-secondary'
         >
             <FontAwesomeIcon icon = {faEdit} />
         </Link>
-        
+        <a onClick = {(e) => modalEliminar(e, id, nombre, cliente)} className = 'btn btn-outline-danger'>
+            <FontAwesomeIcon icon = {faTrashAlt} />   
+        </a>
         </>
     )
 }

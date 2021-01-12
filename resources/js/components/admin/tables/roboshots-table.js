@@ -24,7 +24,9 @@ const RoboshotsTable = (props) => {
     useEffect(() => {
         const inicio = async() => {
             const resp = await UserService.verRoboshots();
+            
             if(resp){
+                setRoboshots(resp.data)
                 setLoading(false);
             }
         }   
@@ -74,5 +76,9 @@ const RoboshotsTable = (props) => {
     )
 
 }
+
+/*
+
+*/
 
 export default RoboshotsTable;
