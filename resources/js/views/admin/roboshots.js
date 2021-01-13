@@ -7,7 +7,7 @@ import {Switch, Route} from 'react-router-dom';
 import UserService from '../../services/auth/servicioUsuarios';
 
 //  toast
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 //  componentes
@@ -43,7 +43,7 @@ const RoboshotsAdmin = (props) => {
             cliente: ''
         })
         setEliminarRob(false);
-        props.history.push('/admin');
+        props.history.push('/admin/roboshots');
     }
 
     //  guardar datos de roboshot
@@ -86,6 +86,46 @@ const RoboshotsAdmin = (props) => {
         
     }
 
+    //  editar roboshot
+    const editar = (data) => {
+        
+        const envio = UserService.editarRoboshot(data)
+        envio.then((response) => {
+            if(response.data.status){
+                toast.success(response.data.mensaje,{
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    newestOnTop: false,
+                    closeOnClick: true,
+                    rtl: false,
+                    draggable: true,
+                    pauseOnHover: true,
+                    progress: undefined,
+                    onClose: () => cerrar()
+                });
+                
+            }else{
+                let mensajes = response.data.mensaje;
+                mensajes.forEach((item) => {
+                    toast.warning(item,{
+                        position: toast.POSITION.TOP_CENTER,
+                        autoClose: 4000,
+                        hideProgressBar: false,
+                        newestOnTop: false,
+                        closeOnClick: true,
+                        rtl: false,
+                        draggable: true,
+                        pauseOnHover: true,
+                        progress: undefined
+                    });
+                });
+                return false
+            }
+
+        })
+    }
+
     const cerrar = () => {
         props.history.push('/admin/roboshots')
     }
@@ -106,7 +146,12 @@ const RoboshotsAdmin = (props) => {
                                 nuevoRob = {(e) => nuevo(e)}
                             />
                         </Route>
-                        <Route exact path = '/admin/roboshots/editar' component = {RoboshotsUpdate}/>
+                        <Route exact path = '/admin/roboshots/editar' >
+                            <RoboshotsUpdate
+                                editar = {(e) => editar(e)}
+                                location = {props.location} 
+                            />
+                        </Route>
                     </Switch>
                 </div>
             </div>

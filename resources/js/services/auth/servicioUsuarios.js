@@ -70,6 +70,10 @@ const anadirRoboshot = (data) => {
   return axios.post(API_URL + '/roboshots/anadir', data, {headers: authHeader()});
 }
 
+const editarRoboshot = (data) => {
+  return axios.post(API_URL + '/roboshots/editar', data, {headers: authHeader()});
+}
+
 //  elimina una estacion
 const eliminarRoboshot = (data) => {
   return axios.post(API_URL + '/roboshots/eliminar', data, {headers: authHeader()})
@@ -94,6 +98,7 @@ const eliminarRoboshot = (data) => {
     verRoboshots,
     infoRoboshot,
     anadirRoboshot,
+    editarRoboshot,
     eliminarRoboshot,
     clientes,
     nuevoCliente,

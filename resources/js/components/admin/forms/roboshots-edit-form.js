@@ -41,6 +41,8 @@ const RoboshotsUpdate = (props) => {
     const checkRef = useRef();
     const form = useRef();
 
+    const editar = props.editar;
+
     const id = props.location.idRob;
 
     const [loading, setLoading] = useState(false);
@@ -54,7 +56,6 @@ const RoboshotsUpdate = (props) => {
     useEffect(() => {
         const inicio = async() => {
             const info = await UserService.infoRoboshot(id);
-            console.log(info.data);
             if(info){
                 setMac(info.data.mac);
                 setCliente(info.data.idCliente);
@@ -83,21 +84,19 @@ const RoboshotsUpdate = (props) => {
 
     const onSubmitForm = (e) => {
         e.preventDefault();
-        setLoading(true);
         form.current.validateAll();
 
         if(checkRef.current.context._errors.length == 0){
             let data = {
+                idRob: id,
                 idCliente: cliente,
                 mac: mac,
                 nombre: nombre,
                 estado: estado
             }
-            console.log(data)
-            /*const status = nuevo(data)
-            if(status == false){
-                setLoading(false)
-            }*/
+            
+            const status = editar(data)
+            
         }else{
             setLoading(false);
         }

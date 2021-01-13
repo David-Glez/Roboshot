@@ -7,11 +7,11 @@ const SpanRoboshot = (props) => {
         <>
         {estado ? (
             <>
-            Activo
+            <span className="badge bg-success spanColor">Activo</span>
             </>
         ):(
             <>
-            Inactivo
+            <span className="badge bg-danger spanColor">Inactivo</span>
             </>
         )}
         </>

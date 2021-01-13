@@ -36,6 +36,7 @@ const columnas = (abrirModal) => {
         dataField: '',
         text: "Acciones",
         sort: false,
+        classes: 'text-center',
         formatter: (cell, row, rowIndex, formatExtraData) =>{
             return(
                 <RoboshotsTableButtons

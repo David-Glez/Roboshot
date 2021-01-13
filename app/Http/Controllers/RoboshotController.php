@@ -31,6 +31,14 @@ class RoboshotController extends Controller
         return response()->json($x);
     }
 
+    //  editar datos de una estacion
+    public function editar(Request $request){
+
+        $x = Roboshot::editar($request);
+        
+        return response()-> json($x);
+    }
+
     //  elimina un roboshot
     public function eliminar(Request $request){
 

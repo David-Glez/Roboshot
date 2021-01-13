@@ -95,6 +95,23 @@ class Roboshot{
         return $data;
     }
 
+    //  editar datos de una estacion
+    public static function editar($datos){
+        
+        $robot = Roboshots::find($datos->idRob);
+        $robot->nombre = $datos->nombre;
+        $robot->MAC = $datos->mac;
+        $robot->estado = $datos->estado;
+        $robot->save();
+
+        $data = array(
+            'status' => true,
+            'mensaje' => 'Datos actualizados'
+        );
+
+        return $data;
+    }
+
     //  elimina el registro de una estacion roboshot
     public static function eliminar($datos){
         try{

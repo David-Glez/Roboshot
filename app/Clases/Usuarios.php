@@ -28,7 +28,7 @@ class Usuarios{
             if($roboshots == 0){
                 $roboshot = '---';
             }else{
-                $roboshot = 'existe';
+                $roboshot = $roboshots;
             }
             if($cliente->razonSocial == null || $cliente->razonSocial == ''){
                 $razonSocial = 'No Aplica';
@@ -195,7 +195,8 @@ class Usuarios{
                 $image = $datos->file('new_img');
                 $extension = $image->getClientOriginalExtension();
                 $newLogo = $fecha.'-'.$datos->id.'-'.$usuario->nombre.'.'.$extension;
-
+                //  elimina el archivo anterior
+                Storage::delete($logo);
                 //  mueve el elemento
                 $logo = Storage::putFileAs('public/images/'.$cliente->directorio, $image, $newLogo);
                 
@@ -260,7 +261,7 @@ class Usuarios{
                 
                 $data = array(
                     'status' => true,
-                    'mensaje' => 'Todo en orden'
+                    'mensaje' => 'Cliente eliminado'
                 );
             }else{
                 $data = array(
