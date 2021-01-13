@@ -2,7 +2,7 @@ import React from 'react';
 
 import SinElementos from '../../components/alertas/vacio';
 import RoboshotsTableButtons from '../../components/admin/buttons/roboshots-table-buttons';
-import SpanRoboshot from '../../components/admin/buttons/roboshots-span'
+import CustomSpan from '../../components/admin/buttons/custom-span'
 
 //  informacion de las columnas de la tabla clientes
 const columnas = (abrirModal) => {
@@ -24,7 +24,7 @@ const columnas = (abrirModal) => {
         text: 'Estado',
         formatter: (cell, row, rowIndex, formatExtraData) => {
             return(
-                <SpanRoboshot
+                <CustomSpan
                     estado = {row.estado} 
                 />
             )

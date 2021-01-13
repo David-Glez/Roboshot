@@ -21,6 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import DashBoard from '../views/admin/dashboard';
 import UsersAdmin from '../views/admin/users';
 import RoboshotsAdmin from '../views/admin/roboshots';
+import RecipesAdmin from '../views/admin/recipes';
 
 //bootstrap
 import 'bootstrap/dist/js/bootstrap.min.js';
@@ -58,6 +59,7 @@ function Inicio(props){
                 rol: resp.rol,
                 autorizado: resp.autorizado
             })
+            setLoading(false)
         }else{
             setLogueado(false)
         }
@@ -124,6 +126,8 @@ function Inicio(props){
                         <Route exact path = '/admin/roboshots' component = {RoboshotsAdmin} />
                         <Route exact path = '/admin/roboshots/anadir' component = {RoboshotsAdmin} />
                         <Route exact path = '/admin/roboshots/editar' component = {RoboshotsAdmin} />
+                        <Route exact path = '/admin/recetas' component = {RecipesAdmin} />
+                        <Route exact path = '/admin/recetas/editar' component = {RecipesAdmin} />
                     </Switch>
                     
                 </div>

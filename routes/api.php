@@ -84,6 +84,9 @@ Route::group([
         Route::post('/roboshots/editar', 'RoboshotController@editar');
         Route::post('/roboshots/eliminar', 'RoboshotController@eliminar');
 
+        //  rutas para funciones destinadas a recetas e ingredientes
+        Route::get('/recetas', 'RecetasIngredientesController@inicio');
+
         //  rutas para funciones generales
         Route::get('/general/stats', 'GeneralController@statsCard');
         Route::get('/general/rutas', 'GeneralController@rutas');

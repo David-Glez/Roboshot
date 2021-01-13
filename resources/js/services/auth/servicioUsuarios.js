@@ -55,7 +55,7 @@ const clientes = () => {
 
 /*****      FUNCIONES PARA MANEJO DE ROBOSHOTS      *****/
 
-// Mostrar la lista de roboshots registrados
+//  Mostrar la lista de roboshots registrados
 const verRoboshots = () =>{
   return axios.get(API_URL + '/roboshots', {headers: authHeader()});
 };
@@ -80,17 +80,15 @@ const eliminarRoboshot = (data) => {
 }
 
 /**************************************************/
-  const getUserBoard = () => {
-    return axios.get(API_URL + "user", { headers: authHeader() });
-  };
-  
-  const getModeratorBoard = () => {
-    return axios.get(API_URL + "mod", { headers: authHeader() });
-  };
-  
-  const getAdminBoard = () => {
-    return axios.get(API_URL + "admin", { headers: authHeader() });
-  };
+
+/*****      FUNCIONES PARA MANEJO DE RECETAS      *****/
+
+//  consulta la lista de recetas del cliente
+const verRecetas = () => {
+  return axios.get(API_URL + '/recetas', {headers: authHeader()})
+}
+
+/**************************************************/
   
   export default {
     statsCard,
@@ -106,6 +104,5 @@ const eliminarRoboshot = (data) => {
     editarCliente,
     eliminarCliente,
     rutasRol,
-    getModeratorBoard,
-    getAdminBoard,
+    verRecetas
   };
