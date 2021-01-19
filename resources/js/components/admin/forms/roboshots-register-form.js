@@ -9,9 +9,6 @@ import Input from 'react-validation/build/input';
 import CheckButton from 'react-validation/build/button';
 import Select from 'react-validation/build/select';
 
-//  libreria toast
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const required = (value) =>{
     if(!value){
