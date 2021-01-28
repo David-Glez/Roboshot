@@ -64,6 +64,7 @@ Route::group([
 
     //  ruta para roboshot local
     Route::post('/roboshots/local/actualizar', 'RoboshotController@actualizarLocal');
+    Route::post('/roboshots/local/img', 'RoboshotController@receiveImg');
     
     //rutas con requerimiento de autorizacion
     Route::group([

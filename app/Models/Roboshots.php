@@ -13,7 +13,7 @@ class Roboshots extends Model
         'idCliente', 'MAC', 'nombre', 'estado'
     ];
 
-    public function cliente(){
+    public function station_client(){
         return $this->belongsToMany(Clientes::class, 'idCliente', 'idCliente');
     }
 }

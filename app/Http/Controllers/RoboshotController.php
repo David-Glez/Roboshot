@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Clientes;
 use App\Clases\Roboshot;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class RoboshotController extends Controller
 {
@@ -92,13 +93,11 @@ class RoboshotController extends Controller
         return response()->json($resultado);
     }
 
-    
-
     //  actualizar roboshot
     public function actualizarLocal(Request $request){
-        
+        return response()->json($request);
         //  verifica si los campos usuario y esquema estan definidos
-        if(isset($request->usuarioWeb) && isset($request->esquema)){
+        /*if(isset($request->usuarioWeb) && isset($request->esquema)){
             //$usuario = User::where('nombre', $request->usuarioweb)->first();
             if(isset($request->tablaReceta)){
                 $estadoRec = Roboshot::recetasWeb($request);
@@ -126,6 +125,37 @@ class RoboshotController extends Controller
             $data = array(
                 'estado' => false,
                 'mensaje' => 'Usuario y/o esquema no definidos'
+            );
+        }
+
+        return response()->json($data);*/
+    }
+
+    //  recibe la imagen al crear la receta en local
+    public function receiveImg(Request $request){
+        if($request->hasFile('img')){
+            $stationName = $request->station;
+            $macAddress = $request->mac_address;
+            //  buscar el directorio del cliente
+            $cliente = Clientes::whereHas('station_rob', function($query) use($stationName){
+                $query->where('nombre', $stationName);
+            })->first();
+
+            //  se modifica el nombre del archivo para que sea identico al de la estacion
+            $img = $request->file('img');
+
+            //  se mueve al directorio
+            $path = Storage::putFileAs('public/images/'.$cliente->directorio, $img, $request->fileName);
+
+            $data = array(
+                'status' => true,
+                'mensaje' => 'image stored',
+                'data' => $path
+            );
+        }else{
+            $data = array(
+                'status' => false,
+                'mensaje' => 'no image'
             );
         }
 

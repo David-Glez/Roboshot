@@ -18,7 +18,7 @@ class Clientes extends Model
         return $this->hasOne(User::class, 'idUsuario', 'idUsuario');
     }
 
-    public function roboshot(){
+    public function station_rob(){
         return $this->hasMany(Roboshots::class, 'idCliente', 'idCliente');
     }
     
