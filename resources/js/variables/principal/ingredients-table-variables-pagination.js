@@ -4,7 +4,7 @@ import SinElementos from '../../components/alertas/vacio';
 import IngredientesButtons from '../../components/principal/buttons/ingredients-table-buttons';
 
 //  informacion de las columnas de la tabla clientes
-const columnas = (cantidades) => {
+const columnas = (cantidades, lista) => {
     //  columnas para la tabla
     const data = [{
         dataField: 'idIngrediente',
@@ -20,12 +20,13 @@ const columnas = (cantidades) => {
         text: "Cantidad",
         sort: false,
         formatter: (cell, row, rowIndex, formatExtraData) =>{
-            
+            const ingredient = lista.ingredientes.find(item => item.idIngrediente == row.idIngrediente);
             return(
                 <IngredientesButtons
                     id = {row.idIngrediente}
                     precio = {row.precio}
                     cantidades = {cantidades}
+                    ingredient = {ingredient}
                 />
             )
         },

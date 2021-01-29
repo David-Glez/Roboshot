@@ -11,6 +11,7 @@ const IngredientesTable = (props) => {
 
     const idCategoria = props.idCategoria;
     const ingredientes = props.ingredientes;
+    const lista = props.lista;
 
     //  funciones
     const cantidades = props.cantidadBebida;
@@ -21,7 +22,7 @@ const IngredientesTable = (props) => {
         <BootstrapTable 
             keyField = 'idIngrediente' 
             data = { filtro } 
-            columns = { opciones.columnas(cantidades) }
+            columns = { opciones.columnas(cantidades, lista) }
             bootstrap4 = {true} 
             noDataIndication={ opciones.vacio() }
             classes = 'table scrollDiv'

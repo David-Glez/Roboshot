@@ -14,6 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../../alertas/loader';
 import CategoriasCard from '../cards/categorias-card';
 import IngredientesTable from '../tables/ingredients-table';
+import AnimatedGlass from '../cards/animated-glass-section';
 
 // hook
 import usePedido from '../../../hooks/principal/manual-recipe-hook';
@@ -34,8 +35,6 @@ const Contenido = (props) => {
         precio: 0 
     });
     
-    const [precioReceta, setPrecioReceta] = useState(0);
-    const [cantidadBebida, setCantidadBebida] = useState(0);
     const [idCategoria, setIDCategoria] = useState();
     const [loading, setLoading] = useState(true);
     const lista = usePedido(ingredient, id);
@@ -86,7 +85,7 @@ const Contenido = (props) => {
             }else{
                 
                 //  los envia al carrito
-                props.pedir(receta);
+                props.pedir(lista);
 
                 //  cierra el modal
                 props.cerrar();
@@ -125,17 +124,6 @@ const Contenido = (props) => {
         
     };
 
-
-
-    //  quita un ingrediente de la lista
-    const quitarIngrediente = (id, precio, cantidad, e) => {
-        e.preventDefault();
-        setPrecioReceta(precioReceta - precio);
-        setCantidadBebida(cantidadBebida - cantidad);
-        setPedido(pedido.filter(item => item.idIngrediente !== id))
-    };
-
-
     return(
         <>
         <Modal.Body>
@@ -165,13 +153,15 @@ const Contenido = (props) => {
                                 idCategoria = {idCategoria} 
                                 ingredientes = {ingredientes}
                                 cantidadBebida = {(e, i) => cantidades(e, i)}
+                                lista = {lista}
                                 
                             />
                         </div>
                         <div className = 'col-md-3'>
-                            <label htmlFor = 'ingredients' className = 'col-form-label primaryText'>
-                                Pedido
-                            </label>
+                            <AnimatedGlass
+                                cantidad = {lista.cantidad} 
+                            />
+                            
                         </div>
                     </div>
                     

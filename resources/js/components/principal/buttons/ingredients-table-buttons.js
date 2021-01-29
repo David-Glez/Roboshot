@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,8 +7,20 @@ const IngredientesButtons = (props) => {
 
     const id = props.id;
     const cantidades = props.cantidades;
+    const ingredient = props.ingredient;
+
+    console.log(ingredient)
 
     const [cantidad, setCantidad] = useState(0);
+
+    useEffect(() => {
+        if(ingredient == undefined){
+            setCantidad(0)
+        }else{
+            setCantidad(ingredient.cantidad)
+        }
+    },[ingredient])
+    
 
     const mas = () => {
         const ml = cantidad + 10;

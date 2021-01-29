@@ -14,6 +14,7 @@ import './assets/css/index.css';
 import './assets/css/style.css';
 import './assets/css/admin.css';
 import './assets/css/preloader.css';
+import './assets/css/animated-glass.css'
 
 //  layouts
 import Home from './layouts/home-principal';
