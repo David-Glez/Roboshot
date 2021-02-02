@@ -8,6 +8,10 @@ import Form from 'react-validation/build/form';
 import Input from 'react-validation/build/input';
 import CheckButton from 'react-validation/build/button';
 
+//  libreria toast
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 //  Estilos
 import {Spinner}from 'react-bootstrap';
 
@@ -45,6 +49,7 @@ const UsersUpdate = (props) => {
     useEffect(() => {
         const inicio = async() =>{
             const result = await UserService.infoCliente(idUser);
+            console.log(result.data)
             if(result){
                 setCharge(false);
                 setUsuario(result.data.usuario);
@@ -118,7 +123,7 @@ const UsersUpdate = (props) => {
     const onSubmitForm = (e) => {
         e.preventDefault();
         setLoading(true);
-        props.abrirLoading();
+        //props.abrirLoading();
         const data = new FormData();
         data.append('id', idUser);
         data.append('nombre', nombre);

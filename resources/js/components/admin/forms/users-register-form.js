@@ -128,6 +128,8 @@ const UsersAdd = (props) => {
         if(checkBtn.current.context._errors.length == 0){
             const envio = UserService.nuevoCliente(data);
             envio.then(response => {
+                setLoading(false)
+                //console.log(response)
                 if(response.data.status == true){
                     toast.success(response.data.mensaje,{
                         position: toast.POSITION.TOP_CENTER,
@@ -203,7 +205,7 @@ const UsersAdd = (props) => {
                                     value = {nombre}
                                     onChange = {onChangeNombre}
                                     disabled = {loading}
-                                    validations = {[required]}
+                                    //validations = {[required]}
                                 />
                             </div>
                         </div>
@@ -220,7 +222,7 @@ const UsersAdd = (props) => {
                                     value = {apellidoPaterno}
                                     onChange = {onChangeApellidoP}
                                     disabled = {loading}
-                                    validations = {[required]}
+                                    //validations = {[required]}
                                 />
                             </div>
                         </div>
@@ -237,7 +239,7 @@ const UsersAdd = (props) => {
                                     value = {apellidoMaterno}
                                     onChange = {onChangeApellidoM}
                                     disabled = {loading}
-                                    validations = {[required]}
+                                    //validations = {[required]}
                                 />
                             </div>
                         </div>
@@ -254,7 +256,7 @@ const UsersAdd = (props) => {
                                     value = {razon}
                                     onChange = {onChangeRazon}
                                     disabled = {loading}
-                                    validations = {[required]}
+                                    //validations = {[required]}
                                 />
                             </div>
                         </div>
@@ -271,7 +273,7 @@ const UsersAdd = (props) => {
                                     value = {rfc}
                                     onChange = {onChangeRFC}
                                     disabled = {loading}
-                                    validations = {[required]}
+                                    //validations = {[required]}
                                 />
                             </div>
                         </div>
@@ -288,7 +290,7 @@ const UsersAdd = (props) => {
                                     value = {email}
                                     onChange = {onChangeEmail}
                                     disabled = {loading}
-                                    validations = {[required]}
+                                    //validations = {[required]}
                                 />
                             </div>
                         </div>

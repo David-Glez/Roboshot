@@ -39,7 +39,7 @@ const UsersAdmin = (props) => {
 
     return(
         <>
-        <ToastContainer />
+        
         <div className = 'content'>
             <div className = 'row'>
                 <div className = 'col-md-12'>

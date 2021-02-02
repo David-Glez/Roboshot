@@ -23,11 +23,11 @@ class WebController extends Controller
 
         $clientes = Clientes::where('esquema', '!=', '')->get();
         foreach($clientes as $i){
-            $logo = Storage::url($i->logo);
+            //$logo = Storage::url($i->logo);
             $datos = array(
                 'idCliente' => $i->idCliente,
                 'razonSocial' => $i->razonSocial,
-                'logo' => $logo
+                'logo' => $i->logo
             );
 
             $data[] = $datos;
