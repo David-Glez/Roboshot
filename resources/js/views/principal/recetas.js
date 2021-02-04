@@ -55,7 +55,7 @@ const Recipe = (props) => {
                     <>
                     {recetas.map((x) =>
                         <CardRecipe
-                            key = {x.idReceta}
+                            key = {x.id}
                             datos = {x}
                             cliente = {idCliente}
                             abrirReceta = {(e,i) => abrir(e,i)} 

@@ -14,7 +14,7 @@ const CardRecipe = (props) => {
         <>
         <div className = 'col-sm-3 my-sm-2'>
             <div className = 'card mb-4 mb-sm-1'>
-                <img className = 'card-img-top img-fluid' src = {window.location.origin+''+receta.img} style = {{maxHeight: 255}} alt = 'Card image cap' />
+                <img className = 'card-img-top img-fluid' src = {receta.img} style = {{maxHeight: 255}} alt = 'Card image cap' />
                 <div className = 'card-body'>
                     <h5 className = 'card-title'>{receta.nombre}</h5>
                     <span className = 'price'>${receta.precio}</span>

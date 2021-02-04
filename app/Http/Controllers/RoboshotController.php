@@ -2,14 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Clases\Conexion;
 use Illuminate\Http\Request;
 use App\Models\Clientes;
 use App\Clases\Roboshot;
+use App\Models\RecetaIngredientes;
+use App\Models\Recetas;
+use App\Models\Roboshots;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class RoboshotController extends Controller
 {
+    public function __construct(){
+        //  Necesitamos obtener una instancia de la clase Client la cual tiene algunos métodos
+        //  que serán necesarios.
+        //  en el caso de que marque error el metodo getDriver ignorar
+        $this->dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();   
+    }
+
     //  ver la lista de roboshots registrados
     public function inicio(){
 
@@ -54,53 +65,23 @@ class RoboshotController extends Controller
         return response()->json($x);
     }
 
-    //  consulta lista de esquemas
-    public function disponibles(Request $request){
-
-        //  cuenta las coincidencias dentro de la BD
-        $busca = Clientes::where('esquema', $request->esquema)->count();
-        
-        if($busca > 0){
-
-            //  genera la sugerencia 1
-            $cadena = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            $longitud = strlen($cadena);
-            $codigo = '';
-
-            for($i = 0; $i < 5; $i++){
-                $codigo .= $cadena[rand(0, $longitud-1)];
-            }
-
-            $sugerencia1 = $request->esquema.'_'.$codigo;
-
-            // genera sugerencia 2
-            $num = rand(0,1000);
-            $sugerencia2 = $request->esquema.'_'.$num;
-
-            $resultado = array(
-                'mensaje' => 'El nombre de BD ya existe',
-                'sugerencia1' => $sugerencia1,
-                'sugerencia2' => $sugerencia2
-            );
-        }else{
-            $resultado = array(
-                'mensaje' => 'Nombre disponible',
-                'sugerencia1' => '',
-                'sugerencia2' => ''
-            );
-        }
-        
-        return response()->json($resultado);
-    }
-
     //  actualizar roboshot
     public function actualizarLocal(Request $request){
-        return response()->json($request);
+
         //  verifica si los campos usuario y esquema estan definidos
-        /*if(isset($request->usuarioWeb) && isset($request->esquema)){
-            //$usuario = User::where('nombre', $request->usuarioweb)->first();
+        if(isset($request->usuarioWeb) && isset($request->esquema)){
+            $stationName = $request->roboshotName;
+            $userName = $request->usuarioWeb;
+            $schema = $request->esquema;
+            $recipes = $request->tablaReceta;
+
+            //  client info
+            $cliente = Clientes::whereHas('station_rob', function($query) use($stationName){
+                $query->where('nombre', $stationName);
+            })->first();
+            
             if(isset($request->tablaReceta)){
-                $estadoRec = Roboshot::recetasWeb($request);
+                $estadoRec = $this->updateRecipes($recipes, $schema, $cliente->directorio, $stationName);
             }else{
                 $estadoRec = 'No seleccionada';
             }
@@ -109,17 +90,17 @@ class RoboshotController extends Controller
             }else{
                 $estadoIng = 'No seleccionada';
             }
-            if(isset($request->tablaCategorias)){
+            /*if(isset($request->tablaCategorias)){
                 $estadoCat = Roboshot::categoriasWeb($request);
             }else{
                 $estadoCat = 'No seleccionada';
-            }
+            }*/
             $data = array(
                 'estado' => true,
                 'mensaje' => 'Tablas actualizadas',
                 'tablaRecetas' => $estadoRec,
                 'tablaIngredientes' => $estadoIng,
-                'tablaCategorias' => $estadoCat
+                //'tablaCategorias' => $estadoCat
             );
         }else{
             $data = array(
@@ -128,7 +109,86 @@ class RoboshotController extends Controller
             );
         }
 
-        return response()->json($data);*/
+        return response()->json($data);
+    }
+
+    //  updates recetas table from client database
+    public function updateRecipes($localRecipes, $schema, $directory, $stationName){
+        //  client database connection 
+        Conexion::conectaNombre($schema);
+
+        //  decodified recipes
+        $recipes = json_decode($localRecipes);
+
+        //  find Roboshot ID
+        $robot = Roboshots::where('nombre', $stationName)->first();
+ 
+        foreach($recipes as $item){
+            // generate absolut path from local file path
+            $localPath = explode('\\', $item->image);
+            $fileName = end($localPath);
+            $imagePath = 'public/images/'.$directory.'/'.$fileName;
+
+            //  check if file exists in client storage
+            $locatedImage = Storage::disk('dropbox')->exists($imagePath);
+            if(!$locatedImage){
+                // if file not exists searchs in images-without-roboshot
+                $temporaryPath = 'public/images/images-without-roboshot/'.$fileName;
+                //  check if file exists in temporary directory
+                $locatedMissingImage = Storage::disk('dropbox')->exists($temporaryPath);
+                //  if file is located move it to client directory
+                if($locatedMissingImage){
+                    Storage::disk('dropbox')->copy($temporaryPath, $imagePath);
+                }else{
+                    $imagePath = 'public/images-default/camera.jpg';
+                }
+            }
+            //  check if shared link exists
+            $locatedSharedLink = $this->dropbox->listSharedLinks($imagePath);
+            //  if shared link not exists it is created
+            if(empty($locatedSharedLink)){
+                $dropboxUrl = $this->dropbox->createSharedLinkWithSettings(
+                    $imagePath, 
+                    ["requested_visibility" => "public"]
+                );
+                $urlArray = explode('?', $dropboxUrl['url']);
+                $url = $urlArray[0].'?dl=1';
+            }else{
+                $urlArray = explode('?', $locatedSharedLink[0]['url']);
+                $url = $urlArray[0].'?dl=1';
+            }
+
+            //  updates recetas table, if the register is not found it's created
+            $updatedRecipe = Recetas::updateOrCreate(
+                ['idReceta' => $item->id, 'roboshot' => $robot->idRoboshot], // conditional
+                [
+                    'nombre' => $item->name,
+                    'descripcion' => $item->description,
+                    'precio' => $item->price,
+                    'activa' => true,
+                    'img' => $url,
+                    'path' => $imagePath
+                ]
+            );
+
+            //  updates recetaIngrediente table, if the register is not found it's created
+            foreach($item->lista_ingredientes as $updIng){
+                $updatedRecipeIngredient = RecetaIngredientes::updateOrCreate(
+                    ['idReceta' => $item->id, 'roboshot' => $robot->idRoboshot], //conditional
+                    [
+                        'idIngrediente' => $updIng->idIngrediente,
+                        'cantidad' => $updIng->cantidad
+                    ]
+                );
+            }
+        }
+
+        return true;
+    }
+
+    //  updates ingredientes table from client database
+    public function updateIngredients(){
+        
     }
 
     //  recibe la imagen al crear la receta en local
@@ -136,21 +196,30 @@ class RoboshotController extends Controller
         if($request->hasFile('img')){
             $stationName = $request->station;
             $macAddress = $request->mac_address;
+
             //  buscar el directorio del cliente
             $cliente = Clientes::whereHas('station_rob', function($query) use($stationName){
                 $query->where('nombre', $stationName);
             })->first();
-
+            if($cliente == ''){
+                $dir = 'images-without-roboshot';
+            }else{
+                $dir = $cliente->directorio;
+            }
             //  se modifica el nombre del archivo para que sea identico al de la estacion
             $img = $request->file('img');
 
             //  se mueve al directorio
-            $path = Storage::putFileAs('public/images/'.$cliente->directorio, $img, $request->fileName);
-
+            //$path = Storage::putFileAs('public/images/'.$cliente->directorio, $img, $request->fileName);
+            $imageUrl = $img->storeAs(
+                'public/images/'.$dir,
+                $request->fileName,
+                'dropbox'
+            );
+            
             $data = array(
                 'status' => true,
                 'mensaje' => 'image stored',
-                'data' => $path
             );
         }else{
             $data = array(

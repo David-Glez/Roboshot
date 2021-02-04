@@ -140,7 +140,7 @@ class UsuariosController extends Controller
             $data = array(
                 'status' => true,
                 'mensaje' => 'Usuario insertado correctamente',
-                'data' => $directLink
+                //'data' => $directLink
             );
         }catch(ValidationException $e){
             $errors = [];
