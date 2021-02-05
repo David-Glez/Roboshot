@@ -177,7 +177,8 @@ class RoboshotController extends Controller
             );
 
             //  updates recetaIngrediente table, if the register is not found it's created
-            foreach($item->lista_ingredientes as $updIng){
+            //foreach($item->lista_ingredientes as $updIng){
+            foreach($item->idIngr as $updIng){
                 RecetaIngredientes::updateOrCreate(
                     ['idReceta' => $item->id, 'roboshot' => $robot->idRoboshot], //conditional
                     [
