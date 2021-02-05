@@ -72,7 +72,7 @@ class RoboshotController extends Controller
 
         //  verifica si los campos usuario y esquema estan definidos
         if(isset($request->usuarioWeb) && isset($request->esquema)){
-            $stationName = $request->roboshotName;
+            $stationName = 'roboshot-integra';
             $userName = $request->usuarioWeb;
             $schema = $request->esquema;
             $recipes = $request->tablaReceta;
