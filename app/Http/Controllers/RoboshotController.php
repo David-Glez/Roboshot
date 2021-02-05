@@ -6,6 +6,8 @@ use App\Clases\Conexion;
 use Illuminate\Http\Request;
 use App\Models\Clientes;
 use App\Clases\Roboshot;
+use App\Models\Categorias;
+use App\Models\Ingredientes;
 use App\Models\RecetaIngredientes;
 use App\Models\Recetas;
 use App\Models\Roboshots;
@@ -74,33 +76,38 @@ class RoboshotController extends Controller
             $userName = $request->usuarioWeb;
             $schema = $request->esquema;
             $recipes = $request->tablaReceta;
+            $ingredients = $request->tablaIngredientes;
+            $categories = $request->tablaCategorias;
 
             //  client info
             $cliente = Clientes::whereHas('station_rob', function($query) use($stationName){
                 $query->where('nombre', $stationName);
             })->first();
+
+            //  find Roboshot ID
+            $robot = Roboshots::where('nombre', $stationName)->first();
             
             if(isset($request->tablaReceta)){
-                $estadoRec = $this->updateRecipes($recipes, $schema, $cliente->directorio, $stationName);
+                $estadoRec = $this->updateRecipes($recipes, $schema, $cliente->directorio, $robot);
             }else{
                 $estadoRec = 'No seleccionada';
             }
             if(isset($request->tablaIngredientes)){
-                $estadoIng = Roboshot::ingredientesWeb($request);
+                $estadoIng = $this->updateIngredients($ingredients, $schema, $robot);
             }else{
                 $estadoIng = 'No seleccionada';
             }
-            /*if(isset($request->tablaCategorias)){
-                $estadoCat = Roboshot::categoriasWeb($request);
+            if(isset($request->tablaCategorias)){
+                $estadoCat = $this->updateCategories($categories, $schema, $robot);
             }else{
                 $estadoCat = 'No seleccionada';
-            }*/
+            }
             $data = array(
                 'estado' => true,
                 'mensaje' => 'Tablas actualizadas',
                 'tablaRecetas' => $estadoRec,
                 'tablaIngredientes' => $estadoIng,
-                //'tablaCategorias' => $estadoCat
+                'tablaCategorias' => $estadoCat
             );
         }else{
             $data = array(
@@ -112,17 +119,14 @@ class RoboshotController extends Controller
         return response()->json($data);
     }
 
-    //  updates recetas table from client database
-    public function updateRecipes($localRecipes, $schema, $directory, $stationName){
+    //  updates recetas table in client database
+    public function updateRecipes($localRecipes, $schema, $directory, $robot){
         //  client database connection 
         Conexion::conectaNombre($schema);
 
         //  decodified recipes
         $recipes = json_decode($localRecipes);
 
-        //  find Roboshot ID
-        $robot = Roboshots::where('nombre', $stationName)->first();
- 
         foreach($recipes as $item){
             // generate absolut path from local file path
             $localPath = explode('\\', $item->image);
@@ -159,7 +163,7 @@ class RoboshotController extends Controller
             }
 
             //  updates recetas table, if the register is not found it's created
-            $updatedRecipe = Recetas::updateOrCreate(
+            Recetas::updateOrCreate(
                 ['idReceta' => $item->id, 'roboshot' => $robot->idRoboshot], // conditional
                 [
                     'nombre' => $item->name,
@@ -167,13 +171,14 @@ class RoboshotController extends Controller
                     'precio' => $item->price,
                     'activa' => true,
                     'img' => $url,
-                    'path' => $imagePath
+                    'path' => $imagePath,
+                    'mezclar' => $item->mezclar
                 ]
             );
 
             //  updates recetaIngrediente table, if the register is not found it's created
             foreach($item->lista_ingredientes as $updIng){
-                $updatedRecipeIngredient = RecetaIngredientes::updateOrCreate(
+                RecetaIngredientes::updateOrCreate(
                     ['idReceta' => $item->id, 'roboshot' => $robot->idRoboshot], //conditional
                     [
                         'idIngrediente' => $updIng->idIngrediente,
@@ -186,9 +191,46 @@ class RoboshotController extends Controller
         return true;
     }
 
-    //  updates ingredientes table from client database
-    public function updateIngredients(){
+    //  updates ingredientes table in client database
+    public function updateIngredients($localIngredients, $schema, $robot){
         
+        //  client database connection
+        Conexion::conectaNombre($schema);
+
+        //  decodified ingredients
+        $ingredients = json_decode($localIngredients);
+
+        foreach($ingredients as $item){
+            Ingredientes::updateOrCreate(
+                ['idIngrediente' => $item->id, 'roboshot' => $robot->idRoboshot],   // conditional
+                [
+                    'categoria' => $item->category,
+                    'marca' => $item->marca,
+                    'precio' => $item->price
+                ]
+            );
+        }
+        return true;
+    }
+
+    //  updates categorias table in client database
+    public function updateCategories($localCategories, $schema, $robot){
+        //  client database connection
+        Conexion::conectaNombre($schema);
+
+        //  decodified categories
+        $categories = json_decode($localCategories);
+
+        foreach($categories as $item){
+            Categorias::updateOrCreate(
+                ['idCategoria' => $item->id, 'roboshot' => $robot->idRoboshot], //conditional
+                [
+                    'nombre' => $item->nombre
+                ]
+            );
+        }
+
+        return true;
     }
 
     //  recibe la imagen al crear la receta en local

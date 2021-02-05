@@ -172,6 +172,7 @@ class Roboshot{
             $table->boolean('activa');
             $table->string('img')->nullable();
             $table->string('path')->nullable();
+            $table->boolean('mezclar');
             $table->timestamps();
         });
 
@@ -211,72 +212,5 @@ class Roboshot{
             return false;
         }
     }
-
-    public static function ingredientesWeb($datos){
-
-        //  establece la conexion a la base de datos de acuerdo al nombre
-        Conexion::conectaNombre($datos->esquema);
-
-        //  se decodifica
-        $dataIngre = json_decode($datos->tablaIngredientes);
-
-        //  se recorren los datos
-        foreach($dataIngre as $item){
-            //  se busca el elemento
-            $busca = Ingredientes::where('idIngrediente', $item->id)->first();
-
-            //   si el campo no existe se añade a la tabla
-            if($busca == ''){
-                $ingrediente = new Ingredientes;
-                $ingrediente->idIngrediente = $item->id;
-                $ingrediente->categoria = $item->category;
-                $ingrediente->posicion = $item->pos;
-                $ingrediente->marca = $item->marca;
-                $ingrediente->precio = $item->price;
-                $ingrediente->actualizado = Carbon::now();
-                $ingrediente->save();
-            }else{
-                $busca->categoria = $item->category;
-                $busca->posicion = $item->pos;
-                $busca->marca = $item->marca;
-                $busca->precio = $item->price;
-                $busca->actualizado = Carbon::now();
-                $busca->save();
-            }
-        }
-
-        return $datos;
-
-    }
-
-    public static function categoriasWeb($datos){
-
-        //  establece la conexion a la base de datos de acuerdo al nombre
-        Conexion::conectaNombre($datos->esquema);
-
-        //  se decodifica
-        $dataCategoria = json_decode($datos->tablaCategorias);
-
-        //  se recorren los datos
-        foreach($dataCategoria as $item){
-
-            //  se bsuca el elemento
-            $busca = Categorias::where('idCategoria', $item->id)->first();
-
-            //  si no existe se añade a la tabla
-            if($busca == ''){
-                $categoria = New Categorias;
-                $categoria->idCategoria = $item->id;
-                $categoria->nombre = $item->nombre;
-                $categoria->actualizado = Carbon::now();
-                $categoria->save();
-            }else{
-                $busca->nombre = $item->nombre;
-                $busca->actualizado = Carbon::now();
-                $busca->save();
-            }
-        }
-
-        return true;
-    }
+    
 }

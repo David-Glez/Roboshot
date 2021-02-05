@@ -10,9 +10,9 @@ class Categorias extends Model
     protected $connection = 'roboshot';
     protected $table = 'categorias';
     protected $primaryKey = 'idCategoria';
-    public $incrementing = false;
-    public $timestamps = false;
+    //public $incrementing = false;
+    //public $timestamps = false;
     protected $fillable = [
-        'idCategoria', 'nombre'
+        'idCategoria', 'roboshot', 'nombre'
     ];
 }

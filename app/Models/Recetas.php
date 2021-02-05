@@ -13,6 +13,6 @@ class Recetas extends Model
     //public $incrementing = false;
     //public $timestamps = false;
     protected $fillable = [
-        'idReceta','roboshot', 'nombre', 'descripcion', 'precio', 'activa', 'img', 'path'
+        'idReceta','roboshot','mezclar', 'nombre', 'descripcion', 'precio', 'activa', 'img', 'path'
     ];
 }
