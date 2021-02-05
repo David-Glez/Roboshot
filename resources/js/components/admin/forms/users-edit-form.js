@@ -115,7 +115,7 @@ const UsersUpdate = (props) => {
 
     //  cerrar toast y redireccionar
     const cerrarToast = () => {
-        props.cerrarLoading();
+        //props.cerrarLoading();
         props.history.push('/admin/usuarios');
     }
 
