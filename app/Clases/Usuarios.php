@@ -82,9 +82,9 @@ class Usuarios{
             //  datos del cliente
             $cliente = Clientes::where('idUsuario', $datos->id)->first();
 
-            $eliminarEsquema = Roboshot::eliminarRoboshot($cliente->esquema);
+            /*$eliminarEsquema = Roboshot::eliminarRoboshot($cliente->esquema);
 
-            if($eliminarEsquema){
+            if($eliminarEsquema){*/
                 //  se eliminan los datos del cliente y todo su contenido
                 //  elimina directorio
                 Storage::disk('dropbox')->deleteDirectory('public/images/'.$cliente->directorio);
@@ -102,12 +102,12 @@ class Usuarios{
                     'status' => true,
                     'mensaje' => 'Cliente eliminado'
                 );
-            }else{
+            /*}else{
                 $data = array(
                     'status' => false,
                     'mensaje' => 'Error al eliminar.'
                 );
-            }
+            }*/
 
         }catch(ValidationException $e){
             $errors = [];
