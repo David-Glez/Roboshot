@@ -172,7 +172,7 @@ class RoboshotController extends Controller
                     'activa' => true,
                     'img' => $url,
                     'path' => $imagePath,
-                    'mezclar' => $item->mezclar
+                    'mezclar' => true
                 ]
             );
 
