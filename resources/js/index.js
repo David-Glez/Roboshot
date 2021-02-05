@@ -5,30 +5,58 @@ import {
     BrowserRouter,
     Switch
 }from 'react-router-dom';
+
+//  estilos
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap/dist/css/bootstrap.css';
-import './css/buttons.css';
-import './css/index.css';
-import './css/style.css';
-import './css/admin.css';
-import './css/preloader.css';
+import './assets/css/buttons.css';
+import './assets/css/index.css';
+import './assets/css/style.css';
+import './assets/css/admin.css';
+import './assets/css/preloader.css';
+import './assets/css/animated-glass.css'
 
+//  layouts
+import Home from './layouts/home-principal';
+import Inicio from './layouts/home-admin';
+import SignUpIn from './layouts/home-signup-singin';
 
-//  componentes
-import Home from './components/home';
-import Inicio from './components/admin/index';
-import Login from './components/auth/login';
-import Register from './components/auth/register';
+//  iconos
+import { library } from '@fortawesome/fontawesome-svg-core'
+import {
+    faHome, 
+    faUsers,
+    faUserTie, 
+    faBeer, 
+    faRoute, 
+    faCalendar, 
+    faClock, 
+    faTimes,
+    faPlus,
+    faShoppingCart, 
+    faUserAlt, 
+    faSignOutAlt,
+    faTrashAlt,
+    faCircle,
+    faWineBottle,
+    faCocktail 
+} from "@fortawesome/free-solid-svg-icons";
 
+library.add(
+    faHome, faUsers, faBeer, faRoute, faCalendar, faClock, faTimes,
+    faUserTie, faPlus, faShoppingCart, faUserAlt, faSignOutAlt, faTrashAlt,
+    faCircle, faWineBottle, faCocktail
+    ) 
 class Index extends Component{
+    
     render(){
         return(
             <BrowserRouter>
                 <Switch>
                     <Route exact path='/' component = {Home} />
                     <Route path = '/admin' component = {Inicio} />
-                    <Route path = '/login' component = {Login} />
-                    <Route path = '/registro' component = {Register} />
+                    <Route path = '/login' component = {SignUpIn} />
+                    <Route path = '/registro' component = {SignUpIn} />
                     <Route path = '/roboshot' component = {Home} />
                     <Route path = '/perfil' component = {Home} />
                 </Switch>       
@@ -42,6 +70,6 @@ export default Index;
 if (document.getElementById('App')) {
     ReactDOM.render(<Index />, 
         document.getElementById('App'),
-        
+         
     );
 }

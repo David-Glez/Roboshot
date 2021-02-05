@@ -23,6 +23,11 @@ class User extends Authenticatable
         'nombre', 'password', 'idRol', 
     ];
 
+    public function cliente(){
+        return $this->belongsTo(Clientes::class, 'idUsuario', 'idUsuario')
+                    ->orderBY('idUsuario');
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *

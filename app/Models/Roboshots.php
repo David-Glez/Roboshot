@@ -10,6 +10,10 @@ class Roboshots extends Model
     protected $table = 'roboshots';
     protected $primaryKey = 'idRoboshot';
     protected $fillable = [
-        'idUsuario', 'MAC', 'nombre', 'esquema'
+        'idCliente', 'MAC', 'nombre', 'estado'
     ];
+
+    public function station_client(){
+        return $this->belongsToMany(Clientes::class, 'idCliente', 'idCliente');
+    }
 }

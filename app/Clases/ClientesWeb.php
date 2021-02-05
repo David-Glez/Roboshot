@@ -14,6 +14,12 @@ use App\Models\Pedidos;
 use App\Models\RecetaPedidos;
 use App\Models\IngredientePedidos;
 
+//  auxiliares
+use App\Rules\MayorEdad;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
+
 class ClientesWeb{
 
     //  trae los datos del usuario especifico
@@ -25,7 +31,7 @@ class ClientesWeb{
         $usuarioGral = Clientes::where('idUsuario', $id)->first();
 
         $fecha = Carbon::parse($usuarioGral->created_at)->format('d/m/Y');
-
+        //$url = Storage::url($usuarioGral->logo);
         //  arreglo de datos
         $datosUsuario = array(
             'nombres' => $usuarioGral->nombres,
@@ -95,5 +101,5 @@ class ClientesWeb{
 
         return $data;
     }
-
+    
 }

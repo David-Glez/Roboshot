@@ -1,0 +1,95 @@
+:root{
+
+/* Variables para la animacion*/
+    /*¿Altura del liquido*/
+    --liquid: 1%;
+    /*Altura de la onda
+    * Siendo 0.5 (cero) el minimo
+    * y 0.99 (cero) el maximo*/
+    --h-wave: 0.9;
+    /*¿Color del borde?*/
+    --cl-bd: blue;
+    /*¿Color del liquido?*/
+    --cl-lq:rgb(0,180,200);
+    /*¿Grosor del borde*/
+    --bd: 0.4vw;
+    /*¿Ancho del contenedor*/
+    --w-cnt: 80%;
+}
+
+/* vaso animacion de llenado*/
+.animacion {
+    width: var(--w-cnt);
+    /*margin: auto;*/
+    /*border: solid var(--bd) var(--cl-bd);*/
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .animacion img{
+    position: relative;
+    z-index: 2; /*para que la imagen este por encima*/
+    display: block;
+    width: 100%;
+    height: auto;
+    /*La imagen no es transparente, 
+    entonces aunque este adelante de la onda
+    igual no se verá, por eso uso el modo
+    de fusión "multiply", que hace que los colores
+    entre más claros sean, más los transparenta*/
+    mix-blend-mode: multiply;
+    /*LO mejor es que la imagen tenga fondo 
+    transparente y quites esta propiedad*/
+  }
+  
+  .porcentaje {
+    z-index: 3;
+    font-size: 2em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .mililitros {
+    z-index: 3;
+    font-size: 1em;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .animacion::before,
+  .animacion::after{
+    content: '';
+    display: block;
+    position: absolute;
+    background-color: var(--cl-lq);
+    height: var(--liquid);
+    bottom: 40px;
+    left: 0;
+    z-index: 1; /*para que la onda este por debajo*/
+  }
+  
+  .animacion::before{
+    z-index: 2;
+    width: 100%;
+    transform-origin: 50% 100%;
+    animation: wave-shrink 3s linear infinite;
+  }
+  
+  .animacion::after{
+    z-index: 1;
+    width: 200%;
+    border-radius: 50%;
+    animation: wave-sway 5s linear infinite;
+  }
+  
+  @keyframes wave-shrink{
+    50%{ transform: scaleY(var(--h-wave));}
+  }
+  
+  @keyframes wave-sway{
+    0%{ transform: translateX(-100%);}
+    100%{ transform: translateX(100%);}
+  }

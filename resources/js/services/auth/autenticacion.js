@@ -48,6 +48,7 @@ const getCurrentUser = () =>{
     return JSON.parse(localStorage.getItem('user'));
 };
 
+
 //exportacion de funciones
 export default{
     login,

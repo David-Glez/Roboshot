@@ -1,72 +1,79 @@
 import React from 'react';
-import beer from '../../../img/beer.svg';
-import logo from '../../../img/roboshot-logo-1.png'
+//  navegacion
+import {Link} from 'react-router-dom';
 
-//iconos
+//  logo
+import logo from '../../../assets/img/roboshot-logo-1.png'
+
+//libreria de iconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faUsers, faBeer } from "@fortawesome/free-solid-svg-icons";
 
-import {Link} from 'react-router-dom'; 
+//  components
+import ItemSidebar from './sidebar-list-item';
 
-//import AuthService from '../../../services/auth/autenticacion';
-
-const SideBar = (props) =>{
-
-    const rol = props.idRol;
-    const clase = props.clase;
-
-    //datos del usuario en localStorage
-    //const userData = AuthService.getCurrentUser();
+const Sidebar = (props) => {
+    
+    const rutas = props.rutas;
+    const loading = props.loading;
+    const usuario = props.usuario;
+    const rol = props.rol;
+    const autorizado = props.autorizado;
+    
     return(
         <>
-            <div className = {clase ? "active" : ""} id = 'sidebar'>
-                <div className = 'sidebar-header'>
-                    <img src={logo} id='logoAdmin' className = 'logo'/>
-                    <img src={beer} id="beer" className = 'iconAdmin'/>
-                </div>
-
-                <ul className = 'navbar-nav ml-auto'>
-                    
-                    <li className = 'nav-item'>
-                        <Link to='/admin' className = 'nav-link'>    
-                            <FontAwesomeIcon icon = {faHome} />
-                            <span className = 'customSpan'>Inicio</span>                 
+        <div
+            id = "sidebar"
+            className = "sidebarAdmin"
+            data-color = 'black'
+        >
+            <div className = 'logo '>
+                <Link to = '/admin' className="simple-text text-center">
+                    <img src={logo} id='logoAdmin' className = 'logoAdmin'/>
+                </Link>
+            </div>
+            <div className = 'infoUser '>
+                <p>Usuario: {usuario}</p>
+                <p>Rol: {rol}</p>
+                <small>
+                    <FontAwesomeIcon 
+                        icon = 'circle' 
+                        className = {autorizado ? 'text-success' : 'text-warning'} 
+                    />
+                    <span className = 'customSpanAdmin'>
+                        {autorizado ? 'Activo' : 'En espera'}
+                    </span>
+                </small>
+            </div>
+            <div className="sidebarAdmin-wrapper">
+                <ul className ='navAdmin'>
+                    <li className = ''>
+                        <Link to = '/admin' className = 'nav-link'>
+                            <FontAwesomeIcon icon = 'home' />
+                            <span className = 'customSpanAdmin'>
+                                Inicio
+                            </span>
                         </Link>
                     </li>
-                    {rol &&(
-                        <li>
-                            <Link to='/admin/clientes' className='nav-link dropdown-toggle'>
-                                <FontAwesomeIcon icon = {faUsers} />
-                                <span className = 'customSpan'>Clientes</span>
-                            </Link>
-                        </li>
+                {loading ? (
+                    <div></div>
+                ):(
+                    <>
+                    {rutas.map((x) =>
+                        <ItemSidebar
+                            key = {x.idRuta}
+                            nombre = {x.nombre}
+                            ruta = {x.ruta}
+                            icono = {x.icono}
+                        /> 
                     )}
-                    {rol && (
-                        <li>
-                        <a href ='#homeRoboshot' data-toggle = 'collapse' aria-expanded = 'false' className='nav-link dropdown-toggle'>
-                            <FontAwesomeIcon icon = {faBeer} />
-                            <span className = 'customSpan'>Roboshots</span>
-                        </a>
-                        <ul className = 'list-unstyled collapse' id = 'homeRoboshot'>
-                            <li>
-                                <Link  to = '/admin/roboshot'>
-                                    Ver Lista
-                                </Link>
-                            </li>
-                            <li>
-                                <Link  to = '/admin/roboshot/anadir'>
-                                    Añadir Roboshot
-                                </Link>
-                            </li>
-                        </ul>
-                    </li>
-                    )}
-                    
-                    
+                    </>
+                )}   
+                        
                 </ul>
             </div>
+        </div>
         </>
-    )
+    );
 };
 
-export default SideBar;
+export default Sidebar;

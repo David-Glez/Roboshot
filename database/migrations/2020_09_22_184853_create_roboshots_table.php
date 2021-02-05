@@ -18,6 +18,7 @@ class CreateRoboshotsTable extends Migration
             $table->integer('idCliente')->nullable();
             $table->string('MAC');
             $table->string('nombre');
+            $table->boolean('estado');
             $table->timestamps();
         });
     }

@@ -64,6 +64,7 @@ Route::group([
 
     //  ruta para roboshot local
     Route::post('/roboshots/local/actualizar', 'RoboshotController@actualizarLocal');
+    Route::post('/roboshots/local/img', 'RoboshotController@receiveImg');
     
     //rutas con requerimiento de autorizacion
     Route::group([
@@ -72,12 +73,25 @@ Route::group([
 
         // rutas para funciones destinadas a usuarios
         Route::get('/usuarios', 'UsuariosController@inicio');
-        Route::get('/clientes', 'UsuariosController@clientes');
         Route::post('/usuarios/anadir', 'UsuariosController@anadirCliente');
+        Route::get('/usuarios/{id}', 'UsuariosController@infoCliente');
+        Route::post('/usuarios/editar', 'UsuariosController@editarCliente');
+        Route::post('/usuarios/eliminar', 'UsuariosController@eliminarCliente');
 
         // rutas para funciones destinadas a roboshots
         Route::get('/roboshots', 'RoboshotController@inicio');
-        Route::post('/roboshots/revisar', 'RoboshotController@disponibles');
+        Route::post('/roboshots/anadir', 'RoboshotController@anadir');
+        Route::get('/roboshots/{id}', 'RoboshotController@info');
+        Route::post('/roboshots/editar', 'RoboshotController@editar');
+        Route::post('/roboshots/eliminar', 'RoboshotController@eliminar');
+
+        //  rutas para funciones destinadas a recetas e ingredientes
+        Route::get('/recetas', 'RecetasIngredientesController@inicio');
+
+        //  rutas para funciones generales
+        Route::get('/general/stats', 'GeneralController@statsCard');
+        Route::get('/general/rutas', 'GeneralController@rutas');
+        Route::get('/general/clientes', 'GeneralController@clientes');
         
     });
 });
