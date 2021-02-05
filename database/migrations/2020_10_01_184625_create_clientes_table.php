@@ -18,6 +18,7 @@ class CreateClientesTable extends Migration
             $table->integer('idUsuario');
             $table->string('razonSocial')->nullable();
             $table->string('logo')->nullable();
+            $table->string('path')->nullable();
             $table->string('nombres');
             $table->string('apellidoPaterno');
             $table->string('apellidoMaterno')->nullable();

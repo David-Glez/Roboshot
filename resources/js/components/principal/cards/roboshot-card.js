@@ -9,7 +9,12 @@ const CardRoboshot = (props) => {
         <>
         <div className = 'col-sm-3 my-sm-2'>
             <div className = 'card mb-4 mb-sm-1'>
-                <img className = 'card-img-top img-fluid' src = {roboshots.logo} style = {{maxHeight: 255}} alt = 'Card image cap' />
+                <div className = 'recipeImage'>
+                    <div className = 'contentImage'>
+                    <img className = 'card-img-top img-fluid' src = {roboshots.logo} alt = 'Card image cap' />
+                    </div>
+                </div>
+                
                 <div className = 'card-body'>
                     <h5 className = 'card-title'>{roboshots.razonSocial}</h5>
                     <div className = 'text-center'>

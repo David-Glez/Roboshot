@@ -25,6 +25,7 @@ const IngredientesTable = (props) => {
             columns = { opciones.columnas(cantidades, lista) }
             bootstrap4 = {true} 
             noDataIndication={ opciones.vacio() }
+            pagination={ paginationFactory(opciones.opcionesPaginacion(filtro)) }
             classes = 'table scrollDiv'
         />
         </>

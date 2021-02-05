@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-
-use App\Clases\ClientesWeb;
+use App\Models\Clientes;
 use App\Models\Roles;
+use App\Models\User;
+use App\Rules\MayorEdad;
+use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
 
 class InicioController extends Controller
 {
@@ -51,9 +54,59 @@ class InicioController extends Controller
 
     public function registro(Request $request){
         
-        $x = ClientesWeb::addUsuario($request);
+        try{
+            $request->validate([
+                'usuario' => ['required', 'unique:usuarios,nombre', 'min:6'],
+                'contrasena' => ['required', 'min:8'],
+                'fechaNacimiento' => ['required', new MayorEdad]
+            ]);
+            
+            $fechaNacimiento = Carbon::create($request->fechaNacimiento);
+            
+            //   se añade el usuario a la tabla usuarios
+            $user = new User;
+            $user->nombre = $request->usuario;
+            $user->password = bcrypt($request->contrasena);
+            $user->idRol = 4; #id de rol por defecto para clientes
+            $user->save();
+            
+            //  id del usuario recien creado
+            $id = $user->idUsuario;
 
-        return response()->json($x);
+            //  se añade a la tabla clientes
+            $general = new Clientes;
+            $general->idUsuario = $id;
+            $general->nombres = $request->nombres;
+            $general->apellidoPaterno = $request->apellido;
+            $general->fechaNacimiento = $fechaNacimiento;
+            $general->apellidoMaterno = '-'; # valor temporal, en la tabla es nulo
+            $general->email = $request->correo;
+            $general->logo = 'public/images-default/camera.jpg';  #   valor por defecto, personalizado por el usuario
+            $general->path = 'public/images-default/camera.jpg';
+            $general->save();
+
+            $data = array(
+                'status' => true,
+                'mensaje' => 'Usuario Registrado :D ya puedes iniciar sesion'
+            );
+            
+            
+        }catch(ValidationException $e){
+            $errors = [];
+            foreach($e->errors() as $item) {
+                foreach($item as $x){
+                    $errors[] = $x;
+                }
+            }
+            $data = array(
+                'status' => false,
+                'mensaje' => $errors
+            );
+
+            //return $data;
+        }
+
+        return response()->json($data);
 
     }
     

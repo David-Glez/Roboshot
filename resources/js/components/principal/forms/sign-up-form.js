@@ -6,6 +6,13 @@ import Input from 'react-validation/build/input';
 import CheckButton from 'react-validation/build/button';
 import Select from 'react-validation/build/select';
 
+//  toast
+import { toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+//  API
+import AuthService from '../../../services/auth/autenticacion';
+
 const required = (value) =>{
     if(!value){
         return(
@@ -148,6 +155,11 @@ const SignUpForm = (props) => {
         })
     }
 
+    //  cerrar toast
+    const cerrarToast = () =>{
+        props.history.push('/');
+    };
+
     //  funcion que envia los datos a insertar en la bd
     const onSubmitForm = (e) => {
         //  previe la recarga de la pagina
@@ -169,7 +181,40 @@ const SignUpForm = (props) => {
         form.current.validateAll();
 
         if(checkBtn.current.context._errors.length == 0){
-            setLoading(props.registrar(data));
+            const envio = AuthService.registrar(data);
+            envio.then((response) => {
+
+                if(response.data.status){
+                    toast.success(response.data.mensaje,{
+                        position: toast.POSITION.TOP_CENTER,
+                        autoClose: 4000,
+                        hideProgressBar: false,
+                        newestOnTop: false,
+                        closeOnClick: true,
+                        rtl: false,
+                        draggable: true,
+                        pauseOnHover: true,
+                        progress: undefined,
+                        onClose: () => cerrarToast()
+                    });
+                }else{
+                    let mensajes = response.data.mensaje;
+                    mensajes.forEach((item) => {
+                        toast.warning(item,{
+                            position: toast.POSITION.TOP_CENTER,
+                            autoClose: 4000,
+                            hideProgressBar: false,
+                            newestOnTop: false,
+                            closeOnClick: true,
+                            rtl: false,
+                            draggable: true,
+                            pauseOnHover: true,
+                            progress: undefined
+                        });
+                    });
+                    setLoading(false)
+                }
+            })
         }else{
             setLoading(false);
         }
