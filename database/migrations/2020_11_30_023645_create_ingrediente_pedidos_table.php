@@ -18,7 +18,7 @@ class CreateIngredientePedidosTable extends Migration
             $table->integer('idIngrediente');
             $table->integer('idCategoria');
             $table->string('marca');
-            $table->integer('posicion');
+            //$table->integer('posicion');
             $table->integer('cantidad');
             $table->float('precio');
             $table->timestamps();

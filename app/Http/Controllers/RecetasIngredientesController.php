@@ -6,16 +6,29 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 //  auxiliares
-use App\Clases\RecetasIngredientes;
+use App\Clases\Conexion;
+use App\Models\Recetas;
 
 class RecetasIngredientesController extends Controller
 {
-    //  trae las recetas del cliente logueado
+    //  select all recipes from client
     public function inicio(){
-        $esquema = Auth::user()->cliente->esquema;
-
-        $x = RecetasIngredientes::recetas($esquema);
-
-        return response()->json($x);
+        //  connect with client schema 
+        $schema = Auth::user()->cliente->esquema;
+        Conexion::conectaNombre($schema);
+        $data = [];
+        $recipes = Recetas::all();
+        foreach($recipes as $recipe){
+            $recipeData = array(
+                'id' => $recipe->idReceta,
+                'nombre' => $recipe->nombre,
+                'precio' => '$'.floatval($recipe->precio),
+                'estado' => $recipe->activa,
+                'creado' => $recipe->created_at
+            );
+            $data[] = $recipeData;
+        }
+        
+        return response()->json($data);
     }
 }
