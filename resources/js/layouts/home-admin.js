@@ -52,6 +52,9 @@ function Inicio(props){
         //  datos en localstorage
         const resp = AuthService.getCurrentUser();
         if(resp != null){
+            if(resp.idRol == 4){
+                setLogueado(false)
+            }
             setUser({
                 id: resp.id,
                 idRol: resp.idRol, 

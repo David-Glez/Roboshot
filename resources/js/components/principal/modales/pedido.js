@@ -1,54 +1,33 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 //  estilos
 import {Modal} from 'react-bootstrap';
 
+//  componentes
 import QRGenerator from '../qr-code/qr-code';
-
+import RecipeList from '../cards/recipe-list-card';
+import IngredientsList from '../cards/ingredients-list-card';
 
 const ModalPedido = (props) => {
     const ver = props.activo;
     const cerrar = props.inactivo;
     const data = props.pedido;
 
-    const [ingredientes, setIngredientes] = useState([]);
+    const [ingredients, setIngredients] = useState([]);
+    const [ingredientPosition, setIngredientPosition] = useState(undefined);
+
+    useEffect(() => {
+        if(data != undefined && ingredientPosition != undefined){
+            const position = data.recetas[ingredientPosition-1].ingredientes;
+            setIngredients(position)
+        }
+    }, [ingredientPosition, data.codigo]);
 
     //  muestra la lista de los ingredientes seleccionados
-    const listaIngredientes = (e, prod, codigo) => {
-        const codProd = codigo+'-'+prod;
-        const ingrediente = data.recetas[prod-1].ingredientes;
-
-        setIngredientes(ingrediente)
+    const ingPosition = (position) => {
+        setIngredients([])
+        setIngredientPosition(position);
     };
-
-    //  muestra la informacion de los ingredientes
-    const ingredientesInfo = () =>{
-        return ingredientes.map((item, index) => {
-            return(
-                
-                <li key = {index} className = 'list-group-item'>
-                    <div className = 'row'>
-                        <div className = 'form-group'>
-                            <label className = 'primaryText'>
-                                Marca: {item.marca}
-                            </label>
-                        </div>
-                        <div className = 'form-group'>
-                            <label className = 'primaryText'>
-                                Precio: ${parseFloat(item.precio).toFixed(2)} / 10 mL
-                            </label>
-                        </div>
-                        <div className = 'form-group'>
-                            <label className = 'primaryText'>
-                                Cantidad: {item.cantidad} mL
-                            </label>
-                        </div>  
-                    </div>
-                </li>
-                
-            )
-        })
-    }
 
     if(ver){
         return(
@@ -72,12 +51,12 @@ const ModalPedido = (props) => {
                 </Modal.Header>
                 <Modal.Body>
                     <div className = 'row'>
-                        <div className = 'col-md-4 text-center'>
+                        <div className = 'col-md-3 text-center'>
                             <QRGenerator 
                                 codigo = {data.codigo}
                             />
                         </div>
-                        <div className = 'col-md-8'>
+                        <div className = 'col-md-9'>
                             <div className = 'row'>
                                 <label htmlFor = 'codigo' className="col-sm-2 col-form-label">Código</label>
                                 <div className = 'col-sm-4'>
@@ -96,45 +75,18 @@ const ModalPedido = (props) => {
                                 
                             </div>
                             <div className = 'row'>
-                                <div className = 'col-sm-6'>
-                                    <div className = 'card'>
-                                        <div className = 'card-header'>
-                                            Recetas
-                                        </div>
-                                        <div className = 'card-body'>
-                                            <ul className = 'list-group scrollDiv'>
-                                                {data.recetas.map((item, index) => {
-                                                    return(
-                                                        <li className = 'list-group-item' key = {index} >
-                                                            <a href = '#' onClick = {(e) => listaIngredientes(e, item.idProd, data.codigo)}>
-                                                                <div className = 'row'>
-                                                                    <div className = 'col-sm-6'>
-                                                                        {item.nombre}
-                                                                    </div>
-                                                                    <div className = 'col-sm-6'>
-                                                                        <span className = 'text-success'>
-                                                                            ${parseFloat(item.precio).toFixed(2)}
-                                                                        </span>
-                                                                    </div>
+                                <div className = 'col-sm-5'>
+                                    <RecipeList 
+                                        recipes = {data.recetas}
+                                        code = {data.codigo}
+                                        position = {(e) => ingPosition(e)}
+                                    />
 
-                                                                </div>
-                                                            </a>
-                                                        </li>
-                                                    )
-                                                })}
-                                            </ul>
-                                        </div>
-                                    </div>
                                 </div>
-                                <div className = 'col-sm-6'>
-                                    <div className = 'card'>
-                                        <div className = 'card-header'>
-                                            Ingredientes
-                                        </div>
-                                        <div className = 'list-group scrollDiv'>
-                                            {ingredientesInfo()}
-                                        </div>
-                                    </div>
+                                <div className = 'col-sm-7'>
+                                    <IngredientsList
+                                        ingredients = {ingredients}
+                                    /> 
                                 </div>
                             </div>
                         </div>

@@ -74,7 +74,7 @@ class Web{
                 'nombre' => $ing->marca,
                 'idCategoria' => $cat->idCategoria,
                 'categoria' => $cat->nombre,
-                'posicion' => $ing->posicion,
+                //'posicion' => $ing->posicion,
                 'cantidad' => $item->cantidad,
                 'precio' => $ing->precio
             );
