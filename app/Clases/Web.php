@@ -118,7 +118,7 @@ class Web{
                 $ingr = array(
                     'idIngrediente' => $ing->idIngrediente,
                     'idCategoria' => $ing->idCategoria,
-                    'posicion' => $ing->posicion,
+                    //'posicion' => $ing->posicion,
                     'marca' => $ing->marca,
                     'cantidad' => $ing->cantidad,
                     'precio' => $ing->precio
