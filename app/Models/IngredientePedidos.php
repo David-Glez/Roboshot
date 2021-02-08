@@ -10,6 +10,6 @@ class IngredientePedidos extends Model
     protected $primaryKey = null;
     public $incrementing = false;
     protected $fillable = [
-        'codigoProd', 'idIngrediente', 'idCategoria', 'marca', 'posicion', 'cantidad', 'precio'
+        'codigoProd', 'idIngrediente', 'idCategoria', 'marca', 'cantidad', 'precio'
     ];
 }

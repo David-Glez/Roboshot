@@ -104,7 +104,7 @@ class WebController extends Controller
                 $ingredientesPedidos->idIngrediente = $ingredientes->idIngrediente;
                 $ingredientesPedidos->idCategoria = $ingredientes->idCategoria;
                 $ingredientesPedidos->marca = $ingredientes->nombre;
-                $ingredientesPedidos->posicion = $ingredientes->posicion;
+                //$ingredientesPedidos->posicion = $ingredientes->posicion;
                 $ingredientesPedidos->cantidad = $ingredientes->cantidad;
                 $ingredientesPedidos->precio = $ingredientes->precio;
                 $ingredientesPedidos->save();
