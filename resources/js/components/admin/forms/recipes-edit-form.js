@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+
+//  API
+import UserService from '../../../services/auth/servicioUsuarios';
 
 //  elementos y validacion de formulario
 import Form from 'react-validation/build/form';
 import Input from 'react-validation/build/input';
 import CheckButton from 'react-validation/build/button';
-import Select from 'react-validation/build/select';
+import Textarea from 'react-validation/build/textarea';
 
 //  libreria toast
 import { toast } from 'react-toastify';
@@ -16,9 +19,26 @@ import {Spinner, ToggleButtonGroup, ToggleButton}from 'react-bootstrap';
 const RecipesUpdate = (props) => {
 
     console.log(props);
+    const idRecipe = props.location.idRecipe;
+    const robot = props.location.robot;
 
     const [loading, setLoading] = useState(false);
     const [cargando, setCargando] = useState(true);
+    const [recipe, setRecipe] = useState([]);
+    const [ingredients, setIngredients] = useState([]);
+
+    useEffect(() => {
+        const home = async() => {
+            const data = {
+                id: idRecipe,
+                robot: robot
+            }
+            const recipe = await UserService.recipe(data);
+            console.log(recipe.data)
+            setCargando(false)
+        };
+        home();
+    }, []);
 
     return(
         <>
@@ -52,7 +72,64 @@ const RecipesUpdate = (props) => {
                     </>
                 ):(
                     <>
-                    cargado
+                    <div className = 'row'>
+                    <div className = 'col-md-6'>
+                        <div className = 'form-group row'>
+                            <label htmlFor = 'nombre' className = 'col-sm-4'>
+                                Nombre
+                            </label>
+                            <div className = 'col-sm-8'>
+                                <Input
+                                    type = 'text'
+                                    className = 'form-control'
+                                    id = 'nombre'
+                                    name = 'nombre'
+                                    //value = {nombre}
+                                    disabled = {loading}
+                                    //onChange = {onChangeNombre}
+                                    //validations = {[required]}
+                                />
+                            </div>
+                        </div>
+                        <div className = 'form-group row'>
+                            <label htmlFor = 'nombre' className = 'col-sm-4'>
+                                Estacion
+                            </label>
+                            <div className = 'col-sm-8'>
+                                <Input
+                                    type = 'text'
+                                    className = 'form-control'
+                                    id = 'nombre'
+                                    name = 'nombre'
+                                    //value = {nombre}
+                                    disabled = {loading}
+                                    //onChange = {onChangeNombre}
+                                    //validations = {[required]}
+                                />
+                            </div>
+                        </div>
+                        <div className = 'form-group row'>
+                            <label htmlFor = 'nombre' className = 'col-sm-4'>
+                                Descripcion
+                            </label>
+                            <div className = 'col-sm-8'>
+                                <Textarea
+                                    type = 'text'
+                                    className = 'form-control'
+                                    id = 'nombre'
+                                    name = 'nombre'
+                                    //value = {nombre}
+                                    disabled = {loading}
+                                    //onChange = {onChangeNombre}
+                                    //validations = {[required]}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className = 'col-md-6'>
+
+                    </div>
+                    </div>
                     </>
                 )}
                 

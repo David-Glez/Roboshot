@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class RecetaIngredientes extends Model
 {
@@ -13,4 +14,8 @@ class RecetaIngredientes extends Model
     protected $fillable = [
         'idReceta', 'idIngrediente', 'cantidad', 'roboshot'
     ];
+
+    public function ingredients(){
+        return $this->belongsTo(Ingredientes::class, 'idIngrediente', 'idIngrediente');
+    }
 }
