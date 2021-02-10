@@ -1,8 +1,5 @@
 import React, {useState, useEffect} from 'react';
 
-//  API
-import UserService from '../../../services/auth/servicioUsuarios';
-
 //  elementos y validacion de formulario
 import Form from 'react-validation/build/form';
 import Input from 'react-validation/build/input';
@@ -16,34 +13,27 @@ import 'react-toastify/dist/ReactToastify.css';
 //  Estilos
 import {Spinner, ToggleButtonGroup, ToggleButton}from 'react-bootstrap';
 
+//  custom hook
+import useRecipeEdit from '../../../hooks/admin/recipes-edit-hook';
+
 const RecipesUpdate = (props) => {
 
-    console.log(props);
+    //console.log(props);
     const idRecipe = props.location.idRecipe;
     const robot = props.location.robot;
+    const data = {
+        id: idRecipe,
+        robot: robot
+    }
 
-    const [loading, setLoading] = useState(false);
-    const [cargando, setCargando] = useState(true);
-    const [recipe, setRecipe] = useState([]);
-    const [ingredients, setIngredients] = useState([]);
+    const {dataForm, onChangeInput, onSubmitForm} = useRecipeEdit(data);
 
-    useEffect(() => {
-        const home = async() => {
-            const data = {
-                id: idRecipe,
-                robot: robot
-            }
-            const recipe = await UserService.recipe(data);
-            console.log(recipe.data)
-            setCargando(false)
-        };
-        home();
-    }, []);
+    console.log(dataForm)
 
     return(
         <>
         <div className = 'card'>
-            <Form encType="multipart/form-data" >
+            <Form onSubmit = {onSubmitForm} encType="multipart/form-data" >
             <div className = 'card-header'>
                 <div className = 'row'>
                     <div className = 'col-sm-4'>
@@ -52,8 +42,8 @@ const RecipesUpdate = (props) => {
                         </h3>
                     </div>
                     <div className = 'col-sm-8'>
-                        <button className = 'btn btn-success float-right' disabled = {loading}>
-                            {loading && (
+                        <button className = 'btn btn-success float-right' disabled = {dataForm.sending}>
+                            {dataForm.sending && (
                                 <span className = "spinner-border spinner-border-sm"></span>
                             )}
                             Guardar
@@ -62,7 +52,7 @@ const RecipesUpdate = (props) => {
                 </div>
             </div>
             <div className = 'card-body'>
-                {cargando ? (
+                {dataForm.loading ? (
                     <>
                     <div className = 'text-center'>
                         <Spinner animation = 'border' variant = 'secondary' role = 'status'>
@@ -82,11 +72,11 @@ const RecipesUpdate = (props) => {
                                 <Input
                                     type = 'text'
                                     className = 'form-control'
-                                    id = 'nombre'
-                                    name = 'nombre'
-                                    //value = {nombre}
-                                    disabled = {loading}
-                                    //onChange = {onChangeNombre}
+                                    id = 'name'
+                                    name = 'name'
+                                    value = {dataForm.name}
+                                    disabled = {true}
+                                    //onChange = {onChangeInput}
                                     //validations = {[required]}
                                 />
                             </div>
@@ -99,10 +89,10 @@ const RecipesUpdate = (props) => {
                                 <Input
                                     type = 'text'
                                     className = 'form-control'
-                                    id = 'nombre'
-                                    name = 'nombre'
-                                    //value = {nombre}
-                                    disabled = {loading}
+                                    id = 'roboshot'
+                                    name = 'roboshot'
+                                    value = {dataForm.roboshot}
+                                    disabled = {true}
                                     //onChange = {onChangeNombre}
                                     //validations = {[required]}
                                 />
@@ -116,18 +106,46 @@ const RecipesUpdate = (props) => {
                                 <Textarea
                                     type = 'text'
                                     className = 'form-control'
-                                    id = 'nombre'
-                                    name = 'nombre'
-                                    //value = {nombre}
-                                    disabled = {loading}
-                                    //onChange = {onChangeNombre}
+                                    id = 'description'
+                                    name = 'description'
+                                    value = {dataForm.description}
+                                    disabled = {dataForm.sending}
+                                    onChange = {onChangeInput}
                                     //validations = {[required]}
                                 />
                             </div>
                         </div>
+                        <div className = 'form-group row'>
+                            <label htmlFor = 'nombre' className = 'col-sm-4'>
+                                Estado de la receta
+                            </label>
+                            <div className = 'col-sm-8'>
+
+                            </div>
+                        </div>
                     </div>
                     <div className = 'col-md-6'>
-
+                        <div className = 'row'>
+                            <div className = 'col-sm-12 imgPadre'>
+                                <div className = 'imageContent content-justify-center'>
+                                <img src={dataForm.newImg ? URL.createObjectURL(dataForm.newImg) : dataForm.img }  />
+                                </div>
+                            </div>
+                        </div>
+                        <div className = 'form-group row'>
+                            <label htmlFor = 'img' className = 'col-sm-2'>
+                                Logo
+                            </label>
+                            <div className = 'col-sm-8'>
+                                <div className = 'custom-file'>
+                                    <input type = 'file' id = 'img' name = 'newImg' className = 'custom-file-input' onChange = {onChangeInput} lang="es" />
+                                    <label className="custom-file-label" htmlFor="img">Seleccionar...</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className = 'row'>
+                            aqui va la tabla de ingredientes
+                        </div>
                     </div>
                     </div>
                     </>

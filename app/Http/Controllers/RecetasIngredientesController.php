@@ -66,7 +66,8 @@ class RecetasIngredientesController extends Controller
             'roboshot' => $robot_recipe->nombre,
             'precio' => $recipe->precio,
             'activa' => $recipe->activa,
-            'ingredientes' => $ingredients
+            'ingredientes' => $ingredients,
+            'img' => $recipe->img
         );
         return response()->json($data);
     }
