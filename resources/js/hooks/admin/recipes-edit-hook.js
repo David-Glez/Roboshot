@@ -26,6 +26,7 @@ const useRecipeEdit = (data, onSubmitData) => {
         const index = async() => {
             const response = await UserService.recipe(data.id, data.robot);
             if(response){
+                console.log(response.data)
                 setDataForm({
                     loading: false,
                     sending: false, 

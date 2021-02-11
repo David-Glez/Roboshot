@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 
 //  auxiliares
 use App\Clases\Conexion;
+use App\Models\Categorias;
 use App\Models\Ingredientes;
 use App\Models\RecetaIngredientes;
 use App\Models\Recetas;
@@ -63,6 +64,25 @@ class RecetasIngredientesController extends Controller
         $ingredients = Ingredientes::whereHas('recipeIngredient', function($query) use($robot_id, $id){
             $query->where('idReceta', $id)->where('roboshot', $robot_id);
         })->get();
+
+        $list_ingredients = [];
+        foreach($ingredients as $ingredient){
+            $quantity = RecetaIngredientes::where('idReceta', $id)
+                        ->where('idIngrediente', $ingredient->idIngrediente)
+                        ->where('roboshot', $robot_id)->first();
+            $category = Categorias::where('idCategoria', $ingredient->categoria)
+                        ->where('roboshot', $robot_id)->first();
+            
+            $list = array(
+                'id' => $ingredient->id,
+                'idIngrediente' => $ingredient->idIngrediente,
+                'marca' => $ingredient->marca,
+                'categoria' => $category->nombre,
+                'precio' => '$'.$ingredient->precio,
+                'cantidad' => $quantity->cantidad.' mL'
+            );
+            $list_ingredients[] = $list;
+        }
         $data = array(
             'id' => $recipe->id,
             'idReceta' => $recipe->idReceta,
@@ -72,14 +92,15 @@ class RecetasIngredientesController extends Controller
             'roboshot' => $robot_recipe->nombre,
             'precio' => $recipe->precio,
             'activa' => $recipe->activa,
-            'ingredientes' => $ingredients,
-            'img' => $recipe->img
+            'ingredientes' => $list_ingredients,
+            'img' => $recipe->img,
+            
         );
         return response()->json($data);
     }
 
     public function updateRecipe(Request $request){
-        $x = 'vacio';
+
         //  connect to client schema
         $schema = Auth::user()->cliente->esquema;
         $directory = Auth::user()->cliente->directorio;

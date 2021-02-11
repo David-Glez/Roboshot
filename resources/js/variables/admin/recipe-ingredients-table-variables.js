@@ -6,10 +6,13 @@ const columnas = () => {
         dataField: 'idIngrediente',
         text: 'ID'
     },{
+        dataField: 'categoria',
+        text: 'Categoria'
+    },{
         dataField: 'marca',
         text: 'Marca'
     },{
-        dataField: '',
+        dataField: 'cantidad',
         text: 'Cantidad'
     },{
         dataField: 'precio',
