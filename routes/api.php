@@ -87,7 +87,8 @@ Route::group([
 
         //  rutas para funciones destinadas a recetas e ingredientes
         Route::get('/recetas', 'RecetasIngredientesController@inicio');
-        Route::post('/recetas/editar', 'RecetasIngredientesController@recipe');
+        Route::get('/recetas/{id}/{robot}', 'RecetasIngredientesController@recipe');
+        Route::post('/recetas/editar', 'RecetasIngredientesController@updateRecipe');
 
         //  rutas para funciones generales
         Route::get('/general/stats', 'GeneralController@statsCard');

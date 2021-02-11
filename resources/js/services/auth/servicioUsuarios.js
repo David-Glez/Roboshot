@@ -91,8 +91,13 @@ const verRecetas = () => {
 }
 
 //  consult a recipe information
-const recipe = (data) =>{
-  return axios.post(API_URL + '/recetas/editar', data, {headers: authHeader()})
+const recipe = (id, robot) =>{
+  return axios.get(API_URL + '/recetas/'+id+'/'+robot, {headers: authHeader()})
+}
+
+//  updates recipe information
+const updateRecipe = (data) => {
+  return axios.post(API_URL + '/recetas/editar', data, {headers: authHeader()});
 }
 
 /**************************************************/
@@ -112,5 +117,6 @@ const recipe = (data) =>{
     eliminarCliente,
     rutasRol,
     verRecetas,
-    recipe
+    recipe,
+    updateRecipe
   };

@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 //  API 
 import UserService from '../../services/auth/servicioUsuarios';
 
-const useRecipeEdit = (data) => {
+const useRecipeEdit = (data, onSubmitData) => {
 
     const [dataForm, setDataForm] = useState({
         loading: true, 
@@ -24,7 +24,7 @@ const useRecipeEdit = (data) => {
     //  charges recipe content once time
     useEffect(() => {
         const index = async() => {
-            const response = await UserService.recipe(data);
+            const response = await UserService.recipe(data.id, data.robot);
             if(response){
                 setDataForm({
                     loading: false,
@@ -47,21 +47,66 @@ const useRecipeEdit = (data) => {
 
     //  modify select field
     const onChangeInput = (e) => {
-        console.log(e.target)
-        /*const name = e.target.name;
-        let value = '';
-        if(name == 'newImg'){
-            value = e.target.files[0];
-        }else{
-            value = e.target.value;
+        const name = e.target.name;
+        let value;
+        switch(name){
+            case 'newImg':
+                value = e.target.files[0]
+            break;
+            case 'state':
+                if(e.target.value == 'true'){
+                    value = true;
+                }
+                if(e.target.value == 'false'){
+                    value = false
+                }
+            break;
+            case 'mix':
+                if(e.target.value == 'true'){
+                    value = true;
+                }
+                if(e.target.value == 'false'){
+                    value = false
+                }
+            break;
+            default:
+                value = e.target.value
+            break;
         }
-        setDataForm(dataForm => ({...dataForm, [name]:value}))*/
+        setDataForm(dataForm => ({...dataForm, [name]:value}))
     }
 
     const onSubmitForm = (e) => {
         e.preventDefault();
         setDataForm(dataForm => ({...dataForm, ['sending']:true}))
-        
+        //  send data to backend
+        let data = new FormData();
+        let responseData;
+        data.append('id', dataForm.id)
+        data.append('name', dataForm.name)
+        data.append('description', dataForm.description)
+        data.append('mix', dataForm.mix)
+        data.append('state', dataForm.state);
+        data.append('newImg', dataForm.newImg);
+        data.append('roboshot', dataForm.roboshot);
+        data.append('price', dataForm.price)
+        const send = UserService.updateRecipe(data);
+        send.then((response) => {
+            console.log(response.data)
+            if(response.data.status == true){
+                responseData = {
+                    status: response.data.status,
+                    mensaje: response.data.mensaje
+                }
+            }else{
+                responseData = {
+                    status: response.data.status,
+                    mensaje: response.data.mensaje
+                }
+                setDataForm(dataForm => ({...dataForm, ['sending']:false}))
+            }
+            onSubmitData(responseData);
+        })
     }
 
     return {dataForm, onChangeInput, onSubmitForm}
