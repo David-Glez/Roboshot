@@ -72,7 +72,7 @@ class RoboshotController extends Controller
 
         //  verifica si los campos usuario y esquema estan definidos
         if(isset($request->usuarioWeb) && isset($request->esquema)){
-            $stationName = $request->roboshotName;
+            $stationName = 'roboshot-integra';
             $userName = $request->usuarioWeb;
             $schema = $request->esquema;
             $recipes = $request->tablaReceta;
@@ -172,12 +172,13 @@ class RoboshotController extends Controller
                     'activa' => true,
                     'img' => $url,
                     'path' => $imagePath,
-                    'mezclar' => $item->mezclar
+                    'mezclar' => true
                 ]
             );
 
             //  updates recetaIngrediente table, if the register is not found it's created
-            foreach($item->lista_ingredientes as $updIng){
+            //foreach($item->lista_ingredientes as $updIng){
+            foreach($item->idIngr as $updIng){
                 RecetaIngredientes::updateOrCreate(
                     ['idReceta' => $item->id, 'roboshot' => $robot->idRoboshot], //conditional
                     [

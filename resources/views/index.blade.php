@@ -15,7 +15,6 @@
 
 <body>
     <div id="App"></div>
-    
 </body>
 
 <!--<script src="{{ secure_asset('js/app.js')}}"></script>-->

@@ -157,7 +157,8 @@ return [
         'contrasena' => 'contraseña',
         'user' => 'usuario',
         'img' => 'imagen',
-        'new_img' => 'imagen'
+        'new_img' => 'imagen',
+        'newImg' => 'imagen'
     ],
 
 ];

@@ -34,12 +34,12 @@ const UsersAdmin = (props) => {
         setNombre('');
         setRazon('')
         setEliminarUsuario(false);
-        props.history.push('/admin/usuarios');
+        props.history.push('/admin');
     }
 
     return(
         <>
-        
+        <ToastContainer />
         <div className = 'content'>
             <div className = 'row'>
                 <div className = 'col-md-12'>
