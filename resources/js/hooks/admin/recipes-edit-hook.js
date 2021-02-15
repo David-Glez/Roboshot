@@ -93,7 +93,7 @@ const useRecipeEdit = (data, onSubmitData) => {
         data.append('price', dataForm.price)
         const send = UserService.updateRecipe(data);
         send.then((response) => {
-            console.log(response.data)
+            
             if(response.data.status == true){
                 responseData = {
                     status: response.data.status,

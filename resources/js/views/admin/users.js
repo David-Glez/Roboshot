@@ -34,7 +34,7 @@ const UsersAdmin = (props) => {
         setNombre('');
         setRazon('')
         setEliminarUsuario(false);
-        props.history.push('/admin/usuarios');
+        props.history.push('/admin');
     }
 
     return(
