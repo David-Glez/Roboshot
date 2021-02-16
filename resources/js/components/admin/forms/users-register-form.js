@@ -5,7 +5,7 @@ import Form from 'react-validation/build/form';
 import Input from 'react-validation/build/input';
 import CheckButton from 'react-validation/build/button';
 import PasswordStrengthBar from 'react-password-strength-bar';
-import validation from '../../../variables/admin/validations/user-register-validations'
+import validation from '../../../variables/admin/validations/form-validations';
  
 //  libreria toast
 import { toast } from 'react-toastify';
@@ -14,7 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import camera from '../../../assets/img/camera.jpg';
 
 //  custom hook
-import useUserRegister from '../../../hooks/admin/user-register-hook';
+import useUserRegister from '../../../hooks/admin/users/user-register-hook';
 
 const UsersAdd = (props) => {
     const imgRef = useRef();

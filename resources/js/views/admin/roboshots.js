@@ -3,13 +3,6 @@ import React, {useState} from 'react';
 //  navegation
 import {Switch, Route} from 'react-router-dom';
 
-//  API 
-import UserService from '../../services/auth/servicioUsuarios';
-
-//  toast
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
 //  componentes
 import RoboshotsTable from '../../components/admin/tables/roboshots-table';
 import RoboshotsAdd from '../../components/admin/forms/roboshots-register-form';
@@ -43,93 +36,9 @@ const RoboshotsAdmin = (props) => {
             cliente: ''
         })
         setEliminarRob(false);
-        props.history.push('/admin/roboshots');
+        props.history.push('/admin');
     }
-
-    //  guardar datos de roboshot
-    const nuevo = (data) => {
-        const resp = UserService.anadirRoboshot(data);
-        resp.then((response) => {
-            if(response.data.status){
-                toast.success(response.data.mensaje,{
-                    position: toast.POSITION.TOP_CENTER,
-                    autoClose: 4000,
-                    hideProgressBar: false,
-                    newestOnTop: false,
-                    closeOnClick: true,
-                    rtl: false,
-                    draggable: true,
-                    pauseOnHover: true,
-                    progress: undefined,
-                    onClose: () => cerrar()
-                });
-                
-            }else{
-                let mensajes = response.data.mensaje;
-                mensajes.forEach((item) => {
-                    toast.warning(item,{
-                        position: toast.POSITION.TOP_CENTER,
-                        autoClose: 4000,
-                        hideProgressBar: false,
-                        newestOnTop: false,
-                        closeOnClick: true,
-                        rtl: false,
-                        draggable: true,
-                        pauseOnHover: true,
-                        progress: undefined
-                    });
-                });
-                return false
-            }
-            
-        })
-        
-    }
-
-    //  editar roboshot
-    const editar = (data) => {
-        
-        const envio = UserService.editarRoboshot(data)
-        envio.then((response) => {
-            if(response.data.status){
-                toast.success(response.data.mensaje,{
-                    position: toast.POSITION.TOP_CENTER,
-                    autoClose: 4000,
-                    hideProgressBar: false,
-                    newestOnTop: false,
-                    closeOnClick: true,
-                    rtl: false,
-                    draggable: true,
-                    pauseOnHover: true,
-                    progress: undefined,
-                    onClose: () => cerrar()
-                });
-                
-            }else{
-                let mensajes = response.data.mensaje;
-                mensajes.forEach((item) => {
-                    toast.warning(item,{
-                        position: toast.POSITION.TOP_CENTER,
-                        autoClose: 4000,
-                        hideProgressBar: false,
-                        newestOnTop: false,
-                        closeOnClick: true,
-                        rtl: false,
-                        draggable: true,
-                        pauseOnHover: true,
-                        progress: undefined
-                    });
-                });
-                return false
-            }
-
-        })
-    }
-
-    const cerrar = () => {
-        props.history.push('/admin/roboshots')
-    }
-
+    
     return(
         <>
         <div className = 'content'>
@@ -141,17 +50,10 @@ const RoboshotsAdmin = (props) => {
                                 abrirModalDelete = {(e, i , r) => abrirModalEliminar(e, i ,r)} 
                             />
                         </Route>
-                        <Route exact path = '/admin/roboshots/anadir'>
-                            <RoboshotsAdd 
-                                nuevoRob = {(e) => nuevo(e)}
-                            />
-                        </Route>
-                        <Route exact path = '/admin/roboshots/editar' >
-                            <RoboshotsUpdate
-                                editar = {(e) => editar(e)}
-                                location = {props.location} 
-                            />
-                        </Route>
+                        <Route exact path = '/admin/roboshots/anadir' component = {RoboshotsAdd} />
+                        
+                        <Route exact path = '/admin/roboshots/editar'component = {RoboshotsUpdate} />
+                            
                     </Switch>
                 </div>
             </div>
