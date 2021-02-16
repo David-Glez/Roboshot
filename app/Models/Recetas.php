@@ -15,4 +15,6 @@ class Recetas extends Model
     protected $fillable = [
         'idReceta','roboshot','mezclar', 'nombre', 'descripcion', 'precio', 'activa', 'img', 'path'
     ];
+
+
 }

@@ -24,7 +24,7 @@ class Web{
     public static function inicio($datos){
         
         Conexion::conectaID($datos);
-        $recipes = Recetas::all();
+        $recipes = Recetas::where('activa', true)->get();
 
         DB::purge('roboshot');
 

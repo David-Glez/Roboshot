@@ -29,6 +29,7 @@ const RecipesAdmin = (props) => {
                         <Route exact path = '/admin/recetas/editar'>
                             <RecipesUpdate
                                 location = {props.location} 
+                                history = {props.history}
                             />
                         </Route>
                     </Switch>

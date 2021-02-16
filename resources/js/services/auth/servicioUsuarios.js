@@ -90,6 +90,16 @@ const verRecetas = () => {
   return axios.get(API_URL + '/recetas', {headers: authHeader()})
 }
 
+//  consult a recipe information
+const recipe = (id, robot) =>{
+  return axios.get(API_URL + '/recetas/'+id+'/'+robot, {headers: authHeader()})
+}
+
+//  updates recipe information
+const updateRecipe = (data) => {
+  return axios.post(API_URL + '/recetas/editar', data, {headers: authHeader()});
+}
+
 /**************************************************/
   
   export default {
@@ -106,5 +116,7 @@ const verRecetas = () => {
     editarCliente,
     eliminarCliente,
     rutasRol,
-    verRecetas
+    verRecetas,
+    recipe,
+    updateRecipe
   };

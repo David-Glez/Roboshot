@@ -44,7 +44,7 @@ class UsuariosController extends Controller
         $id = '';
         $dir = '';
         $path = '';
-
+        
         //  validacion de datos
         try{
              //  validacion de los datos

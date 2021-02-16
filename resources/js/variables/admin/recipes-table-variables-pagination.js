@@ -14,6 +14,9 @@ const columnas = (abrirModal) => {
         dataField: 'nombre',
         text: 'Nombre'
     },{
+        dataField: 'robot',
+        text: 'Roboshot'
+    },{
         dataField: 'precio',
         text: 'Precio'
     },{
@@ -39,6 +42,7 @@ const columnas = (abrirModal) => {
                 <RecipesTableButtons
                     id = {row.id}
                     nombre = {row.nombre}
+                    robot = {row.robot}
                     abrirModal = {abrirModal} 
                 />
             )

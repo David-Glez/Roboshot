@@ -9,13 +9,15 @@ import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 const RecipesTableButtons = (props) => {
 
     const id = props.id;
+    const robot = props.robot;
 
     return(
         <>
         <Link 
             to = {{
                 pathname: '/admin/recetas/editar',
-                idRecipe: id
+                idRecipe: id,
+                robot: robot
             }}
             className = 'btn btn-outline-secondary'
         >

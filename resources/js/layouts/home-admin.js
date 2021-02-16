@@ -38,6 +38,7 @@ function Inicio(props){
     const [logueado, setLogueado] = useState(true);
     const [loading, setLoading] = useState(true);
     const [modalLog, setModalLog] = useState(false);
+    const [cards, setCards] = useState([]);
     const [modalLoading, setModalLoading] = useState(true);
     const [user, setUser] = useState({
         id: 0,
@@ -69,11 +70,13 @@ function Inicio(props){
 
         //  datos de la API
         const inicio = async() =>{
-            const result = await UserService.rutasRol();
-            if(result){
-                setRutas(result.data);
+            const routes = await UserService.rutasRol();
+            const statsCards =  await UserService.statsCard();
+            if(routes && statsCards){
+                setRutas(routes.data);
                 setLoading(false);
                 setModalLoading(false);
+                setCards(statsCards.data)
             }
         }
         inicio();
@@ -122,7 +125,12 @@ function Inicio(props){
                         logout = {(e) => logOut(e)}
                     />
                     <Switch>
-                        <Route exact path = '/admin' component = {DashBoard} />
+                        <Route exact path = '/admin'>
+                            <DashBoard
+                                loading = {loading}
+                                cards = {cards} 
+                            />
+                        </Route>
                         <Route exact path = '/admin/usuarios' component = {UsersAdmin} />
                         <Route exact path = '/admin/usuarios/anadir'component = {UsersAdmin} />
                         <Route exact path = '/admin/usuarios/editar' component = {UsersAdmin} />

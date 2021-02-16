@@ -118,7 +118,7 @@ return [
     'string' => 'The :attribute must be a string.',
     'timezone' => 'The :attribute must be a valid zone.',
     //'unique' => 'The :attribute has already been taken.',
-    'unique' => 'El nombre de :attribute ya existe.',
+    'unique' => ':attribute ya existe.',
     'uploaded' => 'The :attribute failed to upload.',
     'url' => 'The :attribute format is invalid.',
     'uuid' => 'The :attribute must be a valid UUID.',
@@ -152,12 +152,14 @@ return [
     */
 
     'attributes' => [
-        'bd' => 'base de datos',
+        'bd' => 'El nombre de la base de datos',
         'password' => 'contraseña',
         'contrasena' => 'contraseña',
-        'user' => 'usuario',
+        'user' => 'El nombre de usuario',
         'img' => 'imagen',
-        'new_img' => 'imagen'
+        'new_img' => 'imagen',
+        'newImg' => 'imagen',
+        'mac' => 'La direccion MAC'
     ],
 
 ];
