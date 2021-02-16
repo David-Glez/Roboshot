@@ -15,7 +15,7 @@ import {Spinner, ButtonGroup, ToggleButton}from 'react-bootstrap';
 import RecipeIngredients from '../tables/recipe-ingredients-table';
 
 //  custom hook
-import useRecipeEdit from '../../../hooks/admin/recipes-edit-hook';
+import useRecipeEdit from '../../../hooks/admin/recipes/recipes-edit-hook';
 
 const RecipesUpdate = (props) => {
     const idRecipe = props.location.idRecipe;
