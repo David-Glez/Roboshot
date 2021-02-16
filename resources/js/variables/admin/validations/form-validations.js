@@ -49,9 +49,23 @@ const validateDB = (value) => {
     }
 }
 
+//  check if the input contains a valid mac address
+const validateMAC = (value) => {
+    var regex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
+    const isMac = regex.test(value);
+    if(!isMac){
+        return(
+            <small className = 'text-danger' role = 'alert'>
+                Formato inválido
+            </small>
+        )
+    }
+}
+
 
 export default {
     required,
     validateRFC,
-    validateDB
+    validateDB,
+    validateMAC
 }

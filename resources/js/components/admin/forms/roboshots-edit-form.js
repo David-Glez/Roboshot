@@ -1,111 +1,93 @@
 import React, {useState, useRef, useEffect} from 'react';
-//  API url
-import UserService from '../../../services/auth/servicioUsuarios';
 
 //  elementos y validacion de formulario
 import Form from 'react-validation/build/form';
 import Input from 'react-validation/build/input';
 import CheckButton from 'react-validation/build/button';
 import Select from 'react-validation/build/select';
+import validations from '../../../variables/admin/validations/form-validations'
+
+//  custom hook
+import useEditRoboshot from '../../../hooks/admin/roboshots/roboshot-edit-hook';
 
 //  libreria toast
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 //  Estilos
-import {Spinner, ToggleButtonGroup, ToggleButton}from 'react-bootstrap';
-
-const required = (value) =>{
-    if(!value){
-        return(
-            <small className = 'text-danger' role = 'alert'>
-                Este campo es requerido
-            </small>
-        )
-    }
-};
-
-const macAddress = (value) => {
-    var regex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
-    const isMac = regex.test(value);
-    if(!isMac){
-        return(
-            <small className = 'text-danger' role = 'alert'>
-                Formato inválido
-            </small>
-        )
-    }
-}
+import {Spinner, ButtonGroup, ToggleButton}from 'react-bootstrap';
 
 const RoboshotsUpdate = (props) => {
     const checkRef = useRef();
     const form = useRef();
-
-    const editar = props.editar;
-
     const id = props.location.idRob;
+    const [state, setState] = useState('')
 
-    const [loading, setLoading] = useState(false);
-    const [cargando, setCargando] = useState(true);
-    const [mac, setMac] = useState('');
-    const [estado, setEstado] = useState(undefined);
-    const [cliente, setCliente] = useState(0);
-    const [nombreCliente, setNombreCliente] = useState('')
-    const [nombre, setNombre] = useState('');
-
-    useEffect(() => {
-        const inicio = async() => {
-            const info = await UserService.infoRoboshot(id);
-            if(info){
-                setMac(info.data.mac);
-                setCliente(info.data.idCliente);
-                setNombreCliente(info.data.cliente);
-                setNombre(info.data.nombre)
-                setEstado(info.data.estado)
-                setCargando(false);
-            }
-        }
-        inicio()
-    },[]);
-
-    const onChangeMac = (e) => {
-        const dir = e.target.value;
-        setMac(dir.toUpperCase())
-    }
-
-    const onChangeEstado = (e) => {
-        
-        setEstado(e)
-    }
-    const onChangeNombre = (e) => {
-        const name = e.target.value;
-        setNombre(name)
-    }
-
-    const onSubmitForm = (e) => {
-        e.preventDefault();
+    const validateForm = () => {
         form.current.validateAll();
-
         if(checkRef.current.context._errors.length == 0){
-            let data = {
-                idRob: id,
-                idCliente: cliente,
-                mac: mac,
-                nombre: nombre,
-                estado: estado
-            }
-            
-            const status = editar(data)
-            
+            return true;
         }else{
-            setLoading(false);
+            return false;
         }
     }
+    
+    const cerrar = () => {
+        props.history.push('/admin/roboshots')
+    }
+
+    const onSubmitData = (response) => {
+        if(response.status == true){
+            toast.success(response.mensaje,{
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 4000,
+                hideProgressBar: false,
+                newestOnTop: false,
+                closeOnClick: true,
+                rtl: false,
+                draggable: true,
+                pauseOnHover: true,
+                progress: undefined,
+                onClose: () => cerrar()
+            });
+        }else{
+            let mensajes = response.mensaje;
+            mensajes.forEach((item) => {
+                toast.warning(item,{
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    newestOnTop: false,
+                    closeOnClick: true,
+                    rtl: false,
+                    draggable: true,
+                    pauseOnHover: true,
+                    progress: undefined
+                });
+            });
+        }
+    }
+
+    const {roboshotData, onChangeInput, onSubmitForm} = useEditRoboshot(id, validateForm, onSubmitData)
+    useEffect(() => {
+        if(roboshotData.estado === true){
+            setState({
+                activo: true,
+                inactivo: false
+            })
+        }
+        if(roboshotData.estado === false){
+            setState({
+                activo: false,
+                inactivo: true
+            });
+        }
+    },[roboshotData.estado]);
 
     return(
         <>
         <div className = 'card'>
-            <Form onSubmit = {onSubmitForm} ref = {form} encType="multipart/form-data" >
+            <Form onSubmit = {onSubmitForm} ref = {form}  >
             <div className = 'card-header'>
                 <div className = 'row'>
                     <div className = 'col-sm-4'>
@@ -114,8 +96,8 @@ const RoboshotsUpdate = (props) => {
                         </h3>
                     </div>
                     <div className = 'col-sm-8'>
-                        <button className = 'btn btn-success float-right' disabled = {loading}>
-                            {loading && (
+                        <button className = 'btn btn-success float-right' disabled = {roboshotData.sending}>
+                            {roboshotData.sending && (
                                 <span className = "spinner-border spinner-border-sm"></span>
                             )}
                             Guardar
@@ -124,7 +106,7 @@ const RoboshotsUpdate = (props) => {
                 </div>
             </div>
             <div className = 'card-body'>
-                {cargando ? (
+                {roboshotData.loading ? (
                     <>
                     <div className = 'text-center'>
                         <Spinner animation = 'border' variant = 'secondary' role = 'status'>
@@ -146,8 +128,8 @@ const RoboshotsUpdate = (props) => {
                                         name = 'cliente'
                                         disabled = {true}
                                     >
-                                        <option value = {cliente}>
-                                            {nombreCliente}
+                                        <option value = {roboshotData.id}>
+                                            {roboshotData.cliente}
                                         </option>
                                     </Select>
                                 </div>
@@ -159,12 +141,13 @@ const RoboshotsUpdate = (props) => {
                                 <div className = 'col-sm-8'>
                                     <Input
                                         className = 'form-control'
-                                        value = {mac}
+                                        name = 'mac'
+                                        value = {roboshotData.mac}
                                         placeholder = 'AA:BB:CC:DD:EE:FF'
                                         maxLength = '17'
-                                        onChange = {onChangeMac}
-                                        disabled = {loading}
-                                        validations = {[macAddress]}
+                                        onChange = {onChangeInput}
+                                        disabled = {roboshotData.sending}
+                                        validations = {[validations.validateMAC]}
                                     />
                                     <small>
                                         ingrese : o - entre dos caracteres
@@ -181,10 +164,10 @@ const RoboshotsUpdate = (props) => {
                                         className = 'form-control'
                                         id = 'nombre'
                                         name = 'nombre'
-                                        value = {nombre}
-                                        disabled = {loading}
-                                        validations = {[required]}
-                                        onChange = {onChangeNombre}
+                                        value = {roboshotData.nombre}
+                                        disabled = {roboshotData.sending}
+                                        validations = {[validations.required]}
+                                        onChange = {onChangeInput}
                                     />
                                 </div>
                             </div>
@@ -193,22 +176,30 @@ const RoboshotsUpdate = (props) => {
                                     Estado de la estación
                                 </label>
                                 <div className = 'col-sm-8'>
-                                    <ToggleButtonGroup type="radio" name="estado" defaultValue={estado} onChange={onChangeEstado}>
+                                    <ButtonGroup toggle>
                                         <ToggleButton
+                                            type="radio"
                                             variant="outline-success"
-                                            value = {true}
-                                            checked = {estado}
+                                            name="estado"
+                                            value={true}
+                                            checked={state.activo}
+                                            onChange={onChangeInput}
+                                            disabled = {roboshotData.sending}
                                         >
                                             Activo
                                         </ToggleButton>
                                         <ToggleButton
+                                            type="radio"
                                             variant="outline-danger"
-                                            value = {false}
-                                            checked = {estado}
+                                            name="estado"
+                                            value={false}
+                                            checked={state.inactivo}
+                                            onChange={onChangeInput}
+                                            disabled = {roboshotData.sending}
                                         >
                                             Inactivo
                                         </ToggleButton>
-                                    </ToggleButtonGroup>
+                                    </ButtonGroup>
                                 </div>
                             </div>
                         </div>
