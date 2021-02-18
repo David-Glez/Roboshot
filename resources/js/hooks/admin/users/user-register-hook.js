@@ -60,18 +60,11 @@ const useUserRegister = (validateForm, onSubmitData) => {
             //  sending data to backend
             const send = UserService.nuevoCliente(data);
             send.then((response) => {
-                if(response.data.status == true){
-                    responseData = {
-                        status: response.data.status,
-                        mensaje: response.data.mensaje
-                    }
-                }else{
-                    responseData = {
-                        status: response.data.status,
-                        mensaje: response.data.mensaje
-                    }
-                    setUserData(userData => ({...userData, ['loading']:false}))
+                responseData = {
+                    status: response.data.status,
+                    mensaje: response.data.mensaje
                 }
+                setUserData(userData => ({...userData, ['loading']:response.data.status}))
                 onSubmitData(responseData)
             })
         }

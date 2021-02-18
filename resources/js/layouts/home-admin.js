@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-
 import {
     Route,
     Switch,
@@ -32,6 +31,9 @@ import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.m
 import AuthService from '../services/auth/autenticacion';
 import UserService from '../services/auth/servicioUsuarios';
 
+//  custom hook
+import useAdminLayout from '../hooks/admin/layout/layout-hook';
+
 function Inicio(props){
 
     const [rutas, setRutas] = useState([]);
@@ -63,7 +65,7 @@ function Inicio(props){
                 rol: resp.rol,
                 autorizado: resp.autorizado
             })
-            setLoading(false)
+            //setLoading(false)
         }else{
             setLogueado(false)
         }
@@ -102,6 +104,9 @@ function Inicio(props){
         })
     };
 
+    const {userData, layout} = useAdminLayout();
+    console.log(userData, layout)
+
     //  texto del navbar
     const getBrandText = () => {
         return props.location.pathname;
@@ -115,9 +120,9 @@ function Inicio(props){
                 <Sidebar 
                     rutas = {rutas}
                     loading = {loading}
-                    usuario = {user.usuario}
-                    rol = {user.rol}
-                    autorizado = {user.autorizado}
+                    usuario = {userData.usuario}
+                    rol = {userData.rol}
+                    autorizado = {userData.autorizado}
                 />
                 <div className = 'mainPanel' id = 'mainPanel'>
                     <AdminNavBar

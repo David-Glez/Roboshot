@@ -40,18 +40,11 @@ const useAddRoboshot = (validateForm, onSubmitData) => {
             }
             const envio = UserService.anadirRoboshot(data);
             envio.then((response) => {
-                if(response.data.status == true){
-                    responseData = {
-                        status: response.data.status,
-                        mensaje: response.data.mensaje
-                    }
-                }else{
-                    responseData = {
-                        status: response.data.status,
-                        mensaje: response.data.mensaje
-                    }
-                    setRoboshotData(roboshotData => ({...roboshotData, ['loading']:false}))
+                responseData = {
+                    status: response.data.status,
+                    mensaje: response.data.mensaje
                 }
+                setRoboshotData(roboshotData => ({...roboshotData, ['loading']:response.data.status}))
                 onSubmitData(responseData)
             });
         }

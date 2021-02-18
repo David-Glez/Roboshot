@@ -28,20 +28,14 @@ const useSignIn = (validateForm, onSubmitData) => {
             }
             const envio = AuthService.login(credenciales);
             envio.then((response) => {
-                if(response.autorizado){
-                    responseData = {
-                        autorizado: response.autorizado,
-                        id: response.idRol,
-                        mensaje: 'Todo en orden'
-                    }
-                }else{
-                    responseData = {
-                        autorizado: response.autorizado,
-                        id: response.idRol,
-                        mensaje: 'Usuario y/o contraseña incorrectos'
-                    }
-                    setUserData(userData => ({...userData, ['loading']:false}));
+                
+                responseData = {
+                    autorizado: response.autorizado,
+                    id: response.idRol,
+                    mensaje: response.mensaje
                 }
+                setUserData(userData => ({...userData, ['loading']:response.autorizado}));
+                
                 onSubmitData(responseData)
             });
         }

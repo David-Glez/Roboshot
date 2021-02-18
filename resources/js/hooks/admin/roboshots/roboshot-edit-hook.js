@@ -66,18 +66,11 @@ const useEditRoboshot = (id, validateForm, onSubmitData) => {
             }
             const envio = UserService.editarRoboshot(data)
             envio.then((response) => {
-                if(response.data.status == true){
-                    responseData = {
-                        status: response.data.status,
-                        mensaje: response.data.mensaje
-                    }
-                }else{
-                    responseData = {
-                        status: response.data.status,
-                        mensaje: response.data.mensaje
-                    }
-                    setRoboshotData(roboshotData => ({...roboshotData, ['sending']:false}))
+                responseData = {
+                    status: response.data.status,
+                    mensaje: response.data.mensaje
                 }
+                setRoboshotData(roboshotData => ({...roboshotData, ['sending']:response.data.status}))
                 onSubmitData(responseData)
             });
         }

@@ -37,12 +37,14 @@ class InicioController extends Controller
                 'idRol' => $idRol,
                 'accessToken' => $accessToken,
                 'autorizado' => $verificacion,
+                'mensaje' => 'ok'
                 
             );
         }else{
             $datos = array(
                 'id' => 0,
-                'autorizado' => $verificacion
+                'autorizado' => $verificacion,
+                'mensaje' => 'Usuario y/o contraseña incorrectos.'
             );
         }
 
@@ -113,9 +115,10 @@ class InicioController extends Controller
     //funcion para ver si el usuario sigue autenticado en el servidor
     public function vidaSesion(){
       
-        $activo = Auth::check();
+        //$activo = Auth::check();
+        $user = Auth::user();
 
-        return response()->json($activo);
+        return response()->json($user);
     }
 
 

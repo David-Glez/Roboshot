@@ -1,225 +1,77 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React,  {useRef} from 'react';
 
 //  elementos y validacion de formulario
 import Form from 'react-validation/build/form';
 import Input from 'react-validation/build/input';
 import CheckButton from 'react-validation/build/button';
 import Select from 'react-validation/build/select';
+import validations from '../../../variables/admin/validations/form-validations';
 
 //  toast
 import { toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-//  API
-import AuthService from '../../../services/auth/autenticacion';
-
-const required = (value) =>{
-    if(!value){
-        return(
-            <small className = 'text-danger' role = 'alert'>
-                Este campo es requerido
-            </small>
-        )
-    }
-};
+//custom hook
+import useSignUp from '../../../hooks/principal/sign-forms/sign-up-hook';
 
 const SignUpForm = (props) => {
 
     const form = useRef();
     const checkBtn = useRef();
 
-    //  variables a enviar
-    const [nombres, setNombres] = useState("");
-    const [apellido, setApellido] = useState("");
-    const [email, setEmail] = useState("");
-    const [usuario, setUsuario] = useState("");
-    const [contrasena, setContrasena] = useState("");
-    const [diaN, setDiaN] = useState(0);
-    const [mesN, setMesN] = useState(0);
-    const [yearN, setYearN] = useState(undefined);
-    const [loading, setLoading] = useState(false);
-    const [dias, setDias] = useState([]);
-    const [meses, setMeses] = useState([
-        {m:1, n:'ene'},
-        {m:2, n:'feb'},
-        {m:3, n:'mar'},
-        {m:4, n:'abr'},
-        {m:5, n:'may'},
-        {m:6, n:'jun'},
-        {m:7, n:'jul'},
-        {m:8, n:'ago'},
-        {m:9, n:'sep'},
-        {m:10, n:'oct'},
-        {m:11, n:'nov'},
-        {m:12, n:'dic'},
-    ]);
-    const [year, setYear] = useState([]);
-
-    useEffect(() => {
-
-        //  arreglo con los años hasta 1950
-        let actualYear = (new Date()).getFullYear();
-        let allYears = [];
-        for(let x = 0; x <= 70; x++) {
-            allYears.push(actualYear - x)
-        }
-        setYear(allYears);
-
-        //  arreglo con los dias
-        let allDays = [];
-        for(let i = 1; i<32; i++){
-            allDays.push(i);
-        }
-        setDias(allDays);
-
-    },[]);
-
-    //  funcion que guarda el nombre
-    const onChangeNombre = (e) => {
-        const username = e.target.value;
-        setNombres(username);
-    };
-
-    //  funcion que guarda el apellido
-    const onChangeApellido = (e) => {
-        const lastName = e.target.value;
-        setApellido(lastName);
-    };
-
-    //  funcion que guarda el correo
-    const onChangeEmail = (e) => {
-        const correo = e.target.value;
-        setEmail(correo);
-    };
-
-    //  funcion que guarda el usuario
-    const onChangeUsuario = (e) => {
-        const user = e.target.value;
-        setUsuario(user);
-    };
-
-    //  funcion que guarda la contraseña
-    const onChangeContrasena = (e) => {
-        const password = e.target.value;
-        setContrasena(password);
-    };
-
-    //  funcion que guarda el dia selecionado
-    const onChangeDia = (e) => {
-        const day = e.target.value;
-        setDiaN(day);
-    };
-
-    //  funcion que guarda el mes seleccionado
-    const onChangeMes = (e) => {
-        const month = e.target.value;
-        setMesN(month);
-    }
-
-    //  funcion que guarda el año escrito
-    const onChangeYear = (e) => {
-        const year = e.target.value;
-        setYearN(year);
-    };
-
-    //  dias para el select
-    const diasSelect = () => {
-        return dias.map((number) => {
-            return(
-                <option key = {number} value = {number}>
-                    {number}
-                </option>
-            )
-        })
-    };
-
-    //  meses para el select
-    const mesesSelect = () => {
-        return meses.map((item, index) => {
-            return(
-                <option key = {index} value = {item.m}>
-                    {item.n}
-                </option>
-            )
-        })
-    };
-
-    //  años para el select
-    const yearSelect = () => {
-        return year.map((number) => {
-            return(
-                <option key = {number} value = {number}>
-                    {number}
-                </option>
-            )
-        })
-    }
-
     //  cerrar toast
     const cerrarToast = () =>{
         props.history.push('/');
     };
 
-    //  funcion que envia los datos a insertar en la bd
-    const onSubmitForm = (e) => {
-        //  previe la recarga de la pagina
-        e.preventDefault();
-
-        setLoading(true);
-        let fechaNacimiento = new Date(yearN, mesN-1, diaN);
-        
-        let data = {
-            nombres: nombres,
-            apellido: apellido,
-            correo: email,
-            usuario: usuario,
-            contrasena: contrasena,
-            fechaNacimiento: fechaNacimiento
-        };
-
-        //  validacion del formulario
+    const validateForm = () => {
         form.current.validateAll();
-
         if(checkBtn.current.context._errors.length == 0){
-            const envio = AuthService.registrar(data);
-            envio.then((response) => {
-
-                if(response.data.status){
-                    toast.success(response.data.mensaje,{
-                        position: toast.POSITION.TOP_CENTER,
-                        autoClose: 4000,
-                        hideProgressBar: false,
-                        newestOnTop: false,
-                        closeOnClick: true,
-                        rtl: false,
-                        draggable: true,
-                        pauseOnHover: true,
-                        progress: undefined,
-                        onClose: () => cerrarToast()
-                    });
-                }else{
-                    let mensajes = response.data.mensaje;
-                    mensajes.forEach((item) => {
-                        toast.warning(item,{
-                            position: toast.POSITION.TOP_CENTER,
-                            autoClose: 4000,
-                            hideProgressBar: false,
-                            newestOnTop: false,
-                            closeOnClick: true,
-                            rtl: false,
-                            draggable: true,
-                            pauseOnHover: true,
-                            progress: undefined
-                        });
-                    });
-                    setLoading(false)
-                }
-            })
+            return true;
         }else{
-            setLoading(false);
+            return false;
         }
-        
-    };
+    }
+
+    const onSubmitData = (response) => {
+        if(response.status){
+            toast.success(response.mensaje,{
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 4000,
+                hideProgressBar: false,
+                newestOnTop: false,
+                closeOnClick: true,
+                rtl: false,
+                draggable: true,
+                pauseOnHover: true,
+                progress: undefined,
+                onClose: () => cerrarToast()
+            });
+        }else{
+            let mensajes = response.mensaje;
+            mensajes.forEach((item) => {
+                toast.warning(item,{
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    newestOnTop: false,
+                    closeOnClick: true,
+                    rtl: false,
+                    draggable: true,
+                    pauseOnHover: true,
+                    progress: undefined
+                });
+            });
+        }
+    }
+
+    const {
+        userData, 
+        onChangeInput,
+        onSubmitForm, 
+        selectYears, 
+        selectMonths, 
+        selectDays} = useSignUp(validateForm, onSubmitData)
 
     return(
         <>
@@ -234,12 +86,12 @@ const SignUpForm = (props) => {
                             <Input 
                                 type = 'text'
                                 className = 'form-control validaReg'
-                                name = 'userName'
+                                name = 'nombres'
                                 placeholder="Nombre"
-                                value = {nombres}
-                                onChange = {onChangeNombre}
-                                validations = {[required]}
-                                disabled = {loading}
+                                value = {userData.nombres}
+                                onChange = {onChangeInput}
+                                validations = {[validations.required]}
+                                disabled = {userData.loading}
                             />
                         </div>
                     </div>
@@ -248,12 +100,12 @@ const SignUpForm = (props) => {
                             <Input 
                                 type = 'text'
                                 className = 'form-control validaReg'
-                                name = 'lastName'
+                                name = 'apellidos'
                                 placeholder="Apellido"
-                                value = {apellido}
-                                onChange = {onChangeApellido}
-                                validations = {[required]}
-                                disabled = {loading}
+                                value = {userData.apellidos}
+                                onChange = {onChangeInput}
+                                validations = {[validations.required]}
+                                disabled = {userData.loading}
                             />
                         </div>
                     </div>
@@ -266,10 +118,10 @@ const SignUpForm = (props) => {
                                 className = 'form-control validaReg'
                                 name = 'email'
                                 placeholder = 'Correo Electrónico'
-                                value = {email}
-                                onChange = {onChangeEmail}
-                                validations = {[required]}
-                                disabled = {loading} 
+                                value = {userData.email}
+                                onChange = {onChangeInput}
+                                validations = {[validations.required]}
+                                disabled = {userData.loading} 
                             />
                         </div>
                     </div>
@@ -286,13 +138,14 @@ const SignUpForm = (props) => {
                         <div className = 'form-group'>
                             <Select
                                 className = 'form-control'
-                                name = 'dia'
-                                validations = {[required]} 
-                                onChange = {onChangeDia}
-                                disabled = {loading}
+                                name = 'diaN'
+                                validations = {[validations.required]} 
+                                onChange = {onChangeInput}
+                                disabled = {userData.loading}
+                                value = {userData.diaN}
                             >
                                 <option value = ''>Día</option>
-                                {diasSelect()}
+                                {selectDays()}
                             </Select>
                         </div>
                     </div>
@@ -300,13 +153,14 @@ const SignUpForm = (props) => {
                         <div className = 'form-group'>
                             <Select
                                 className = 'form-control'
-                                name = 'mes'
-                                validations = {[required]} 
-                                onChange = {onChangeMes}
-                                disabled = {loading}
+                                name = 'mesN'
+                                validations = {[validations.required]} 
+                                onChange = {onChangeInput}
+                                disabled = {userData.loading}
+                                value = {userData.mesN}
                             >
                                 <option value = ''>Mes</option>
-                                {mesesSelect()}
+                                {selectMonths()}
                             </Select>
                         </div>
                     </div>
@@ -315,12 +169,13 @@ const SignUpForm = (props) => {
                             <Select
                                 className = 'form-control '
                                 name = 'yearN'
-                                onChange = {onChangeYear}
-                                validations = {[required]}
-                                disabled = {loading}
+                                onChange = {onChangeInput}
+                                validations = {[validations.required]}
+                                disabled = {userData.loading}
+                                value = {userData.yearN}
                             >
                                 <option value = ''>Año</option>
-                                {yearSelect()}
+                                {selectYears()}
                             </Select>
                         </div>
                     </div>
@@ -331,12 +186,12 @@ const SignUpForm = (props) => {
                             <Input
                                 type = 'text'
                                 className = 'form-control validaReg'
-                                name = 'user'
+                                name = 'usuario'
                                 placeholder = 'Usuario' 
-                                value = {usuario}
-                                onChange = {onChangeUsuario}
-                                validations = {[required]}
-                                disabled = {loading}
+                                value = {userData.usuario}
+                                onChange = {onChangeInput}
+                                validations = {[validations.required]}
+                                disabled = {userData.loading}
                             />
                         </div>
                     </div>
@@ -347,20 +202,20 @@ const SignUpForm = (props) => {
                             <Input
                                 type = 'password'
                                 className = 'form-control validaReg'
-                                name = 'password'
+                                name = 'contrasena'
                                 placeholder = 'Contraseña'
-                                value = {contrasena}
-                                onChange = {onChangeContrasena}
-                                validations = {[required]}
-                                disabled = {loading} 
+                                value = {userData.contrasena}
+                                onChange = {onChangeInput}
+                                validations = {[validations.required]}
+                                disabled = {userData.loading} 
                             />
                         </div>
                     </div>
                 </div>
                 <div className = 'row'>
                     <div className = 'col-sm-12 d-flex justify-content-center'>
-                        <button className = 'btn btn-success' disabled = {loading}>
-                            {loading && (
+                        <button className = 'btn btn-success' disabled = {userData.loading}>
+                            {userData.loading && (
                                 <span className = "spinner-border spinner-border-sm"></span>
                             )}
                             Registrarte

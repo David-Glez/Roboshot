@@ -86,18 +86,11 @@ const useUserUpdate = (id, validateForm, onSubmitData) => {
 
             const envio = UserService.editarCliente(data);
             envio.then((response) => {
-                if(response.data.status == true){
-                    responseData = {
-                        status: response.data.status,
-                        mensaje: response.data.mensaje
-                    }
-                }else{
-                    responseData = {
-                        status: response.data.status,
-                        mensaje: response.data.mensaje
-                    }
-                    setUserData(userData => ({...userData, ['sending']:false}))
+                responseData = {
+                    status: response.data.status,
+                    mensaje: response.data.mensaje
                 }
+                setUserData(userData => ({...userData, ['sending']:response.data.status}))
                 onSubmitData(responseData)
             });
         }

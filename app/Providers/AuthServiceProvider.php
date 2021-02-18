@@ -28,5 +28,8 @@ class AuthServiceProvider extends ServiceProvider
 
         //rutas passport
         Passport::routes();
+
+        //  token lifetime
+        Passport::tokensExpireIn(now()->addDays(5));
     }
 }

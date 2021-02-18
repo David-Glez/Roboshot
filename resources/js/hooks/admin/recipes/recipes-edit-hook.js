@@ -93,19 +93,11 @@ const useRecipeEdit = (data, onSubmitData) => {
         data.append('price', dataForm.price)
         const send = UserService.updateRecipe(data);
         send.then((response) => {
-            
-            if(response.data.status == true){
-                responseData = {
-                    status: response.data.status,
-                    mensaje: response.data.mensaje
-                }
-            }else{
-                responseData = {
-                    status: response.data.status,
-                    mensaje: response.data.mensaje
-                }
-                setDataForm(dataForm => ({...dataForm, ['sending']:false}))
+            responseData = {
+                status: response.data.status,
+                mensaje: response.data.mensaje
             }
+            setDataForm(dataForm => ({...dataForm, ['sending']:response.data.status}))
             onSubmitData(responseData);
         })
     }
