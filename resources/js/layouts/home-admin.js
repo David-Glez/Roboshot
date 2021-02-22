@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
     Route,
     Switch,
@@ -27,84 +27,18 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 
-//servicio de autenticacion
-import AuthService from '../services/auth/autenticacion';
-import UserService from '../services/auth/servicioUsuarios';
-
 //  custom hook
 import useAdminLayout from '../hooks/admin/layout/layout-hook';
 
 function Inicio(props){
 
-    const [rutas, setRutas] = useState([]);
-    const [logueado, setLogueado] = useState(true);
-    const [loading, setLoading] = useState(true);
-    const [modalLog, setModalLog] = useState(false);
-    const [cards, setCards] = useState([]);
-    const [modalLoading, setModalLoading] = useState(true);
-    const [user, setUser] = useState({
-        id: 0,
-        idRol: 0,
-        usuario: '',
-        rol: '',
-        autorizado: null
-    });
-
-    //carga del state
-    useEffect(()=>{
-        //  datos en localstorage
-        const resp = AuthService.getCurrentUser();
-        if(resp != null){
-            if(resp.idRol == 4){
-                setLogueado(false)
-            }
-            setUser({
-                id: resp.id,
-                idRol: resp.idRol, 
-                usuario: resp.usuario,
-                rol: resp.rol,
-                autorizado: resp.autorizado
-            })
-            //setLoading(false)
-        }else{
-            setLogueado(false)
-        }
-
-        //  datos de la API
-        const inicio = async() =>{
-            const routes = await UserService.rutasRol();
-            const statsCards =  await UserService.statsCard();
-            if(routes && statsCards){
-                setRutas(routes.data);
-                setLoading(false);
-                setModalLoading(false);
-                setCards(statsCards.data)
-            }
-        }
-        inicio();
-    }, [])
-
     //cerrar sesion
-    const logOut = () => {
-        setModalLog(true);
-        const salir = AuthService.logout();
-        salir.then(resp => {
-            if(resp.data.status){
-                setRutas([]);
-                setUser({
-                    id: 0,
-                    idRol: 0,
-                    usuario: '',
-                    rol: '',
-                    autorizado: null
-                })
-                setModalLog(false)
-                props.history.push('/')
-            }
-        })
+    const closed = () => {
+        //  logOut()
+        console.log('do something')
     };
 
-    const {userData, layout} = useAdminLayout();
+    const {userData, layout, logOut} = useAdminLayout();
     console.log(userData, layout)
 
     //  texto del navbar
@@ -112,14 +46,14 @@ function Inicio(props){
         return props.location.pathname;
     }
 
-    if(logueado){
+    if(layout.admin){
         return(
             <>
             <ToastContainer />
             <div className = 'wrapperAdmin'>
                 <Sidebar 
-                    rutas = {rutas}
-                    loading = {loading}
+                    rutas = {layout.routes}
+                    loading = {layout.loading}
                     usuario = {userData.usuario}
                     rol = {userData.rol}
                     autorizado = {userData.autorizado}
@@ -127,13 +61,13 @@ function Inicio(props){
                 <div className = 'mainPanel' id = 'mainPanel'>
                     <AdminNavBar
                         brandText = {getBrandText()} 
-                        logout = {(e) => logOut(e)}
+                        logout = {(e) => closed(e)}
                     />
                     <Switch>
                         <Route exact path = '/admin'>
                             <DashBoard
-                                loading = {loading}
-                                cards = {cards} 
+                                loading = {layout.loading}
+                                cards = {layout.cards} 
                             />
                         </Route>
                         <Route exact path = '/admin/usuarios' component = {UsersAdmin} />
@@ -149,10 +83,10 @@ function Inicio(props){
                 </div>
             </div>
             <LogOutModal
-                ver = {modalLog} 
+                ver = {layout.logout} 
             />
             <LoadingModal
-                ver = {modalLoading}
+                ver = {layout.loading}
             />
             </>
         )

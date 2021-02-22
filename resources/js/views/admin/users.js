@@ -14,26 +14,32 @@ import UsersUpdate from '../../components/admin/forms/users-edit-form';
 import UsersDelete from '../../components/admin/modales/users-delete-modal';
 
 const UsersAdmin = (props) => {
-    
-    const [eliminarUsuario, setEliminarUsuario] = useState(false);
-    const [idUsuario, setIdUsuario] = useState(0);
-    const [nombre, setNombre] = useState('');
-    const [razon, setRazon] = useState('');
+
+    const [userDelete, setUserDelete] = useState({
+        id: 0,
+        nombre: '',
+        razon: '',
+        delete: false
+    });
 
     //  abre el modal
     const abrirModalEliminar = (id, nombre, razon) => {
-        setIdUsuario(id);
-        setNombre(nombre);
-        setRazon(razon)
-        setEliminarUsuario(true);
+        setUserDelete({
+            id: id,
+            nombre: nombre,
+            razon: razon,
+            delete: true
+        });
     }
 
     //  cerrar el modal
     const cerrarModalEliminar = () => {
-        setIdUsuario(0);
-        setNombre('');
-        setRazon('')
-        setEliminarUsuario(false);
+        setUserDelete({
+            id: 0,
+            nombre: '',
+            razon: '',
+            delete: false
+        });
         props.history.push('/admin');
     }
 
@@ -56,11 +62,11 @@ const UsersAdmin = (props) => {
             </div>
         </div>
         <UsersDelete 
-            activo = {eliminarUsuario}
+            activo = {userDelete.delete}
             inactivo = {(e) => cerrarModalEliminar(e)}
-            id = {idUsuario}
-            nombre = {nombre}
-            razon = {razon}
+            id = {userDelete.id}
+            nombre = {userDelete.nombre}
+            razon = {userDelete.razon}
         />
         </>
     )
