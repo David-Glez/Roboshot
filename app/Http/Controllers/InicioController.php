@@ -16,7 +16,7 @@ class InicioController extends Controller
 {
     //funcion para login
     public function inicio(Request $request){
-
+        $state = 0;
         $validaUsuario = $request->only('nombre', 'password');
 
         $verificacion = Auth::attempt($validaUsuario);
@@ -40,16 +40,18 @@ class InicioController extends Controller
                 'mensaje' => 'ok'
                 
             );
+            $state = 200;
         }else{
             $datos = array(
                 'id' => 0,
                 'autorizado' => $verificacion,
                 'mensaje' => 'Usuario y/o contraseña incorrectos.'
             );
+            $state = 401;
         }
 
     
-        return response()->json($datos);
+        return response()->json($datos, $state);
     }
 
     //  registro de usuarios como clientes
@@ -127,7 +129,7 @@ class InicioController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        $request->session()->revoke();
+        
 
         $data = array(
             'mensaje' => 'Sesión cerrada',

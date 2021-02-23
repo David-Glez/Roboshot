@@ -8,11 +8,18 @@ import logo from '../../../assets/img/roboshot-logo-1.png';
 //  iconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+//  context
+import {useAuthState, useAuthDispatch, logoutUser} from '../../../context';
+
 const Header = (props) => {
 
+    //  read user details from context
+    const userDetail = useAuthState();
+    // read dispatch method from context
+    const userDispatch = useAuthDispatch();
     const login = props.logueado;
     const data = props.usuario;
-
+    console.log(userDetail)
     const carrito = (e) => {
         e.preventDefault();
         props.carrito(e);

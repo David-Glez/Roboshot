@@ -42,6 +42,9 @@ import {
     faCocktail 
 } from "@fortawesome/free-solid-svg-icons";
 
+//  context
+import {AuthProvider} from './context';
+
 library.add(
     faHome, faUsers, faBeer, faRoute, faCalendar, faClock, faTimes,
     faUserTie, faPlus, faShoppingCart, faUserAlt, faSignOutAlt, faTrashAlt,
@@ -51,6 +54,7 @@ class Index extends Component{
     
     render(){
         return(
+            <AuthProvider>
             <BrowserRouter>
                 <Switch>
                     <Route exact path='/' component = {Home} />
@@ -61,6 +65,7 @@ class Index extends Component{
                     <Route path = '/perfil' component = {Home} />
                 </Switch>       
             </BrowserRouter>
+            </AuthProvider>
         )
     }
 }
