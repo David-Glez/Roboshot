@@ -60,7 +60,7 @@ Route::group([
     Route::post('/login', 'InicioController@inicio');
     Route::post('/registrar', 'InicioController@registro');
     Route::get('/sesion', 'InicioController@vidaSesion');
-    Route::post('/logout', 'InicioController@cerrarSesion');
+    
 
     //  ruta para roboshot local
     Route::post('/roboshots/local/actualizar', 'RoboshotController@actualizarLocal');
@@ -70,6 +70,8 @@ Route::group([
     Route::group([
         'middleware' => 'auth:api'
     ], function(){
+
+        Route::get('/logout', 'InicioController@cerrarSesion');
 
         // rutas para funciones destinadas a usuarios
         Route::get('/usuarios', 'UsuariosController@inicio');

@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import AuthService from '../../../services/auth/autenticacion';
+import {useAuthDispatch, registerUser} from '../../../context';
 
-const useSignUp = (validateForm, onSubmitData) => {
-
+const useSignUp = (validateForm) => {
+    const dispatch = useAuthDispatch();
     const actualDate = new Date();
     let actualYear = actualDate.getFullYear();
     let actualMonth = actualDate.getMonth();
@@ -25,7 +25,6 @@ const useSignUp = (validateForm, onSubmitData) => {
         {m:11, n:'dic'},
     ]);
     const [userData, setUserData] = useState({
-        loading: false,
         nombres: '',
         apellidos: '',
         email: '',
@@ -118,9 +117,7 @@ const useSignUp = (validateForm, onSubmitData) => {
     const onSubmitForm = (e) => {
         e.preventDefault();
         const validate = validateForm();
-        let responseData;
         if(validate){
-            setUserData(userData => ({...userData, ['loading']:true}));
             let fechaNacimiento = new Date(userData.yearN, userData.mesN, userData.diaN);
             let data = {
                 nombres: userData.nombres,
@@ -130,15 +127,7 @@ const useSignUp = (validateForm, onSubmitData) => {
                 contrasena: userData.contrasena,
                 fechaNacimiento: fechaNacimiento
             };
-            const envio = AuthService.registrar(data);
-            envio.then((response) => {
-                responseData = {
-                    status: response.data.status,
-                    mensaje: response.data.mensaje
-                }
-                setUserData(userData => ({...userData, ['loading']:response.data.status}));
-                onSubmitData(responseData)
-            });
+            registerUser(dispatch, data)
         }
     }
 

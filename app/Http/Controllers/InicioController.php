@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Rules\MayorEdad;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
+use Lcobucci\JWT\Parser;
 
 class InicioController extends Controller
 {
@@ -57,7 +58,7 @@ class InicioController extends Controller
     //  registro de usuarios como clientes
 
     public function registro(Request $request){
-        
+        $state = 0;
         try{
             $request->validate([
                 'usuario' => ['required', 'unique:usuarios,nombre', 'min:6'],
@@ -94,7 +95,7 @@ class InicioController extends Controller
                 'mensaje' => 'Usuario Registrado :D ya puedes iniciar sesion'
             );
             
-            
+            $state = 200;
         }catch(ValidationException $e){
             $errors = [];
             foreach($e->errors() as $item) {
@@ -106,11 +107,11 @@ class InicioController extends Controller
                 'status' => false,
                 'mensaje' => $errors
             );
-
+            $state = 401;
             //return $data;
         }
 
-        return response()->json($data);
+        return response()->json($data, $state);
 
     }
     
@@ -125,18 +126,29 @@ class InicioController extends Controller
 
 
     //  funcion para cerrar sesion
-    public function cerrarSesion(Request $request){
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+    public function cerrarSesion(){
+        $status = 0;
+        $token = Auth::user()->token()->revoke();
         
-
-        $data = array(
-            'mensaje' => 'Sesión cerrada',
-            'status' => true
-        );
+        /*$request->session()->invalidate();
+        $request->session()->regenerateToken();*/
         
-        return response()->json($data);
+        if($token){
+            $data = array(
+                'mensaje' => 'Sesión cerrada',
+                'status' => true
+            );
+            $status = 200;
+        }else{
+            $data = array(
+                'mensaje' => 'Error al cerrar',
+                'status' => false
+            );
+            $status = 500;
+        }
+        
+        
+        return response()->json($data, $status);
     }
 
 }

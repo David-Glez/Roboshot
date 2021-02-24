@@ -11,8 +11,10 @@ const initialState = {
   user: '' || current_user.usuario,
   rol: '' || current_user.rol,
   id_rol: 0 || current_user.idRol,
-  access: undefined || current_user.autorizado,
-  token: '' || current_user.accessToken
+  access: false || current_user.autorizado,
+  token: '' || current_user.accessToken,
+  message: null,
+  register: null
 };
 
 const AuthReducer = (initialState, action) => {
@@ -21,7 +23,15 @@ const AuthReducer = (initialState, action) => {
         return {
           ...initialState,
           loading: true,
-          access: undefined
+          access: undefined,
+          message: null
+        };
+      case "REQUEST_REGISTER":
+        return {
+          ...initialState,
+          loading: true,
+          access: undefined,
+          message: null
         };
       case "LOGIN_SUCCESS":
         return {
@@ -32,13 +42,20 @@ const AuthReducer = (initialState, action) => {
           rol: action.payload.rol,
           id_rol: action.payload.idRol,
           access: action.payload.autorizado,
-          token: action.payload.accessToken
+          token: action.payload.accessToken,
+          message: null
         };
       case "LOGOUT":
         return {
           ...initialState,
-          user: "",
-          token: ""
+          errorMessage: null,
+          id_user: 0 ,
+          user: '' ,
+          rol: '' ,
+          id_rol: 0 ,
+          access: false,
+          token: '',
+          message: action.logMessage 
         };
    
       case "LOGIN_ERROR":
@@ -47,6 +64,20 @@ const AuthReducer = (initialState, action) => {
           loading: false,
           errorMessage: action.error,
           access: false
+        };
+      case "REGISTER_SUCCESS":
+        return{
+          ...initialState,
+          loading: false,
+          message: action.success_msg,
+          register: true
+        }
+      case "REGISTER_ERROR":
+        return {
+          ...initialState,
+          loading: false,
+          errorMessage: action.error,
+          register: false
         };
    
       default:

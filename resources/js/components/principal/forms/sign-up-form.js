@@ -1,4 +1,4 @@
-import React,  {useRef} from 'react';
+import React,  {useRef, useEffect} from 'react';
 
 //  elementos y validacion de formulario
 import Form from 'react-validation/build/form';
@@ -13,42 +13,22 @@ import 'react-toastify/dist/ReactToastify.css';
 
 //custom hook
 import useSignUp from '../../../hooks/principal/sign-forms/sign-up-hook';
-
+import {useAuthState} from '../../../context';
 const SignUpForm = (props) => {
 
     const form = useRef();
     const checkBtn = useRef();
+    const userDetails = useAuthState();
 
+    console.log(userDetails)
     //  cerrar toast
     const cerrarToast = () =>{
         props.history.push('/');
     };
 
-    const validateForm = () => {
-        form.current.validateAll();
-        if(checkBtn.current.context._errors.length == 0){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    const onSubmitData = (response) => {
-        if(response.status){
-            toast.success(response.mensaje,{
-                position: toast.POSITION.TOP_CENTER,
-                autoClose: 4000,
-                hideProgressBar: false,
-                newestOnTop: false,
-                closeOnClick: true,
-                rtl: false,
-                draggable: true,
-                pauseOnHover: true,
-                progress: undefined,
-                onClose: () => cerrarToast()
-            });
-        }else{
-            let mensajes = response.mensaje;
+    useEffect(() => {
+        if(userDetails.register == false && userDetails.errorMessage != null){
+            let mensajes = userDetails.errorMessage;
             mensajes.forEach((item) => {
                 toast.warning(item,{
                     position: toast.POSITION.TOP_CENTER,
@@ -63,6 +43,29 @@ const SignUpForm = (props) => {
                 });
             });
         }
+        if(userDetails.register == true && userDetails.message != null){
+            toast.success(userDetails.message,{
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 4000,
+                hideProgressBar: false,
+                newestOnTop: false,
+                closeOnClick: true,
+                rtl: false,
+                draggable: true,
+                pauseOnHover: true,
+                progress: undefined,
+                onClose: () => cerrarToast()
+            });
+        }
+    },[userDetails.register, userDetails.errorMessage, userDetails.message])
+
+    const validateForm = () => {
+        form.current.validateAll();
+        if(checkBtn.current.context._errors.length == 0){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     const {
@@ -71,7 +74,7 @@ const SignUpForm = (props) => {
         onSubmitForm, 
         selectYears, 
         selectMonths, 
-        selectDays} = useSignUp(validateForm, onSubmitData)
+        selectDays} = useSignUp(validateForm)
 
     return(
         <>
@@ -91,7 +94,7 @@ const SignUpForm = (props) => {
                                 value = {userData.nombres}
                                 onChange = {onChangeInput}
                                 validations = {[validations.required]}
-                                disabled = {userData.loading}
+                                disabled = {userDetails.loading}
                             />
                         </div>
                     </div>
@@ -105,7 +108,7 @@ const SignUpForm = (props) => {
                                 value = {userData.apellidos}
                                 onChange = {onChangeInput}
                                 validations = {[validations.required]}
-                                disabled = {userData.loading}
+                                disabled = {userDetails.loading}
                             />
                         </div>
                     </div>
@@ -121,7 +124,7 @@ const SignUpForm = (props) => {
                                 value = {userData.email}
                                 onChange = {onChangeInput}
                                 validations = {[validations.required]}
-                                disabled = {userData.loading} 
+                                disabled = {userDetails.loading} 
                             />
                         </div>
                     </div>
@@ -191,7 +194,7 @@ const SignUpForm = (props) => {
                                 value = {userData.usuario}
                                 onChange = {onChangeInput}
                                 validations = {[validations.required]}
-                                disabled = {userData.loading}
+                                disabled = {userDetails.loading}
                             />
                         </div>
                     </div>
@@ -207,15 +210,15 @@ const SignUpForm = (props) => {
                                 value = {userData.contrasena}
                                 onChange = {onChangeInput}
                                 validations = {[validations.required]}
-                                disabled = {userData.loading} 
+                                disabled = {userDetails.loading} 
                             />
                         </div>
                     </div>
                 </div>
                 <div className = 'row'>
                     <div className = 'col-sm-12 d-flex justify-content-center'>
-                        <button className = 'btn btn-success' disabled = {userData.loading}>
-                            {userData.loading && (
+                        <button className = 'btn btn-success' disabled = {userDetails.loading}>
+                            {userDetails.loading && (
                                 <span className = "spinner-border spinner-border-sm"></span>
                             )}
                             Registrarte

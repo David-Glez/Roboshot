@@ -1,34 +1,40 @@
-import React from 'react';
-
+import React, {useEffect} from 'react';
 import {Link}from 'react-router-dom';
-
 //  Logo roboshot
 import logo from '../../../assets/img/roboshot-logo-1.png';
-
 //  iconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { toast} from 'react-toastify';
 //  context
-import {useAuthState, useAuthDispatch, logoutUser} from '../../../context';
-
+import {useAuthState} from '../../../context';
+import useUserLogout from '../../../hooks/user-state/user-logout-hook'
 const Header = (props) => {
 
     //  read user details from context
     const userDetail = useAuthState();
-    // read dispatch method from context
-    const userDispatch = useAuthDispatch();
-    const login = props.logueado;
-    const data = props.usuario;
-    console.log(userDetail)
+    const {log_out} = useUserLogout();
+
+    useEffect(() => {
+        if(userDetail.message != null && userDetail.access == false){
+            toast.warning(userDetail.message,{
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 4000,
+                hideProgressBar: false,
+                newestOnTop: false,
+                closeOnClick: true,
+                rtl: false,
+                draggable: true,
+                pauseOnHover: true,
+                progress: undefined
+            });
+        }
+    }, [userDetail.access, userDetail.message])
+    
     const carrito = (e) => {
         e.preventDefault();
         props.carrito(e);
     };
 
-    const cerrarSesion = (e) => {
-        e.preventDefault();
-        props.sesion();
-    };
 
     return(
         <>
@@ -44,7 +50,7 @@ const Header = (props) => {
                     <button type="button" className="btn btn-outline-warning" onClick = {(e) => carrito(e)}>
                         <FontAwesomeIcon icon = 'shopping-cart' /> <span className="badge badge-light" id="NumCarrito">{props.counter}</span>
                     </button>
-                    {login ? (
+                    {userDetail.access ? (
                         <div className="dropleft float-right">
                             <button className="btn btn-outline-secondary " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <div className = 'flexContainer'>
@@ -52,7 +58,7 @@ const Header = (props) => {
                                         <FontAwesomeIcon icon = 'user-alt' />
                                     </div>
                                     <div className = 'customSpan'>
-                                        {data.usuario}
+                                        {userDetail.user}
                                     </div>
                                 </div>
                             </button>
@@ -68,7 +74,7 @@ const Header = (props) => {
                                     </div>
                                 </Link>
                                 <div className="dropdown-divider"></div>
-                                <button className="dropdown-item" onClick = {(e) => cerrarSesion(e)}>
+                                <button className="dropdown-item" onClick = {(e) => log_out(e)}>
                                     <div className = 'flexContainer'>
                                         <div>
                                             <FontAwesomeIcon icon = 'sign-out-alt' />

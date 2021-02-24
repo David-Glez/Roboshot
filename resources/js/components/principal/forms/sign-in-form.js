@@ -21,7 +21,6 @@ import user from '../../../assets/img/user.png';
 const SignInForm = (props) => {
     const form = useRef();
     const checkBtn = useRef();
-
     const userDetails = useAuthState();
 
     useEffect(() => {

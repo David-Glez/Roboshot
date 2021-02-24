@@ -26,7 +26,6 @@ import RoboshotCard from '../views/principal/roboshots';
 import Recipe from '../views/principal/recetas';
 import Perfil from '../views/principal/perfil-usuario';
 
-
 function Home(props){
 
     const [roboshots, setRoboshots] = useState([]);
@@ -294,9 +293,6 @@ function Home(props){
         <Header
             carrito = {(e) => abrirCarrito(e)}
             counter = {contador}
-            logueado = {login}
-            usuario = {dataUser}
-            sesion = {(e) => logOut(e)}
         />
 
         <div className = 'container'>
