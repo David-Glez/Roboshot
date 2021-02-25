@@ -64,11 +64,11 @@ class WebController extends Controller
     public function pedido(Request $request){
         
         //  se genera el código del pedido
-        $cadena = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $cadena = '0123456789';
         $longitud = strlen($cadena);
-        $codigo = 'rob-web-';
+        $codigo = '001';    //TODO: get station ID and apply str_pad() function
 
-        for($i = 0; $i < 7; $i++){
+        for($i = 0; $i < 5; $i++){
             $codigo .= $cadena[rand(0, $longitud-1)];
         }
         
