@@ -8,7 +8,7 @@ const AuthDispatchContext = createContext();
 
 export function useAuthState(){
     const context = useContext(AuthStateContext)
-    console.log(context)
+    
     if(context === undefined) {
         throw new Error("useAuthState must be used within a AuthProvider");
     }
@@ -18,7 +18,7 @@ export function useAuthState(){
 
 export function useAuthDispatch(){
     const context = useContext(AuthDispatchContext)
-    console.log(context)
+    
     if(context === undefined) {
         throw new Error("useAuthState must be used within a AuthProvider");
     }

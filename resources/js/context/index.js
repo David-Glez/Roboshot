@@ -1,4 +1,28 @@
 import { AuthProvider, useAuthDispatch, useAuthState } from './user-context/context';
 import {loginUser, logoutUser, registerUser} from './user-context/actions';
 
-export {AuthProvider, useAuthState, useAuthDispatch, loginUser, logoutUser, registerUser}
+import{ HomePageProvider, useHomeDispatch, useHomeState} from './home-context/context';
+import {
+    roboshotStations, 
+    recipesStation, 
+    openModalSwitch, 
+    closeModalSwitch, 
+    ingredientsClient
+} from './home-context/actions';
+
+export {
+    AuthProvider, 
+    useAuthState, 
+    useAuthDispatch, 
+    loginUser, 
+    logoutUser, 
+    registerUser,
+    HomePageProvider,
+    useHomeDispatch,
+    useHomeState, 
+    roboshotStations,
+    recipesStation,
+    openModalSwitch,
+    closeModalSwitch,
+    ingredientsClient
+}

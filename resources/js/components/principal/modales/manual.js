@@ -18,6 +18,8 @@ import AnimatedGlass from '../cards/animated-glass-section';
 
 // hook
 import usePedido from '../../../hooks/principal/manual-recipe-hook';
+import useManualRecipe from '../../../hooks/principal/recipes/manual-recipe-hook';
+import {useHomeState, closeModalSwitch, useHomeDispatch} from '../../../context';
 
 const Contenido = (props) => {
 
@@ -39,7 +41,7 @@ const Contenido = (props) => {
     const [loading, setLoading] = useState(true);
     const lista = usePedido(ingredient, id);
 
-    useEffect(() =>{
+    /*useEffect(() =>{
         const inicio = async() =>{
             const result = await Accion.traeIngredientes(id);
             setCategorias(result.data.categorias);
@@ -50,7 +52,7 @@ const Contenido = (props) => {
             }
         }
         inicio();
-    }, []);
+    }, []);*/
 
 
     //  envia la receta al carrito
@@ -200,17 +202,23 @@ const Contenido = (props) => {
 }
 
 const ModalManual = (props) =>{
+    const settings = useHomeState();
+    const dispatch = useHomeDispatch();
+    
     const ver = props.activo;
     const quitar = props.inactivo;
     const idCliente = props.idCliente;
 
-    if(ver){
+    const {ingredients, categories} = useManualRecipe();
+    if(settings.modal.open == true && settings.modal.name == 'custom'){
+
+        
         return(
             <>
             <Modal
                 size = 'xl'
-                show = {props.activo}
-                onHide = {props.inactivo}
+                show = {settings.modal.open}
+                onHide = {(e) => closeModalSwitch(dispatch, e)}
                 backdrop = 'static'
                 dialogClassName = 'modal-dialog-centered' 
             >
@@ -218,7 +226,7 @@ const ModalManual = (props) =>{
                     <h5 className='modal-title text-dark'>
                         Arma tu receta
                     </h5>
-                    <button className = 'close' onClick={props.inactivo}>
+                    <button className = 'close' onClick={(e) => closeModalSwitch(dispatch, e)}>
                         <span aria-hidden='true'>
                             &times;
                         </span>

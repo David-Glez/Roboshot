@@ -5,25 +5,30 @@ import Loader from '../../components/alertas/loader';
 import SinElementos from '../../components/alertas/vacio';
 import CardRoboshot from '../../components/principal/cards/roboshot-card';
 
+//  context and custom hooks
+import {useHomeState, useAuthState} from '../../context';
+import useRoboshotList from '../../hooks/principal/roboshots/roboshots-hook';
+
 const RoboshotCard = (props) => {
 
-    const lista = props.roboshot;
-
+    const userDetails = useAuthState();
+    const settings = useHomeState();
+    const {list} = useRoboshotList(userDetails.access);
     return(
         <>
-        {props.load ?(
+        {settings.loading ?(
             <div className = 'row superior'>
                 <Loader />
             </div>
         ):(
             <div className = 'row'>
-                {(lista == '') ? (
+                {(list == '') ? (
                     <div className = 'col-md-12 superior'>
                         <SinElementos />
                     </div>
                 ):(
                     <>
-                    {lista.map((x) => 
+                    {list.map((x) => 
                         <CardRoboshot
                             key = {x.idCliente}
                             datos = {x} 

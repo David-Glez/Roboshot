@@ -20,7 +20,6 @@ const SignUpForm = (props) => {
     const checkBtn = useRef();
     const userDetails = useAuthState();
 
-    console.log(userDetails)
     //  cerrar toast
     const cerrarToast = () =>{
         props.history.push('/');

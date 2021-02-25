@@ -26,10 +26,10 @@ import RoboshotCard from '../views/principal/roboshots';
 import Recipe from '../views/principal/recetas';
 import Perfil from '../views/principal/perfil-usuario';
 
+import {HomePageProvider} from '../context';
+
 function Home(props){
 
-    const [roboshots, setRoboshots] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [contador, setContador] = useState(0);
     const [total, setTotal] = useState(0);
     const [carrito, setCarrito] = useState([]);
@@ -46,6 +46,8 @@ function Home(props){
     const [dataUser, setDataUser] = useState([]);
     const [pedido, setPedido] = useState([]);
 
+
+
     //carga de las recetas al abrir la aplicacion
     useEffect(() =>{
 
@@ -57,42 +59,9 @@ function Home(props){
             setDataUser(user);
             setLogin(true);
         }
-
-        const inicio = async() =>{
-
-            //  trae todos los roboshot registrados
-            const result = await Accion.inicio();
-            setRoboshots(result.data)
-            if(result){
-                setLoading(false);
-            }
-        }
-        inicio();
     }, []);
 
-    //  cerrar sesion para clientes
-    const logOut = () => {
-        const envio = AuthService.logout();
-        envio.then(resp => {
-            if(resp.data.status == true){
-                setLogin(false);
-                setDataUser('');
-                //  toast de sesion cerrada
-                toast.warning(resp.data.mensaje,{
-                    position: toast.POSITION.TOP_CENTER,
-                    autoClose: 4000,
-                    hideProgressBar: false,
-                    newestOnTop: false,
-                    closeOnClick: true,
-                    rtl: false,
-                    draggable: true,
-                    pauseOnHover: true,
-                    progress: undefined
-                });
-            }
-        });
-        
-    };
+    
 
     //  abrir modal de usuario
     function abrirUsuario(){
@@ -290,6 +259,7 @@ function Home(props){
     return(
         <>
         <ToastContainer />
+        <HomePageProvider>
         <Header
             carrito = {(e) => abrirCarrito(e)}
             counter = {contador}
@@ -298,20 +268,9 @@ function Home(props){
         <div className = 'container'>
             
             <Switch>
-                <Route exact path = '/'>
-                    <RoboshotCard
-                        load = {loading}
-                        roboshot = {roboshots} 
-                        location = {props.location}
-                    />
-                </Route>
-                <Route exact path = '/roboshot' >
-                    <Recipe
-                        abrirReceta = {(e, i) => abrirReceta(e, i)} 
-                        abrirManual = {(e) => abrirManual(e)}
-                        location = {props.location}
-                    />
-                </Route>
+                <Route exact path = '/' component = {RoboshotCard} />
+                <Route exact path = '/roboshot' component = {Recipe} />
+                    
                 <Route exact path = '/perfil'>
                     <Perfil 
                         logueado = {login}
@@ -365,7 +324,7 @@ function Home(props){
                 inactivo = {(e) => cerrarCodigo(e)}
                 codigo = {codigo}
             />
-
+            </HomePageProvider>
         </>
     )
     
