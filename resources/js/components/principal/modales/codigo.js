@@ -38,6 +38,7 @@ const ModalCodigo = (props) => {
                             />
                         </div>
                         <div className = 'col-md-6'>
+                            <p>Codigo: {codigo}</p>
                             <p>Escanea este QR en la estación Roboshot y disfruta tus bebidas!</p>
                             <small>** Verifica disponibilidad</small>
                         </div>

@@ -194,7 +194,7 @@ class Roboshot{
             $table->integer('idReceta');
             $table->integer('roboshot')->nullable();
             $table->integer('idIngrediente');
-            $table->integer('cantidad');
+            $table->decimal('cantidad', 8, 2);
             $table->timestamps();
         });
 
