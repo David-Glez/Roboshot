@@ -180,9 +180,12 @@ class RoboshotController extends Controller
             //foreach($item->lista_ingredientes as $updIng){
             foreach($item->lista_ingredientes as $updIng){
                 RecetaIngredientes::updateOrCreate(
-                    ['idReceta' => $item->id, 'roboshot' => $robot->idRoboshot], //conditional
                     [
-                        'idIngrediente' => $updIng->idIngrediente,
+                        'idReceta' => $item->id, 
+                        'roboshot' => $robot->idRoboshot,
+                        'idIngrediente' => $updIng->idIngrediente
+                    ], //conditional
+                    [
                         'cantidad' => $updIng->cantidad
                     ]
                 );
