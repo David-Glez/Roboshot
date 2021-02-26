@@ -10,14 +10,10 @@ const HeaderSign = (props) => {
 
     return(
         <>
-        <nav className = 'navbar navbarPrincipal bg-light'>
-            <div className = 'container'>
-                <div className = 'col-md-8'>
-                    <Link to = '/' className = 'navbar-brand'>
-                        <img className = 'logoHome' src = {logo}  alt = '' />
-                    </Link>
-                </div>
-            </div>
+        <nav className = 'navbar navbar-expand-lg navbar-light bg-light navbarPrincipal'>
+            <Link to = '/' className = 'navbar-brand'>
+                <img className = 'logoHome' src = {logo}  alt = '' />
+            </Link>
         </nav>
         </>
     )
