@@ -9,23 +9,21 @@ import opciones from '../../../variables/principal/ingredients-table-variables-p
 
 const IngredientesTable = (props) => {
 
-    const idCategoria = props.idCategoria;
     const ingredientes = props.ingredientes;
     const lista = props.lista;
 
     //  funciones
     const cantidades = props.cantidadBebida;
     
-    const filtro = ingredientes.filter(ing => ing.categoria == idCategoria);
     return(
         <>
         <BootstrapTable 
             keyField = 'idIngrediente' 
-            data = { filtro } 
+            data = { ingredientes } 
             columns = { opciones.columnas(cantidades, lista) }
             bootstrap4 = {true} 
             noDataIndication={ opciones.vacio() }
-            pagination={ paginationFactory(opciones.opcionesPaginacion(filtro)) }
+            pagination={ paginationFactory(opciones.opcionesPaginacion(ingredientes)) }
             classes = 'table scrollDiv'
         />
         </>

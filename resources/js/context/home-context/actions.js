@@ -40,10 +40,16 @@ const ingredientsClient = (dispatch, id) => {
     return resp
 }
 
+const addOrderToCart = (dispatch, order, counter) => {
+    let i = counter +1;
+    console.log(i)
+}
+
 export{
     roboshotStations,
     recipesStation,
     openModalSwitch,
     closeModalSwitch,
-    ingredientsClient
+    ingredientsClient,
+    addOrderToCart
 }

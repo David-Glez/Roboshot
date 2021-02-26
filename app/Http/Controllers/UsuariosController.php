@@ -135,7 +135,7 @@ class UsuariosController extends Controller
             $cliente->save();
             
             //  se crea la bd para el cliente
-            Roboshot::CrearRoboshot($request->bd);
+            //Roboshot::CrearRoboshot($request->bd);
 
             $data = array(
                 'status' => true,

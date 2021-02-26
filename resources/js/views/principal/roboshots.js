@@ -16,7 +16,7 @@ const RoboshotCard = (props) => {
     const {list} = useRoboshotList(userDetails.access);
     return(
         <>
-        {settings.loading ?(
+        {(settings.loading && settings.module == 'home') ?(
             <div className = 'row superior'>
                 <Loader />
             </div>

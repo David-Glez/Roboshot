@@ -21,7 +21,7 @@ const Recipe = (props) => {
 
     return(
         <>
-        {settings.loading ? (
+        {(settings.loading && settings.module == 'recipes_page') ? (
             <div className = 'row superior'>
                 <Loader />
             </div>

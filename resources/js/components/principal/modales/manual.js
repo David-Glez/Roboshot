@@ -1,10 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 
 //  estilos
 import {Modal} from 'react-bootstrap';
-
-//  URL de la API
-import Accion from '../../../services/conexion';
 
 //  libreria toast
 import {  toast, Flip } from 'react-toastify';
@@ -17,49 +14,30 @@ import IngredientesTable from '../tables/ingredients-table';
 import AnimatedGlass from '../cards/animated-glass-section';
 
 // hook
-import usePedido from '../../../hooks/principal/manual-recipe-hook';
 import useManualRecipe from '../../../hooks/principal/recipes/manual-recipe-hook';
 import {useHomeState, closeModalSwitch, useHomeDispatch} from '../../../context';
 
 const Contenido = (props) => {
-
-    const id = props.idCliente;
-
-    const [ingredientes, setIngredientes] = useState([]);
-    const [categorias, setCategorias] = useState([]);
-    const [ingredient, setIngredient] = useState({
-        idIngrediente: 0,
-        nombre: '',
-        idCategoria: 0,
-        categoria: '',
-        posicion: 0,
-        cantidad: 0,
-        precio: 0 
-    });
     
-    const [idCategoria, setIDCategoria] = useState();
-    const [loading, setLoading] = useState(true);
-    const lista = usePedido(ingredient, id);
-
-    /*useEffect(() =>{
-        const inicio = async() =>{
-            const result = await Accion.traeIngredientes(id);
-            setCategorias(result.data.categorias);
-            setIngredientes(result.data.ingredientes);
-            
-            if(result.data){
-                setLoading(false);
-            }
-        }
-        inicio();
-    }, []);*/
-
-
+    const settings = useHomeState();
+    const dispatch = useHomeDispatch()
+    const {
+        categories,
+        pedido, 
+        ingCat,
+        ingredientsxcategory, 
+        ingredientSelected,
+        sendToCart  
+    } = useManualRecipe();
+    
+    
     //  envia la receta al carrito
     const enviar = (e) => {
         e.preventDefault();
+
+        console.log('enviar a carrito')
         //  en el caso de que no haya elementos no envia nada
-        if(lista.ingredientes == ''){
+        /*if(lista.ingredientes == ''){
             toast.warning('Debes seleccionar al menos un ingrediente.',{
                 position: toast.POSITION.TOP_CENTER,
                 autoClose: 4000,
@@ -92,44 +70,14 @@ const Contenido = (props) => {
                 //  cierra el modal
                 props.cerrar();
             }
-        }
-        
-    };
-
-    //  muestra los ingredientes por categoria
-    const ingxcategoria = (categoria) => {
-        setIDCategoria(categoria)
-    };
-
-    //  incrementa y decrementa en 10 la cantidad del ingrediente
-    const cantidades = (id, ml) => {
-        
-        let ing = ingredientes.filter(ing => ing.idIngrediente == id)
-        let cat = categorias.filter(cat => cat.idCategoria == ing[0].categoria);
-        let precioIng = 0;
-        if(ml > 0){
-            precioIng = (ing[0].precio * ml)/10;
-        }else{
-            precioIng = ing[0].precio;
-        }
-        
-        setIngredient({
-            idIngrediente:id,
-            nombre: ing[0].marca,
-            idCategoria: ing[0].categoria,
-            categoria: cat[0].nombre,
-            posicion: ing[0].posicion,
-            cantidad: ml,
-            precio: precioIng, 
-            precioInd: ing[0].precio
-        })
+        }*/
         
     };
 
     return(
         <>
         <Modal.Body>
-            {loading ? (
+            {(settings.loading && settings.module == 'ingredients') ? (
                 <div className = 'container'>
                     <div className = 'col-md-12 superior'>
                         <Loader />
@@ -143,8 +91,8 @@ const Contenido = (props) => {
                                 Categorias
                             </label>
                             <CategoriasCard
-                                categorias = {categorias}
-                                verIngredientes = {(e) => ingxcategoria(e)} 
+                                categorias = {categories}
+                                verIngredientes = {(e) => ingredientsxcategory(e)} 
                             />
                         </div>
                         <div className = 'col-md-6'>
@@ -152,16 +100,16 @@ const Contenido = (props) => {
                                 Descripción
                             </label>
                             <IngredientesTable
-                                idCategoria = {idCategoria} 
-                                ingredientes = {ingredientes}
-                                cantidadBebida = {(e, i) => cantidades(e, i)}
-                                lista = {lista}
+                                
+                                ingredientes = {ingCat}
+                                cantidadBebida = {(e, i) => ingredientSelected(e, i)}
+                                lista = {pedido}
                                 
                             />
                         </div>
                         <div className = 'col-md-3'>
                             <AnimatedGlass
-                                cantidad = {lista.cantidad} 
+                                cantidad = {pedido.cantidad} 
                             />
                             
                         </div>
@@ -173,7 +121,7 @@ const Contenido = (props) => {
                                 Precio Total:
                             </label>
                             <span className = 'col-sm-6 col-form-label text-success'>
-                                ${parseFloat(lista.precio).toFixed(2)}
+                                ${parseFloat(pedido.precio).toFixed(2)}
                             </span>
                         </div>
                         <div className = 'col-md-4'>
@@ -181,7 +129,7 @@ const Contenido = (props) => {
                                 Cantidad:
                             </label>
                             <span className = 'col-sm-6 col-form-label text-success'>
-                                {lista.cantidad} mL
+                                {pedido.cantidad} mL
                             </span>
                         </div>
                         <div className = 'col-md-4'>
@@ -195,24 +143,18 @@ const Contenido = (props) => {
             )}
         </Modal.Body>
         <Modal.Footer>
-            <button className = 'btn btn-success' onClick = {(e) => enviar(e)}>Añadir al carrito</button>
+            <button className = 'btn btn-success' onClick = {(e) => sendToCart(e)}>Añadir al carrito</button>
+            <button className = 'btn btn-danger' onClick = {(e) => closeModalSwitch(dispatch, e)} >Cerrar</button>
         </Modal.Footer>
         </>
     );
 }
 
-const ModalManual = (props) =>{
+const ModalManual = () =>{
     const settings = useHomeState();
     const dispatch = useHomeDispatch();
     
-    const ver = props.activo;
-    const quitar = props.inactivo;
-    const idCliente = props.idCliente;
-
-    const {ingredients, categories} = useManualRecipe();
     if(settings.modal.open == true && settings.modal.name == 'custom'){
-
-        
         return(
             <>
             <Modal
@@ -233,11 +175,7 @@ const ModalManual = (props) =>{
                     </button>
                 </Modal.Header>
 
-                <Contenido
-                    idCliente = {idCliente} 
-                    cerrar = {props.inactivo}
-                    pedir = {props.pedido}
-                />
+                <Contenido/>
             </Modal>
             </>
         )

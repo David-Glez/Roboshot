@@ -7,7 +7,8 @@ import {
     recipesStation, 
     openModalSwitch, 
     closeModalSwitch, 
-    ingredientsClient
+    ingredientsClient,
+    addOrderToCart
 } from './home-context/actions';
 
 export {
@@ -24,5 +25,6 @@ export {
     recipesStation,
     openModalSwitch,
     closeModalSwitch,
-    ingredientsClient
+    ingredientsClient,
+    addOrderToCart
 }

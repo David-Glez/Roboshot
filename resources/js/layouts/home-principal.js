@@ -126,7 +126,7 @@ function Home(props){
     }
 
     //  Añade la receta a la orden
-    function cart(response){
+    function cart(response){ 
         //  incrementa el contador del carrito
         let i = contador;
         setContador(i + 1);
