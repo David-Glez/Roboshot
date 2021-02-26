@@ -16,7 +16,7 @@ use App\Models\Categorias;
 use App\Models\RecetaPedidos;
 use App\Models\IngredientePedidos;
 use App\Models\Pedidos;
-
+use App\Models\User;
 
 class Web{
 
@@ -100,6 +100,7 @@ class Web{
         
         //  busca el pedido con el codigo
         $pedido = Pedidos::where('codigo', $codigo)->first();
+        $user = User::find($pedido->idUsuario);
 
         //  busca las recetas del pedido
         $recetas = RecetaPedidos::where('codigo', $codigo)->get();
@@ -141,7 +142,7 @@ class Web{
 
         $data = array(
             'codigo' => $codigo,
-            'idUsuario' => $pedido->idUsuario,
+            'usuario' => $user->nombre,
             'total' => $pedido->total,
             'cliente' => '-',
             'lista'=> $recetaPedido
