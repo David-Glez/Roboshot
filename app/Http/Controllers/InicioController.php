@@ -127,7 +127,7 @@ class InicioController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        $request->session()->revoke();
+        //$request->session()->revoke();
 
         $data = array(
             'mensaje' => 'Sesión cerrada',
