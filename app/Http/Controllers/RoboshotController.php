@@ -155,11 +155,13 @@ class RoboshotController extends Controller
                     $imagePath, 
                     ["requested_visibility" => "public"]
                 );
-                $urlArray = explode('?', $dropboxUrl['url']);
-                $url = $urlArray[0].'?dl=1';
+                $urlArray = explode('.', $dropboxUrl['url']);
+                $urlArray[0] = 'https://dl';
+                $url =implode('.', $urlArray);
             }else{
-                $urlArray = explode('?', $locatedSharedLink[0]['url']);
-                $url = $urlArray[0].'?dl=1';
+                $urlArray = explode('.', $locatedSharedLink[0]['url']);
+                $urlArray[0] = 'https://dl';
+                $url = implode('.', $urlArray);
             }
 
             //  updates recetas table, if the register is not found it's created
