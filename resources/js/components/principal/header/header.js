@@ -44,7 +44,7 @@ const Header = (props) => {
                         <li className = 'nav-item dropdown '>
                             <a className="nav-link dropdown-toggle" href="#" id="log_user" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <FontAwesomeIcon icon = 'user-alt' className = 'mr-sm-2' />
-                                {data.usuario}
+                                <span className = 'my-2 my-sm-0'>{data.usuario}</span>
                             </a>
                             <div className="dropdown-menu dropdown-menu-right" aria-labelledby="log_user">
                                 <Link to = '/perfil' className = 'dropdown-item'>
