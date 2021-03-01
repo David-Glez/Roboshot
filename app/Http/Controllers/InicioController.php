@@ -83,7 +83,7 @@ class InicioController extends Controller
             $general->fechaNacimiento = $fechaNacimiento;
             $general->apellidoMaterno = '-'; # valor temporal, en la tabla es nulo
             $general->email = $request->correo;
-            $general->logo = 'https://www.dropbox.com/s/jqqra9fl8w4y4i5/camera.jpg?dl=1';  #   valor por defecto, personalizado por el usuario
+            $general->logo = 'https://dl.dropbox.com/s/jqqra9fl8w4y4i5/camera.jpg?dl=0';  #   valor por defecto, personalizado por el usuario
             $general->path = 'public/images-default/camera.jpg';
             $general->save();
 
