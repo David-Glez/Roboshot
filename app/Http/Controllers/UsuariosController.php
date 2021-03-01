@@ -77,8 +77,7 @@ class UsuariosController extends Controller
                     //$path = Storage::putFileAs('public/images/'.$dir, $image, $nombre);
                     
                     $imageUrl = $image->storeAs(
-                        //'public/images/'.$dir,
-                        'public/images/prueba',
+                        'public/images/'.$dir,
                         $nombre,
                         'dropbox'
                     );
