@@ -74,10 +74,10 @@ const Header = (props) => {
                     ):(
                         <>
                         <li className = 'nav-item'>
-                            <Link to = {"/registro"} className = 'btn btn-outline-primary btn-radius mr-sm-2'>Registrate</Link>
+                            <Link to = {"/registro"} className = ' nav-link '>Registrate</Link>
                         </li>
                         <li className = 'nav-item'>
-                            <Link to = {"/login"} className="btn btn-primary btn-radius float-right mr-sm-2">Iniciar Sesión</Link>
+                            <Link to = {"/login"} className=" nav-link  ">Iniciar Sesión</Link>
                         </li>
                         </>
                     )}

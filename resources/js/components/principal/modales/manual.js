@@ -18,6 +18,7 @@ import AnimatedGlass from '../cards/animated-glass-section';
 
 // hook
 import usePedido from '../../../hooks/principal/manual-recipe-hook';
+import construction from '../../../assets/img/under-construction.jpg'
 
 const Contenido = (props) => {
 
@@ -208,7 +209,7 @@ const ModalManual = (props) =>{
         return(
             <>
             <Modal
-                size = 'xl'
+                //size = 'xl' //  TODO: change for 'xl' if it's working
                 show = {props.activo}
                 onHide = {props.inactivo}
                 backdrop = 'static'
@@ -224,12 +225,10 @@ const ModalManual = (props) =>{
                         </span>
                     </button>
                 </Modal.Header>
-
-                <Contenido
-                    idCliente = {idCliente} 
-                    cerrar = {props.inactivo}
-                    pedir = {props.pedido}
-                />
+                <Modal.Body>
+                    
+                    <img className = 'img-fluid rounded mx-auto d-block' src = {construction}></img>
+                </Modal.Body>
             </Modal>
             </>
         )
