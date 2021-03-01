@@ -108,7 +108,7 @@ class UsuariosController extends Controller
             }
             //  se modifica la url para poder visualizar el contenido
             $modifiedUrl = explode('?', $path['url']);
-            $directLink = $modifiedUrl[0].'?dl=1';
+            $directLink = $modifiedUrl[0].'?raw=1';
 
             //  se inserta los datos de inicio
             $usuario = new User;
@@ -224,7 +224,7 @@ class UsuariosController extends Controller
                 );
                 //  se modifica la url para poder visualizar el contenido
                 $modifiedUrl = explode('?', $newImage['url']);
-                $logo = $modifiedUrl[0].'?dl=1';
+                $logo = $modifiedUrl[0].'?raw=1';
 
             }catch(ValidationException $e){
                 $errors = [];
@@ -324,7 +324,7 @@ class UsuariosController extends Controller
                     );
                     //  se modifica la url para poder visualizar el contenido
                     $modifiedUrl = explode('?', $url['url']);
-                    $logo = $modifiedUrl[0].'?dl=1';
+                    $logo = $modifiedUrl[0].'?raw=1';
                     //  se mueve el archivo al storage local
                     //$path = Storage::putFileAs('public/img-users', $img, $nombre);
                 }catch(ValidationException $e){
