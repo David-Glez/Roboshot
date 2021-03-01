@@ -66,11 +66,15 @@ const Recipe = (props) => {
             </div>
         )}
 
-        <div className="new-recipe">
-            <button onClick = {(e) => manual(idCliente, e)} >nueva receta</button>
-        </div>
+        
         </>
     )
+
+    /*
+    <div className="new-recipe">
+            <button onClick = {(e) => manual(idCliente, e)} >nueva receta</button>
+        </div>
+     */
 };
 
 export default Recipe;
