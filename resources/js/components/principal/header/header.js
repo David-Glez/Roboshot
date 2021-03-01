@@ -25,7 +25,7 @@ const Header = (props) => {
 
     return(
         <>
-        <nav className = 'navbar navbar-expand-lg navbar-light bg-light navbarPrincipal'>
+        <nav className = 'navbar navbar-expand-lg navbar-light bg-light sticky-top navbarPrincipal'>
             <Link to = '/' className = 'navbar-brand'>
                 <img className = 'logoHome' src = {logo}  alt = '' />
             </Link>
