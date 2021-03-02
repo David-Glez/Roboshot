@@ -38,6 +38,7 @@ const Header = (props) => {
 
     return(
         <>
+<<<<<<< HEAD
         <nav className = 'navbar navbarPrincipal bg-light'>
             <div className = 'container'>
                 <div className = 'col-md-8'>
@@ -63,6 +64,30 @@ const Header = (props) => {
                                 </div>
                             </button>
                             <div className="dropdown-menu">
+=======
+        <nav className = 'navbar navbar-expand-lg navbar-light bg-light sticky-top navbarPrincipal'>
+            <Link to = '/' className = 'navbar-brand'>
+                <img className = 'logoHome' src = {logo}  alt = '' />
+            </Link>
+            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-home-rob" aria-controls="nav-home-rob" aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className = 'collapse navbar-collapse' id = 'nav-home-rob'>
+                <ul className = 'navbar-nav ml-auto'>
+                    <li className = 'nav-item '>
+                        <button type="button" className="btn btn-outline-warning mr-sm-2" onClick = {(e) => carrito(e)}>
+                            <FontAwesomeIcon icon = 'shopping-cart' /> <span className="badge badge-light" id="NumCarrito">{props.counter}</span>
+                        </button>
+                    </li>
+                    {login ? (
+                        <>
+                        <li className = 'nav-item dropdown '>
+                            <a className="nav-link dropdown-toggle" href="#" id="log_user" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <FontAwesomeIcon icon = 'user-alt' className = 'mr-sm-2' />
+                                <span className = 'my-2 my-sm-0'>{data.usuario}</span>
+                            </a>
+                            <div className="dropdown-menu dropdown-menu-right" aria-labelledby="log_user">
+>>>>>>> master
                                 <Link to = '/perfil' className = 'dropdown-item'>
                                     <div className = 'flexContainer'>
                                         <div>
@@ -85,18 +110,24 @@ const Header = (props) => {
                                     </div>
                                 </button>
                             </div>
-                        </div>
+                        </li>
+                        </>
                     ):(
                         <>
-                            <Link to = {"/registro"} className = 'btn btn-outline-primary btn-radius'>Registrate</Link>
-                            <Link to = {"/login"} className="btn btn-primary btn-radius float-right">Iniciar Sesión</Link>
+                        <li className = 'nav-item'>
+                            <Link to = {"/registro"} className = ' nav-link '>Registrate</Link>
+                        </li>
+                        <li className = 'nav-item'>
+                            <Link to = {"/login"} className=" nav-link  ">Iniciar Sesión</Link>
+                        </li>
                         </>
                     )}
-                </div>
+                </ul>
             </div>
         </nav>
         </>
     )
+
 };
 
 export default Header;

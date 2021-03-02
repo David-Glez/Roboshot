@@ -7,8 +7,6 @@ const IngredientsList = (props) => {
 
     const ingredients = props.ingredients;
 
-    console.log(ingredients)
-
     return(
         <>
         <div className = 'card'>
@@ -16,9 +14,12 @@ const IngredientsList = (props) => {
                 Ingredientes
             </div>
             <div className = 'card-body'>
+                <div className = 'table-responsive'>
                 <IngredientsListTable 
                     ingredients = {ingredients}
                 />
+                </div>
+                
             </div>
         </div>
         </>

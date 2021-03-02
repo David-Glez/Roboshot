@@ -30,10 +30,9 @@ const Contenido = (props) =>{
     useEffect(() => {
         const inicio = async() => {
             const envio = Accion.traeReceta(idReceta, idCliente);
-            if(envio){
-                setLoading(false);
-            }
+            
             envio.then(resp => {
+                setLoading(false)
                 setReceta({
                     idReceta: resp.data.idReceta,
                     idCliente: resp.data.idCliente,
@@ -68,7 +67,7 @@ const Contenido = (props) =>{
                 ):(
                     <div className = 'row no-gutters'>
                         <div className = 'col-md-4'>
-                            <img className = 'card-img imagenReceta' src = {window.location.origin+''+receta.img} />
+                            <img className = 'card-img imagenReceta' src = {receta.img} />
                         </div>
                         <div className = 'col-md-8'>
                             <div className = 'card-body'>
@@ -76,12 +75,16 @@ const Contenido = (props) =>{
                                     {receta.nombre}
                                 </h5>
                                 <div className = 'form-group'>
-                                    <p>
-                                        {receta.descripcion}
-                                    </p>
-                                </div>
-                                <div className = 'form-group'>
-                                    <span>Disponible con {receta.cliente}</span>
+                                    <span>Contiene:</span>
+                                    <ul>
+                                        {receta.ingredientes.map((item, index) => {
+                                            return(
+                                                <li key = {index}>
+                                                    {item.nombre}
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>
                                 </div>
                                 <div className = 'form-group'>
                                     <label className = 'primaryText'>
@@ -103,7 +106,7 @@ const Contenido = (props) =>{
             <button className = 'btn btn-secondary float-left' onClick = {props.cerrar}>
                 Cancelar
             </button>
-            <button className = 'btn btn-success' onClick = {(e) => pedir(e)}>
+            <button className = 'btn btn-success' disabled = {loading} onClick = {(e) => pedir(e)}>
                 Pedir
             </button>
         </Modal.Footer>

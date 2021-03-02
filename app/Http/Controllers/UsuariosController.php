@@ -51,7 +51,8 @@ class UsuariosController extends Controller
              $request->validate([
                 'user' => ['required', 'unique:usuarios,nombre'],
                 'bd' => ['required','unique:clientes,esquema'],
-                'password' => ['required', 'min:6']
+                'password' => ['required', 'min:6'],
+                
             ]);
 
              //  nombre del directorio
@@ -74,6 +75,7 @@ class UsuariosController extends Controller
 
                     //  se mueve el logo al directorio
                     //$path = Storage::putFileAs('public/images/'.$dir, $image, $nombre);
+                    
                     $imageUrl = $image->storeAs(
                         'public/images/'.$dir,
                         $nombre,
@@ -106,10 +108,12 @@ class UsuariosController extends Controller
                     ["requested_visibility" => "public"]
                 );
             }
-            //  se modifica la url para poder visualizar el contenido
-            $modifiedUrl = explode('?', $path['url']);
-            $directLink = $modifiedUrl[0].'?dl=1';
 
+            //  se modifica la url para poder visualizar el contenido
+            $modifiedUrl = explode('.', $path['url']);
+            $modifiedUrl[0] = 'https://dl';
+            $directLink = implode('.', $modifiedUrl);
+            
             //  se inserta los datos de inicio
             $usuario = new User;
             $usuario->nombre = $request->user;
@@ -157,7 +161,7 @@ class UsuariosController extends Controller
             return response()->json($data);
         }
         
-        return response()->json($data);      
+        return response()->json($data);   
     }
 
     //  datos de un cliente en especifico
@@ -223,8 +227,9 @@ class UsuariosController extends Controller
                     ["requested_visibility" => "public"]
                 );
                 //  se modifica la url para poder visualizar el contenido
-                $modifiedUrl = explode('?', $newImage['url']);
-                $logo = $modifiedUrl[0].'?dl=1';
+                $modifiedUrl = explode('.', $newImage['url']);
+                $modifiedUrl[0] = 'https://dl';
+                $logo = implode('.', $modifiedUrl);
 
             }catch(ValidationException $e){
                 $errors = [];
@@ -323,8 +328,9 @@ class UsuariosController extends Controller
                         ["requested_visibility" => "public"]
                     );
                     //  se modifica la url para poder visualizar el contenido
-                    $modifiedUrl = explode('?', $url['url']);
-                    $logo = $modifiedUrl[0].'?dl=1';
+                    $modifiedUrl = explode('.', $url['url']);
+                    $modifiedUrl[0] = 'https://dl';
+                    $logo = implode('.', $modifiedUrl);
                     //  se mueve el archivo al storage local
                     //$path = Storage::putFileAs('public/img-users', $img, $nombre);
                 }catch(ValidationException $e){
