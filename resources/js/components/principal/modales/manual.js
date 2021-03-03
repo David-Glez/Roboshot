@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 //  estilos
 import {Modal} from 'react-bootstrap';
@@ -17,7 +17,7 @@ import AnimatedGlass from '../cards/animated-glass-section';
 import useManualRecipe from '../../../hooks/principal/recipes/manual-recipe-hook';
 import {useHomeState, closeModalSwitch, useHomeDispatch} from '../../../context';
 
-const Contenido = (props) => {
+const Contenido = () => {
     
     const settings = useHomeState();
     const dispatch = useHomeDispatch()
@@ -29,16 +29,19 @@ const Contenido = (props) => {
         ingredientSelected,
         sendToCart  
     } = useManualRecipe();
-    
-    
-    //  envia la receta al carrito
-    const enviar = (e) => {
-        e.preventDefault();
 
-        console.log('enviar a carrito')
-        //  en el caso de que no haya elementos no envia nada
-        /*if(lista.ingredientes == ''){
-            toast.warning('Debes seleccionar al menos un ingrediente.',{
+    const closeErrorToast = () => {
+        dispatch({type: 'CLEAR_ERROR'})
+    }
+
+    const closeSuccessToast = () => {
+        dispatch({type: 'CLEAR_SUCCESS'})
+        closeModalSwitch(dispatch)
+    }
+
+    useEffect(() => {
+        if(settings.error == true && settings.errorCode == 1){
+            toast.warning(settings.errorMessage,{
                 position: toast.POSITION.TOP_CENTER,
                 autoClose: 4000,
                 hideProgressBar: false,
@@ -47,32 +50,26 @@ const Contenido = (props) => {
                 rtl: false,
                 draggable: true,
                 pauseOnHover: true,
-                progress: undefined
+                progress: undefined,
+                onClose: () => closeErrorToast()
             });
-        }else{
-            if(lista.cantidad >= 300){
-                toast.warning('El tamaño máximo de una bebida es de 300 mL.',{
-                    position: toast.POSITION.TOP_CENTER,
-                    autoClose: 4000,
-                    hideProgressBar: false,
-                    newestOnTop: false,
-                    closeOnClick: true,
-                    rtl: false,
-                    draggable: true,
-                    pauseOnHover: true,
-                    progress: undefined
-                }); 
-            }else{
-                
-                //  los envia al carrito
-                props.pedir(lista);
-
-                //  cierra el modal
-                props.cerrar();
-            }
-        }*/
-        
-    };
+        }
+        if(settings.success == true && settings.successCode == 101){
+            toast(settings.message,{
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 4000,
+                hideProgressBar: false,
+                newestOnTop: false,
+                closeOnClick: true,
+                rtl: false,
+                draggable: true,
+                pauseOnHover: true,
+                progress: undefined,
+                onClose: () => closeSuccessToast()
+            });
+        }
+    }, [settings.error, settings.errorCode, settings.success, settings.successCode])
+    
 
     return(
         <>
@@ -152,7 +149,7 @@ const Contenido = (props) => {
 
 const ModalManual = () =>{
     const settings = useHomeState();
-    const dispatch = useHomeDispatch();
+    const dispatch = useHomeDispatch(); 
     
     if(settings.modal.open == true && settings.modal.name == 'custom'){
         return(

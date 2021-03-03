@@ -25,7 +25,9 @@ const logoutUser = (dispatch) => {
         dispatch({type: 'LOGOUT', logMessage: response.data.mensaje});
         return response.data
     }).catch((error) => {
+        localStorage.removeItem('user');
         console.log(error.response.data)
+        dispatch({type: 'TOKEN_EXPIRED'});
     })
 }
 

@@ -1,14 +1,9 @@
 import React from 'react';
+import {useHomeDispatch, openModalSwitch} from '../../../context'
 
 const CardRecipe = (props) => {
-
+    const dispatch = useHomeDispatch()
     const receta = props.datos;
-    const cliente = props.cliente;
-
-    const abrir = (idReceta, idCliente, e) => {
-        e.preventDefault();
-        props.abrirReceta(idReceta, idCliente)
-    }
 
     return(
         <>
@@ -26,7 +21,7 @@ const CardRecipe = (props) => {
                     <div className = 'text-center'>
                         <button 
                             className = 'btn pedir'
-                            onClick = {(e) => abrir(receta.idReceta, cliente, e)}>
+                            onClick = {(e) => openModalSwitch(dispatch, 'recipe', receta, e)}>
                                 Pedir 
                         </button>
                     </div>

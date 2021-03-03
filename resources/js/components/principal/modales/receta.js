@@ -1,83 +1,77 @@
-import React, {useState, useEffect} from 'react';
-
-//  estilos
+import React, {useEffect} from 'react';
 import {Modal} from 'react-bootstrap';
+import {  toast, Flip } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {useHomeDispatch, useHomeState, closeModalSwitch, addOrderToCart} from '../../../context'
 
-//  URL de la API
-import Accion from '../../../services/conexion';
+const ModalReceta = () => {
 
-//  componentes
-import Loader from '../../alertas/loader';
+    const dispatch = useHomeDispatch();
+    const settings = useHomeState();
 
-const Contenido = (props) =>{
-
-    const idReceta = props.idReceta;
-    const idCliente = props.idCliente;
-
-    //  estados
-    const [receta, setReceta] = useState({
-        idReceta: 0,
-        idCliente: 0,
-        cliente: '',
-        nombre: '',
-        descripcion: '',
-        precio: 0,
-        img: '',
-        ingredientes: []
-    });
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const inicio = async() => {
-            const envio = Accion.traeReceta(idReceta, idCliente);
-            
-            envio.then(resp => {
-                setLoading(false)
-                setReceta({
-                    idReceta: resp.data.idReceta,
-                    idCliente: resp.data.idCliente,
-                    cliente: resp.data.cliente,
-                    nombre: resp.data.nombre,
-                    descripcion: resp.data.descripcion,
-                    precio: parseInt(resp.data.precio),
-                    img: resp.data.img,
-                    ingredientes: resp.data.ingredientes
-                });
-            });
-            
-        };
-        inicio();
-    }, []);
-
-    const pedir = (e) =>{
-        e.preventDefault();
-        props.pedido(receta);
-        props.cerrar()
+    const closeSuccessToast = () => {
+        
+        dispatch({type: 'CLEAR_SUCCESS'})
+        
     }
 
-    return (
-        <>
-        <Modal.Body>
-            
-            <div className = 'mb-3'>
-                {loading ? (
-                    <div className = 'row superior'>
-                        <Loader />
-                    </div>
-                ):(
-                    <div className = 'row no-gutters'>
+    useEffect(() => {
+        if(settings.success == true && settings.successCode == 101){
+            closeModalSwitch(dispatch)
+            toast(settings.message,{
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 4000,
+                hideProgressBar: false,
+                newestOnTop: false,
+                closeOnClick: true,
+                rtl: false,
+                draggable: true,
+                pauseOnHover: true,
+                progress: undefined,
+                onClose: () => closeSuccessToast()
+            });
+        }
+    }, [settings.success, settings.successCode])
+
+    if(settings.modal.open == true && settings.modal.name == 'recipe'){
+
+        const data = settings.modal.data;
+        return(
+            <>
+            <Modal
+                size = 'lg'
+                show = {settings.modal.open}
+                onHide = {(e) => closeModalSwitch(dispatch, e)}
+                backdrop = 'static'
+                dialogClassName = 'modal-dialog-centered' 
+            >
+                <Modal.Header>
+                    <h5 className='modal-title text-dark'>
+                        Receta
+                    </h5>
+                    <button className = 'close' onClick={(e) => closeModalSwitch(dispatch, e)}>
+                        <span aria-hidden='true'>
+                            &times;
+                        </span>
+                    </button>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className = 'row'>
                         <div className = 'col-md-4'>
-                            <img className = 'card-img imagenReceta' src = {receta.img} />
+                            <img className = 'card-img imagenReceta' src = {data.img} />
                         </div>
                         <div className = 'col-md-8'>
                             <div className = 'card-body'>
                                 <h5 className = 'card-title see-more-title'>
-                                    {receta.nombre}
+                                    {data.nombre}
                                 </h5>
+                                <div className = 'form-group'>
+                                    <span>{data.descripcion}</span>
+                                </div>
                                 <div className = 'form-group'>
                                     <span>Contiene:</span>
                                     <ul>
-                                        {receta.ingredientes.map((item, index) => {
+                                        {data.ingredientes.map((item, index) => {
                                             return(
                                                 <li key = {index}>
                                                     {item.nombre}
@@ -91,61 +85,21 @@ const Contenido = (props) =>{
                                         Precio:
                                     </label>
                                     <span className = 'text-success'>
-                                        ${parseFloat(receta.precio).toFixed(2)}
+                                        ${parseFloat(data.precio).toFixed(2)}
                                     </span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                )}
-                
-            </div>
-            
-        </Modal.Body>
-        <Modal.Footer>
-            <button className = 'btn btn-secondary float-left' onClick = {props.cerrar}>
-                Cancelar
-            </button>
-            <button className = 'btn btn-success' disabled = {loading} onClick = {(e) => pedir(e)}>
-                Pedir
-            </button>
-        </Modal.Footer>
-        </>
-    )
-}
-
-const ModalReceta = (props) => {
-    const ver = props.activo;
-    const idReceta = props.idReceta;
-    const idCliente = props.idCliente;
-
-    if(ver){
-        return(
-            <>
-            <Modal
-                size = 'lg'
-                show = {props.activo}
-                onHide = {props.inactivo}
-                backdrop = 'static'
-                dialogClassName = 'modal-dialog-centered' 
-            >
-                <Modal.Header>
-                    <h5 className='modal-title text-dark'>
-                        Receta
-                    </h5>
-                    <button className = 'close' onClick={props.inactivo}>
-                        <span aria-hidden='true'>
-                            &times;
-                        </span>
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className = 'btn btn-secondary float-left' onClick = {(e) => closeModalSwitch(dispatch, e)}>
+                        Cancelar
                     </button>
-                </Modal.Header>
-                <Contenido 
-                    idReceta = {idReceta} 
-                    idCliente = {idCliente} 
-                    cerrar = {props.inactivo}
-                    pedido = {props.pedido}
-                />
-                
+                    <button className = 'btn btn-success' onClick = {(e) => addOrderToCart(dispatch, data, settings.counter, settings.total, e)}>
+                        Pedir
+                    </button>
+                </Modal.Footer>
             </Modal>
             </>
         )

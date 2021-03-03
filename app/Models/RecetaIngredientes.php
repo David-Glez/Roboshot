@@ -16,7 +16,5 @@ class RecetaIngredientes extends Model
         'idReceta', 'idIngrediente', 'cantidad', 'roboshot'
     ];
 
-    public function ingredients(){
-        return $this->belongsTo(Ingredientes::class, 'idIngrediente', 'idIngrediente');
-    }
+    
 }

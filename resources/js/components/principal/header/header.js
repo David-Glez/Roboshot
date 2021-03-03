@@ -6,13 +6,17 @@ import logo from '../../../assets/img/roboshot-logo-1.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast} from 'react-toastify';
 //  context
-import {useAuthState} from '../../../context';
+import {useAuthState, useHomeState, useHomeDispatch, openModalSwitch} from '../../../context';
 import useUserLogout from '../../../hooks/user-state/user-logout-hook'
 const Header = (props) => {
 
     //  read user details from context
     const userDetail = useAuthState();
     const {log_out} = useUserLogout();
+
+    //  read order details from context
+    const settings = useHomeState();
+    const dispatch = useHomeDispatch();
 
     useEffect(() => {
         if(userDetail.message != null && userDetail.access == false){
@@ -38,33 +42,6 @@ const Header = (props) => {
 
     return(
         <>
-<<<<<<< HEAD
-        <nav className = 'navbar navbarPrincipal bg-light'>
-            <div className = 'container'>
-                <div className = 'col-md-8'>
-                    <Link to = '/' className = 'navbar-brand'>
-                        <img className = 'logoHome' src = {logo}  alt = '' />
-                    </Link>
-                </div>
-                
-                <div className = 'col-md-4'>
-                    <button type="button" className="btn btn-outline-warning" onClick = {(e) => carrito(e)}>
-                        <FontAwesomeIcon icon = 'shopping-cart' /> <span className="badge badge-light" id="NumCarrito">{props.counter}</span>
-                    </button>
-                    {userDetail.access ? (
-                        <div className="dropleft float-right">
-                            <button className="btn btn-outline-secondary " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <div className = 'flexContainer'>
-                                    <div className = 'dropdown-toggle'>
-                                        <FontAwesomeIcon icon = 'user-alt' />
-                                    </div>
-                                    <div className = 'customSpan'>
-                                        {userDetail.user}
-                                    </div>
-                                </div>
-                            </button>
-                            <div className="dropdown-menu">
-=======
         <nav className = 'navbar navbar-expand-lg navbar-light bg-light sticky-top navbarPrincipal'>
             <Link to = '/' className = 'navbar-brand'>
                 <img className = 'logoHome' src = {logo}  alt = '' />
@@ -75,19 +52,18 @@ const Header = (props) => {
             <div className = 'collapse navbar-collapse' id = 'nav-home-rob'>
                 <ul className = 'navbar-nav ml-auto'>
                     <li className = 'nav-item '>
-                        <button type="button" className="btn btn-outline-warning mr-sm-2" onClick = {(e) => carrito(e)}>
-                            <FontAwesomeIcon icon = 'shopping-cart' /> <span className="badge badge-light" id="NumCarrito">{props.counter}</span>
+                        <button type="button" className="btn btn-outline-warning mr-sm-2" onClick = {(e) => openModalSwitch(dispatch, 'cart', '', e)}>
+                            <FontAwesomeIcon icon = 'shopping-cart' /> <span className="badge badge-light" id="NumCarrito">{settings.counter}</span>
                         </button>
                     </li>
-                    {login ? (
+                    {userDetail.access ? (
                         <>
                         <li className = 'nav-item dropdown '>
                             <a className="nav-link dropdown-toggle" href="#" id="log_user" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <FontAwesomeIcon icon = 'user-alt' className = 'mr-sm-2' />
-                                <span className = 'my-2 my-sm-0'>{data.usuario}</span>
+                                <span className = 'my-2 my-sm-0'>{userDetail.user}</span>
                             </a>
                             <div className="dropdown-menu dropdown-menu-right" aria-labelledby="log_user">
->>>>>>> master
                                 <Link to = '/perfil' className = 'dropdown-item'>
                                     <div className = 'flexContainer'>
                                         <div>

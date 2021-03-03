@@ -130,7 +130,7 @@ function Home(props){
         //  incrementa el contador del carrito
         let i = contador;
         setContador(i + 1);
-
+ 
         // genera el arreglo del pedido
         let pedido = {
             prod: i + 1,

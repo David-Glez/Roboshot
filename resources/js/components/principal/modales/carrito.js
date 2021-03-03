@@ -1,10 +1,8 @@
 import React from 'react';
-
-//  Estilos
 import { Modal }from 'react-bootstrap';
-
-//  iconos
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+//  context
+import {useHomeState, useHomeDispatch, closeModalSwitch, deleteOrderToCart, emptyCart} from '../../../context'
 
 //  componentes
 import SinElementos from '../../alertas/vacio';
@@ -75,31 +73,24 @@ const Contenido = (props) => {
             </div>
         </Modal.Body>
         <Modal.Footer>
-            <button className = 'btn btn-secondary' onClick = {props.cerrar}>
-                Cerrar
-            </button>
-            <button className = 'btn btn-danger' onClick = {(e) => vaciarLista(e)}>
-                Vaciar Carrito
-            </button>
-            <button className = 'btn btn-success' onClick = {props.pedir}>
-                Pedir
-            </button>
+            
         </Modal.Footer>
         </>
     )
 
 };
 
-const ModalCarrito = (props) => {
+const ModalCarrito = () => {
 
-    const ver = props.activo;
+    const settings = useHomeState();
+    const dispatch = useHomeDispatch();
 
-    if(ver){
+    if(settings.modal.open == true && settings.modal.name == 'cart'){
         return(
             <>
             <Modal
-                show = {props.activo}
-                onHide = {props.inactivo}
+                show = {settings.modal.open}
+                onHide = {(e) => closeModalSwitch(dispatch, e)}
                 backdrop = 'static'
                 dialogClassName = 'modal-dialog-centered' 
             >
@@ -107,20 +98,68 @@ const ModalCarrito = (props) => {
                     <h5 className='modal-title text-dark'>
                         Carrito de compras
                     </h5>
-                    <button className = 'close' onClick={props.inactivo}>
+                    <button className = 'close' onClick={(e) => closeModalSwitch(dispatch, e)}>
                         <span aria-hidden='true'>
                             &times;
                         </span>
                     </button>
                 </Modal.Header>
-                <Contenido
-                    cerrar = {props.inactivo}
-                    total = {props.total}
-                    lista = {props.lista}
-                    elimina = {props.elimina}
-                    vaciar = {props.vaciar}
-                    pedir = {props.pedir}
-                />
+                <Modal.Body>
+                    <div className = 'container'>
+                        {(settings.cart == '') ? (
+                        <div className = 'row superior'>
+                            <SinElementos />
+                        </div>
+                        ) : (
+                        <>
+                        <div className = 'row'>
+                            <div className = 'col-md-12'>
+                                <ul className = 'list-group scrollDiv'>
+                                    {settings.cart.map((item, index) => {
+                                        return(
+                                        <li className = 'list-group-item d-flex justify-content-between align-items-center' key = {index}>
+                                            <div className = 'image-parent'>
+                                                <img className = 'img-fluid' src = {item.img} />
+                                            </div>
+                                            <div>
+                                                {item.nombre}
+                                            </div>
+                                            <div>
+                                                <label className = 'primaryText'>
+                                                    Precio:
+                                                </label>
+                                                <span className = 'text-success'>${parseFloat(item.precio).toFixed(2)}</span>
+                                            </div>
+                                            <a className = 'btn btn-danger' onClick = {(e) => deleteOrderToCart(dispatch, item, e)} >
+                                                <FontAwesomeIcon icon = 'trash-alt' />
+                                            </a>
+                                        </li>
+                                        )
+                                    })}
+                                </ul>
+                            </div>
+                        </div>
+                        <div className = 'form-group'>
+                            <label className = 'primaryText'>
+                                Total:
+                            </label>
+                            <span className = 'text-success'>${parseFloat(settings.total).toFixed(2)}</span>
+                        </div>
+                        </>
+                        )}
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className = 'btn btn-secondary' onClick = {(e) => closeModalSwitch(dispatch, e)}>
+                        Cerrar
+                    </button>
+                    <button className = 'btn btn-danger' >
+                        Vaciar Carrito
+                    </button>
+                    <button className = 'btn btn-success' >
+                        Pedir
+                    </button>
+                </Modal.Footer>
             </Modal>
             </>
         )

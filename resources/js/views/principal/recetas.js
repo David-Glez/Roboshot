@@ -14,10 +14,6 @@ const Recipe = (props) => {
     const settings = useHomeState();
     const {recipes} = useRecipesList(idCliente);
     const dispatch = useHomeDispatch();
-    //  funcion para abrir las recetas
-    const abrir = (idReceta, idCliente) => {
-        props.abrirReceta(idReceta, idCliente)
-    };
 
     return(
         <>
@@ -39,8 +35,6 @@ const Recipe = (props) => {
                         <CardRecipe
                             key = {x.id}
                             datos = {x}
-                            cliente = {idCliente}
-                            abrirReceta = {(e,i) => abrir(e,i)} 
                         /> 
                     )}
                     </>

@@ -3,8 +3,11 @@ const initialState = {
     module: '',
     login: false,
     error: false,
+    success: false,
+    successCode: 0,
     errorCode: 0,
     errorMessage: undefined,
+    message: undefined,
     modal: {
         name: '-',
         data: '',
@@ -12,7 +15,7 @@ const initialState = {
     },
     cart: [],
     counter: 0,
-    total: 0
+    total: 0 
 }
 
 const HomeReducer = (initialState, action) => {
@@ -66,7 +69,10 @@ const HomeReducer = (initialState, action) => {
             return{
                 ...initialState,
                 loading: true,
-                module: 'ingredients'
+                module: 'ingredients',
+                error: false, 
+                errorCode: 0,
+                errorMessage: undefined
             }
         case 'INGREDIENTS_CHARGED':
             return{
@@ -74,11 +80,50 @@ const HomeReducer = (initialState, action) => {
                 loading: false,
                 module: ''
             }
+        case 'NOT_INGREDIENTS':
+            return{
+                ...initialState,
+                error: true, 
+                errorCode: 1,
+                errorMessage: 'La receta está vacia o excede su tamaño.'
+            }
         case 'ADD_ORDER_CART':
+            let current_cart = initialState.cart;
+            current_cart.push(action.order)
             return{
                 ...initialState,
                 counter: action.counter,
-                cart: cart.push(action.order)
+                total: action.total,
+                cart: current_cart,
+                success: true, 
+                successCode: 101,
+                message: 'Receta añadida al carrito :)'
+            }
+        case 'DELETE_ORDER_CART':
+            
+        case 'EMPTY_CART':
+            return{
+                ...initialState,
+                counter: 0,
+                total: 0,
+                cart: [],
+                success: true,
+                successCode: 103,
+                message: 'El carrito se ha vaciado'
+            }
+        case 'CLEAR_ERROR':
+            return{
+                ...initialState,
+                error: false, 
+                errorCode: 0,
+                errorMessage: undefined
+            }
+        case 'CLEAR_SUCCESS':
+            return{
+                ...initialState,
+                success: false,
+                successCode: 0,
+                message: undefined
             }
         default:
             throw new Error(`Unhandled action type: ${action.type}`);

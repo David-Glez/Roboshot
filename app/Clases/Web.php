@@ -24,11 +24,44 @@ class Web{
     public static function inicio($datos){
         
         Conexion::conectaID($datos);
+        $data = [];
         $recipes = Recetas::where('activa', true)->get();
+        foreach($recipes as $recipe){
+            $listIngredients = [];
+            $ingredients = RecetaIngredientes::where('idReceta', $recipe->idReceta)
+                        ->where('roboshot', $recipe->roboshot)->get();
+            foreach($ingredients as $ingredient){
+                $ing = Ingredientes::where('idIngrediente', $ingredient->idIngrediente)
+                    ->where('roboshot', $ingredient->roboshot)->first();
+                $category = Categorias::where('idCategoria', $ing->categoria)
+                    ->where('roboshot', $ing->roboshot)->first();
+                $ingredientDetail = array(
+                    'idIngrediente' => $ing->idIngrediente,
+                    'nombre' => $ing->marca,
+                    'idCategoria' => $category->idCategoria,
+                    'categoria' => $category->nombre,
+                    'cantidad' => $ingredient->cantidad,
+                    'precio' => $ing->precio
+                );
+                $listIngredients[] = $ingredientDetail;             
+            }
+            $recipeDetails = array(
+                'id' => $recipe->id,
+                'idReceta' => $recipe->idReceta,
+                'idCliente' => $datos,
+                'nombre' => $recipe->nombre,
+                'descripcion' => $recipe->descripcion,
+                'precio' => $recipe->precio,
+                'img' => $recipe->img,
+                'ingredientes' => $listIngredients
+            );
+
+            $data[] = $recipeDetails;
+        } 
 
         DB::purge('roboshot');
 
-        return $recipes;
+        return $data;
         
     }
 
@@ -85,6 +118,7 @@ class Web{
         $datos = array(
             'idReceta' => $recipes->idReceta,
             'idCliente' => $idCliente,
+            'cliente' => '',
             'nombre' => $recipes->nombre,
             'descripcion' => $recipes->descripcion,
             'precio' => $recipes->precio,

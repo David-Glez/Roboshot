@@ -127,9 +127,9 @@ const useManualRecipe = () => {
     const sendToCart = (e) => {
         e.preventDefault();
         if(pedido.ingredientes == '' || pedido.cantidad > 300){
-            console.log('no hay ingredientes')
+            dispatch({type: 'NOT_INGREDIENTS'})
         }else{
-            addOrderToCart(dispatch, pedido, settings.counter)
+            addOrderToCart(dispatch, pedido, settings.counter, settings.total)
         }
     }
 

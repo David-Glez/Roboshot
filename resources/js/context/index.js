@@ -8,7 +8,10 @@ import {
     openModalSwitch, 
     closeModalSwitch, 
     ingredientsClient,
-    addOrderToCart
+    addOrderToCart,
+    emptyCart,
+    deleteOrderToCart,
+    orderCart
 } from './home-context/actions';
 
 export {
@@ -26,5 +29,8 @@ export {
     openModalSwitch,
     closeModalSwitch,
     ingredientsClient,
-    addOrderToCart
+    addOrderToCart,
+    emptyCart,
+    deleteOrderToCart,
+    orderCart
 }

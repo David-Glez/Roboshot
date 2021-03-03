@@ -57,6 +57,19 @@ const AuthReducer = (initialState, action) => {
           token: '',
           message: action.logMessage 
         };
+
+      case 'TOKEN_EXPIRED':
+        return{
+          ...initialState,
+          errorMessage: null,
+          id_user: 0 ,
+          user: '' ,
+          rol: '' ,
+          id_rol: 0 ,
+          access: false,
+          token: '',
+          message: null 
+        }
    
       case "LOGIN_ERROR":
         return {

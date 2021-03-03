@@ -16,5 +16,4 @@ class Recetas extends Model
         'idReceta','roboshot','mezclar', 'nombre', 'descripcion', 'precio', 'activa', 'img', 'path'
     ];
 
-
 }

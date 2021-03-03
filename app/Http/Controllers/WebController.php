@@ -13,7 +13,6 @@ use App\Models\Recetas;
 use App\Models\Pedidos;
 use App\Models\RecetaPedidos;
 use App\Models\IngredientePedidos;
-use Illuminate\Support\Facades\Storage;
 
 class WebController extends Controller
 {
