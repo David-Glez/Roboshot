@@ -34,12 +34,6 @@ const Header = (props) => {
         }
     }, [userDetail.access, userDetail.message])
     
-    const carrito = (e) => {
-        e.preventDefault();
-        props.carrito(e);
-    };
-
-
     return(
         <>
         <nav className = 'navbar navbar-expand-lg navbar-light bg-light sticky-top navbarPrincipal'>

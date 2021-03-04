@@ -30,13 +30,12 @@ const Contenido = () => {
         sendToCart  
     } = useManualRecipe();
 
-    const closeErrorToast = () => {
+    /*const closeErrorToast = () => {
         dispatch({type: 'CLEAR_ERROR'})
     }
 
     const closeSuccessToast = () => {
         dispatch({type: 'CLEAR_SUCCESS'})
-        closeModalSwitch(dispatch)
     }
 
     useEffect(() => {
@@ -55,6 +54,7 @@ const Contenido = () => {
             });
         }
         if(settings.success == true && settings.successCode == 101){
+            closeModalSwitch(dispatch)
             toast(settings.message,{
                 position: toast.POSITION.TOP_CENTER,
                 autoClose: 4000,
@@ -68,9 +68,8 @@ const Contenido = () => {
                 onClose: () => closeSuccessToast()
             });
         }
-    }, [settings.error, settings.errorCode, settings.success, settings.successCode])
+    }, [settings.error, settings.errorCode, settings.success, settings.successCode])*/
     
-
     return(
         <>
         <Modal.Body>
@@ -108,10 +107,8 @@ const Contenido = () => {
                             <AnimatedGlass
                                 cantidad = {pedido.cantidad} 
                             />
-                            
                         </div>
                     </div>
-                    
                     <div className = 'row'>
                         <div className = 'col-md-4'>
                             <label className = 'col-sm-6 col-form-label primaryText'>
@@ -134,7 +131,6 @@ const Contenido = () => {
                                 Ver ingredientes
                             </button>
                         </div>
-                        
                     </div>
                 </div>
             )}
@@ -171,7 +167,6 @@ const ModalManual = () =>{
                         </span>
                     </button>
                 </Modal.Header>
-
                 <Contenido/>
             </Modal>
             </>

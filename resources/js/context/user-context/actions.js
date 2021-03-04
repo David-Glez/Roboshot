@@ -18,11 +18,12 @@ const loginUser = (dispatch, loginPayload) => {
     })
 }
 
-const logoutUser = (dispatch) => {
+const logoutUser = (dispatch, homeDispatch) => {
     const resp = axios.get(API_URL+'/logout', {headers: authHeader()});
     resp.then((response) => {
         localStorage.removeItem('user');
         dispatch({type: 'LOGOUT', logMessage: response.data.mensaje});
+        homeDispatch({type: 'LOGOUT'})
         return response.data
     }).catch((error) => {
         localStorage.removeItem('user');

@@ -15,11 +15,19 @@ const initialState = {
     },
     cart: [],
     counter: 0,
-    total: 0 
+    total: 0,
+    client: 0,
+    qrcode: ''
 }
 
 const HomeReducer = (initialState, action) => {
+    let current_cart = initialState.cart;
     switch(action.type){
+        case 'LOGOUT':
+            return{
+                ...initialState,
+                login: false
+            }
         case 'LOADING_HOME':
             return{
                 ...initialState,
@@ -36,30 +44,28 @@ const HomeReducer = (initialState, action) => {
                 errorCode: 0,
                 errorMessage: undefined,
             }
+            
         case 'LOADING_RECIPES':
             return{
                 ...initialState,
                 module: 'recipes_page',
                 loading: true
             }
+            
         case 'RECIPES_CHARGED':
             return{
                 ...initialState,
                 module: '',
-                loading: false
+                loading: false,
+                client: action.id_client
             }
-        case 'ERROR_LOAD':
-            return{
-                ...initialState,
-                error: true,
-                errorCode: 0, //TODO: asign a code number 
-                errorMessage: 'Error',
-            }
+            
         case 'OPEN_MODAL':
             return{
                 ...initialState,
                 modal: action.modalOpened
             }
+            
         case 'CLOSE_MODAL':
             return{
                 ...initialState,
@@ -70,36 +76,32 @@ const HomeReducer = (initialState, action) => {
                 ...initialState,
                 loading: true,
                 module: 'ingredients',
-                error: false, 
-                errorCode: 0,
-                errorMessage: undefined
             }
+            
         case 'INGREDIENTS_CHARGED':
             return{
                 ...initialState, 
                 loading: false,
                 module: ''
             }
-        case 'NOT_INGREDIENTS':
-            return{
-                ...initialState,
-                error: true, 
-                errorCode: 1,
-                errorMessage: 'La receta está vacia o excede su tamaño.'
-            }
+            
         case 'ADD_ORDER_CART':
-            let current_cart = initialState.cart;
             current_cart.push(action.order)
             return{
                 ...initialState,
                 counter: action.counter,
                 total: action.total,
-                cart: current_cart,
-                success: true, 
-                successCode: 101,
-                message: 'Receta añadida al carrito :)'
+                cart: current_cart
             }
+            
         case 'DELETE_ORDER_CART':
+            current_cart.splice(action.index, 1)
+            return{
+                ...initialState,
+                counter: action.counter,
+                total: action.total,
+                cart: current_cart,
+            }
             
         case 'EMPTY_CART':
             return{
@@ -107,9 +109,36 @@ const HomeReducer = (initialState, action) => {
                 counter: 0,
                 total: 0,
                 cart: [],
+            }
+        case 'ORDER_CART': 
+            return {
+                ...initialState,
+                loading: true,
+                module: 'order_cart'
+            }
+        case 'CART_SUCCESS':
+            return{
+                ...initialState,
+                loading: false,
+                module: '',
+                counter: 0,
+                cart: [],
+                total: 0,
+                qr_code: action.qr_code
+            }
+        case 'CATCH_SUCCESS':
+            return{
+                ...initialState,
                 success: true,
-                successCode: 103,
-                message: 'El carrito se ha vaciado'
+                successCode: action.successCode,
+                message: action.successMessage
+            }
+        case 'CATCH_ERROR':
+            return{
+                ...initialState,
+                error: true,
+                errorCode: action.errorCode,
+                errorMessage: action.errorMessage
             }
         case 'CLEAR_ERROR':
             return{
@@ -118,6 +147,7 @@ const HomeReducer = (initialState, action) => {
                 errorCode: 0,
                 errorMessage: undefined
             }
+            
         case 'CLEAR_SUCCESS':
             return{
                 ...initialState,
@@ -125,6 +155,7 @@ const HomeReducer = (initialState, action) => {
                 successCode: 0,
                 message: undefined
             }
+            
         default:
             throw new Error(`Unhandled action type: ${action.type}`);
     }

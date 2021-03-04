@@ -14,8 +14,11 @@ const useRoboshotList = (login) => {
                     setList(lista.data)
                 }
             }catch(error){
-                dispatch({type: 'ERROR_LOAD'});
-                console.log(error)
+                dispatch({
+                    type: 'CATCH_ERROR',
+                    errorCode: 12,
+                    errorMessage: 'error al cargar estaciones' 
+                });
             }
         }
         inicio()

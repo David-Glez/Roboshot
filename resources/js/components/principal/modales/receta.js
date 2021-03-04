@@ -9,12 +9,10 @@ const ModalReceta = () => {
     const dispatch = useHomeDispatch();
     const settings = useHomeState();
 
-    const closeSuccessToast = () => {
-        
+    /*const closeSuccessToast = () => {
         dispatch({type: 'CLEAR_SUCCESS'})
-        
     }
-
+    
     useEffect(() => {
         if(settings.success == true && settings.successCode == 101){
             closeModalSwitch(dispatch)
@@ -31,7 +29,7 @@ const ModalReceta = () => {
                 onClose: () => closeSuccessToast()
             });
         }
-    }, [settings.success, settings.successCode])
+    }, [settings.success, settings.successCode])*/
 
     if(settings.modal.open == true && settings.modal.name == 'recipe'){
 

@@ -15,7 +15,7 @@ const recipesStation = (dispatch, id) => {
 }
 
 const openModalSwitch = (dispatch, modal, data, e) => {
-    e.preventDefault();
+    //e.preventDefault();
     let currentModal = {
         name: modal,
         data: data,
@@ -25,7 +25,6 @@ const openModalSwitch = (dispatch, modal, data, e) => {
 }
 
 const closeModalSwitch = (dispatch, e) => {
-    
     let currentModal = {
         name: '-',
         data: '',
@@ -53,7 +52,7 @@ const addOrderToCart = (dispatch, order, counter, price) => {
         img: order.img,
         ingredientes: JSON.stringify(order.ingredientes)
     }
-    const total = price + order.precio;
+    const total = price + parseFloat(order.precio);
     
     dispatch({
         type: 'ADD_ORDER_CART',
@@ -61,18 +60,77 @@ const addOrderToCart = (dispatch, order, counter, price) => {
         order: current_order,
         total: total
     })
+    dispatch({
+        type: 'CATCH_SUCCESS',
+        successCode: 104,
+        successMessage: 'Receta añadida al carrito'
+    })
+
 }
 
-const deleteOrderToCart = (dispatch, recipe) => {
-    console.log(recipe)
+const deleteOrderToCart = (dispatch, recipe, total, counter) => {
+    let index = recipe.prod - 1;
+    let new_counter = counter -1;
+    const new_total = total - recipe.precio;
+    dispatch({
+        type: 'DELETE_ORDER_CART',
+        counter: new_counter,
+        total: new_total,
+        index: index
+    })
+
+    dispatch({
+        type: 'CATCH_SUCCESS',
+        successCode: 105,
+        successMessage: 'Receta eliminada'
+    })
 }
 
 const emptyCart = (dispatch) => {
-
+    dispatch({type: 'EMPTY_CART'})
 }
 
-const orderCart = () => {
-
+const orderCart = (dispatch, state, dataUser) => {
+    if(state.login){
+        if(state.cart != ''){
+            let data = {
+                usuario: dataUser.id_user,
+                cliente: state.client,
+                total: parseFloat(state.total).toFixed(2),
+                lista: JSON.stringify(state.cart)
+            };
+            const send_cart = axios.post(API_URL + '/pedido/nuevo', data);
+            dispatch({type: 'ORDER_CART'})
+            send_cart.then((response) => {
+                dispatch({type: 'CART_SUCCESS', qr_code: response.data})
+                closeModalSwitch(dispatch);
+                dispatch({
+                    type: 'CATCH_SUCCESS',
+                    successCode: 112,
+                    successMessage: response.data
+                })
+                openModalSwitch(dispatch, 'qr_code', '')    //  TODO: check if render its ok
+            }).catch((error) => {
+                dispatch({
+                    type: 'CATCH_ERROR',
+                    errorCode: 111,
+                    errorMessage: 'Error al guardar'
+                })
+            })
+        }else{
+            dispatch({
+                type: 'CATCH_ERROR',
+                errorCode: 109,
+                errorMessage: 'No hay elementos en el carrito'
+            })
+        }
+    }else{
+        dispatch({
+            type: 'CATCH_ERROR',
+            errorCode: 108,
+            errorMessage: 'No estas logueado. Inicia sesion o crea una cuenta para realizar tu pedido'
+        })
+    }
 }
 
 export{

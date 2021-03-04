@@ -10,12 +10,16 @@ const useRecipesList = (id) => {
             try{
                 const lista = await recipesStation(dispatch, id);
                 if(lista.status == 200){
-                    dispatch({type: 'RECIPES_CHARGED'})
+                    dispatch({type: 'RECIPES_CHARGED', id_client: id})
                     setRecipes(lista.data);
                 }
             }catch(error){
-                dispatch({type: 'ERROR_LOAD'})
-                console.log(error)
+                dispatch({
+                    type: 'CATCH_ERROR',
+                    errorCode: 101,
+                    errorMessage: 'Error al cargar recetas'
+                })
+
             }
         }
         index()

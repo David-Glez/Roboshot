@@ -126,11 +126,24 @@ const useManualRecipe = () => {
 
     const sendToCart = (e) => {
         e.preventDefault();
-        if(pedido.ingredientes == '' || pedido.cantidad > 300){
-            dispatch({type: 'NOT_INGREDIENTS'})
+        if(pedido.ingredientes == ''){
+            dispatch({
+                type: 'CATCH_ERROR',
+                errorCode: 102,
+                errorMessage: 'La receta no contiene ingredientes'
+            })
         }else{
-            addOrderToCart(dispatch, pedido, settings.counter, settings.total)
+            if(pedido.cantidad > 300){
+                dispatch({
+                    type: 'CATCH_ERROR',
+                    errorCode: 103,
+                    errorMessage: 'El tamaño maximo para una receta es de 300 mL'
+                })
+            }else{
+                addOrderToCart(dispatch, pedido, settings.counter, settings.total)
+            }
         }
+        
     }
 
     return {

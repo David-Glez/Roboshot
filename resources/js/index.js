@@ -43,7 +43,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 //  context
-import {AuthProvider} from './context';
+import {AuthProvider, HomePageProvider} from './context';
 
 library.add(
     faHome, faUsers, faBeer, faRoute, faCalendar, faClock, faTimes,
@@ -55,16 +55,18 @@ class Index extends Component{
     render(){
         return(
             <AuthProvider>
-            <BrowserRouter>
-                <Switch>
-                    <Route exact path='/' component = {Home} />
-                    <Route path = '/admin' component = {Inicio} />
-                    <Route path = '/login' component = {SignUpIn} />
-                    <Route path = '/registro' component = {SignUpIn} />
-                    <Route path = '/roboshot' component = {Home} />
-                    <Route path = '/perfil' component = {Home} />
-                </Switch>       
-            </BrowserRouter>
+                <HomePageProvider>
+                <BrowserRouter>
+                    <Switch>
+                        <Route exact path='/' component = {Home} />
+                        <Route path = '/admin' component = {Inicio} />
+                        <Route path = '/login' component = {SignUpIn} />
+                        <Route path = '/registro' component = {SignUpIn} />
+                        <Route path = '/roboshot' component = {Home} />
+                        <Route path = '/perfil' component = {Home} />
+                    </Switch>       
+                </BrowserRouter>
+                </HomePageProvider>
             </AuthProvider>
         )
     }

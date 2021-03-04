@@ -2,10 +2,11 @@ import React from 'react';
 
 //  libreria para qr
 import {QRCode} from 'react-qr-svg';
+import {useHomeState} from '../../../context';
 
 const QRGenerator = (props) => {
 
-    const codigo = props.codigo;
+    const settings = useHomeState();
     return(
         <>
         <QRCode
@@ -13,7 +14,7 @@ const QRGenerator = (props) => {
             fgColor = "#000000"
             level = "L"
             style = {{ width: 200 }}
-            value = {codigo}
+            value = {settings.qr_code}
         />
         </>
     )

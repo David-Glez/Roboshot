@@ -1,22 +1,19 @@
 import React from 'react';
-
-//  Estilos
 import { Modal}from 'react-bootstrap';
-
-//  componentes
 import QRGenerator from '../qr-code/qr-code';
+import {useHomeState, useHomeDispatch, closeModalSwitch} from '../../../context'
 
 const ModalCodigo = (props) => {
-    const ver = props.activo;
-    const cerrar = props.inactivo;
-    const codigo = props.codigo;
 
-    if(ver){
+    const settings = useHomeState();
+    const dispatch = useHomeDispatch();
+
+    if(settings.modal.open == true && settings.modal.name == 'qr_code'){
         return(
             <>
             <Modal
-                show = {props.activo}
-                onHide = {props.inactivo}
+                show = {settings.modal.open}
+                onHide = {(e) => closeModalSwitch(dispatch, e)}
                 backdrop = 'static'
                 dialogClassName = 'modal-dialog-centered'
             >
@@ -24,7 +21,7 @@ const ModalCodigo = (props) => {
                     <h5 className='modal-title text-dark'>
                         Tu pedido
                     </h5>
-                    <button className = 'close' onClick={props.inactivo}>
+                    <button className = 'close' onClick={(e) => closeModalSwitch(dispatch, e)}>
                         <span aria-hidden='true'>
                             &times;
                         </span>
@@ -33,19 +30,17 @@ const ModalCodigo = (props) => {
                 <Modal.Body>
                     <div className = 'row'>
                         <div className = 'col-md-6'>
-                            <QRGenerator 
-                                codigo = {codigo}
-                            />
+                            <QRGenerator />
                         </div>
                         <div className = 'col-md-6'>
-                            <p>Codigo: {codigo}</p>
+                            <p>Codigo: {settings.qr_code}</p>
                             <p>Escanea este QR en la estación Roboshot y disfruta tus bebidas!</p>
                             <small>** Verifica disponibilidad</small>
                         </div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <button className = 'btn btn-success float-center' onClick = {props.inactivo}>
+                    <button className = 'btn btn-success float-center' onClick = {(e) => closeModalSwitch(dispatch, e)}>
                         Aceptar
                     </button>
                 </Modal.Footer>

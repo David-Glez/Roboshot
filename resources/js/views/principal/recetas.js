@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 //  components
 import Loader from '../../components/alertas/loader';
@@ -14,7 +14,7 @@ const Recipe = (props) => {
     const settings = useHomeState();
     const {recipes} = useRecipesList(idCliente);
     const dispatch = useHomeDispatch();
-
+    
     return(
         <>
         {(settings.loading && settings.module == 'recipes_page') ? (
@@ -47,12 +47,6 @@ const Recipe = (props) => {
         </div>
         </>
     )
-
-    /*
-    <div className="new-recipe">
-            <button onClick = {(e) => manual(idCliente, e)} >nueva receta</button>
-        </div>
-     */
 };
 
 export default Recipe;
