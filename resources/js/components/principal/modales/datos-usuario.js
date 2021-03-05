@@ -17,6 +17,7 @@ import CheckButton from 'react-validation/build/button';
 
 //  componentes
 import Loader from '../../alertas/loader';
+import {useHomeState, useHomeDispatch, closeModalSwitch, useAuthState} from '../../../context'
 
 const required = (value) =>{
     if(!value){
@@ -304,28 +305,24 @@ const Contenido = (props) => {
 };
 
 const ModalUsuario = (props) => {
-    const ver = props.activo;
-    const quitar = props.inactivo;
-    const id = props.id;
-    const token = props.token;
+    
+    const settings = useHomeState();
+    const dispatch = useHomeDispatch();
 
-    if(ver){
+    if(settings.modal.open == true && settings.modal.name == 'user_details'){
         return(
             <>
             
             <Modal
-                show = {ver}
-                onHide = {props.inactivo}
+                show = {settings.modal.open}
+                onHide = {(e) => closeModalSwitch(dispatch, e)}
                 size = 'lg'
                 backdrop = 'static'
                 dialogClassName = 'modal-dialog-centered'
                 className = 'modalTransparente'
             >
+                <Modal.Body>Prueba</Modal.Body>
                 
-                <Contenido
-                    cerrar = {props.inactivo}
-                    id = {id} 
-                />
             </Modal>
             </>
         )

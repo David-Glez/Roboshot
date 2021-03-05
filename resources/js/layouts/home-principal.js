@@ -26,17 +26,9 @@ import RoboshotCard from '../views/principal/roboshots';
 import Recipe from '../views/principal/recetas';
 import Perfil from '../views/principal/perfil-usuario';
 
-import {useHomeDispatch, useHomeState, closeModalSwitch, openModalSwitch} from '../context';
+import {useHomeDispatch, useHomeState, closeModalSwitch} from '../context';
 
 function Home(props){
-
-    const [codigo, setCodigo] = useState('');
-    const [modalCodigo, setModalCodigo] = useState(false);
-    const [modalUsuario, setModalUsuario] = useState(false);
-    const [modalPedido, setModalPedido] = useState(false);
-    const [login, setLogin] = useState(false);
-    const [dataUser, setDataUser] = useState([]);
-    const [pedido, setPedido] = useState([]);
 
     const settings = useHomeState();
     const dispatch = useHomeDispatch();
@@ -92,7 +84,6 @@ function Home(props){
             }
         }
     }, [settings])
-    console.log(settings)
 
     const errorToast = (message) => {
         toast.warning(message,{
@@ -122,136 +113,24 @@ function Home(props){
         });
     }
 
-    //carga de las recetas al abrir la aplicacion
-    useEffect(() =>{
-
-        //  trae los datos almacenados en el localstorage
-        const user = AuthService.getCurrentUser();
-        if(user == null){
-            setLogin(false)
-        }else{
-            setDataUser(user);
-            setLogin(true);
-        }
-    }, []);
-
-    
-
-    //  abrir modal de usuario
-    function abrirUsuario(){
-        setModalUsuario(true);
-    }
-
-    //  cerrar modal de usuario
-    function cerrarUsuario(){
-        setModalUsuario(false)
-    }
-
-    //  abrir modal de pedido
-    function abrirPedido(item){
-        setPedido(item);
-        setModalPedido(true);
-    }
-
-    //  cerrar modal de pedido
-    function cerrarPedido(){
-        setModalPedido(false)
-    }
-
-    //  cierra el modal del carrito
-    function cerrarCodigo(){
-        setModalCodigo(false);
-    }
-
-
-    //  se realiza el pedido y lo guarda en la base de datos
-    /*function pedirCarrito(){
-
-        if(login == false && dataUser == ''){
-
-            toast.warning('No has iniciado sesión o no tienes cuenta. haz clic en "Iniciar Sesión o crea una cuenta"',{
-                position: toast.POSITION.TOP_CENTER,
-                autoClose: 4000,
-                hideProgressBar: false,
-                newestOnTop: false,
-                closeOnClick: true,
-                rtl: false,
-                draggable: true,
-                pauseOnHover: true,
-                progress: undefined
-            });
-
-        }else{
-            let data = {
-                usuario: dataUser.id,
-                cliente: idCliente,
-                total: total,
-                lista: JSON.stringify(carrito)
-            };
-    
-            //  oculta el modal
-            setModalCarrito(false);
-            const enviar = Accion.pedido(data);
-    
-            enviar.then(resp => {
-                
-                //  muestra el modal del codigo
-                setModalCodigo(true);
-                //  almacena el codigo generado
-                setCodigo(resp.data);
-                //  vacia el carrito y pone el contador en 0
-                setContador(0);
-                setTotal(0);
-                setCarrito([]);
-            });
-
-        }
-
-    }*/
-
     return(
         <>
         <ToastContainer />
         
         <Header/>
         <div className = 'container'>
-            
             <Switch>
                 <Route exact path = '/' component = {RoboshotCard} />
                 <Route exact path = '/roboshot' component = {Recipe} />
-                <Route exact path = '/perfil'>
-                    <Perfil 
-                        logueado = {login}
-                        usuario = {dataUser}
-                        abrirUsuario = {(e) => abrirUsuario(e)}
-                        abrirPedido = {(e, i) => abrirPedido(e, i)}
-                    />
-                </Route>
+                <Route exact path = '/perfil' component = {Perfil} />
             </Switch>
-            
         </div>
-            <ModalUsuario 
-                activo = {modalUsuario}
-                inactivo = {(e) => cerrarUsuario(e)}
-                id = {dataUser.id}
-            />
-
-            <ModalPedido 
-                activo = {modalPedido}
-                inactivo = {(e) => cerrarPedido(e)}
-                pedido = {pedido}
-            />
-
+            <ModalUsuario />
+            <ModalPedido />
             <ModalReceta />
             <ModalManual />
             <ModalCarrito />
-
-            <ModalCodigo 
-                activo = {modalCodigo}
-                inactivo = {(e) => cerrarCodigo(e)}
-                codigo = {codigo}
-            />
-            
+            <ModalCodigo />
         </>
     )
     

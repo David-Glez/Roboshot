@@ -1,12 +1,9 @@
 import React from 'react';
+import {useHomeDispatch, openModalSwitch} from '../../../context'
 
 const CardDataUser = (props) => {
     const dataUsuario = props.dataUsuario;
-
-    const abrirModal = (e) => {
-        e.preventDefault();
-        props.abrirModal();
-    }
+    const dispatch = useHomeDispatch()
 
     return(
         <>
@@ -35,7 +32,7 @@ const CardDataUser = (props) => {
             </div>
             <div className = 'row'>
                 <div className = 'col-sm-12 d-flex justify-content-center'>
-                    <button onClick = {(e) => abrirModal(e)} className = 'btn btn-success'>
+                    <button onClick = {(e) => openModalSwitch(dispatch, 'user_details', '', e)} className = 'btn btn-success'>
                         Modificar Datos
                     </button>
                 </div>

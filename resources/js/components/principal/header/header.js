@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Link}from 'react-router-dom';
 //  Logo roboshot
 import logo from '../../../assets/img/roboshot-logo-1.png';
@@ -17,8 +17,15 @@ const Header = (props) => {
     //  read order details from context
     const settings = useHomeState();
     const dispatch = useHomeDispatch();
+    const [route, setRoute] = useState('/perfil')
 
     useEffect(() => {
+        if(userDetail.id_rol == 4){
+            setRoute('/perfil')
+        }
+        if(userDetail.id_rol == 2 || userDetail.id_rol == 1){
+            setRoute('/admin')
+        }
         if(userDetail.message != null && userDetail.access == false){
             toast.warning(userDetail.message,{
                 position: toast.POSITION.TOP_CENTER,
@@ -32,7 +39,7 @@ const Header = (props) => {
                 progress: undefined
             });
         }
-    }, [userDetail.access, userDetail.message])
+    }, [userDetail])
     
     return(
         <>
@@ -58,7 +65,7 @@ const Header = (props) => {
                                 <span className = 'my-2 my-sm-0'>{userDetail.user}</span>
                             </a>
                             <div className="dropdown-menu dropdown-menu-right" aria-labelledby="log_user">
-                                <Link to = '/perfil' className = 'dropdown-item'>
+                                <Link to = {route} className = 'dropdown-item'>
                                     <div className = 'flexContainer'>
                                         <div>
                                             <FontAwesomeIcon icon = 'user-alt' />

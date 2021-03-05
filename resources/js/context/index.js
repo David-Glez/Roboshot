@@ -11,7 +11,8 @@ import {
     addOrderToCart,
     emptyCart,
     deleteOrderToCart,
-    orderCart
+    orderCart, 
+    userInfo
 } from './home-context/actions';
 
 export {
@@ -32,5 +33,6 @@ export {
     addOrderToCart,
     emptyCart,
     deleteOrderToCart,
-    orderCart
+    orderCart,
+    userInfo
 }

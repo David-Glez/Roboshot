@@ -1,4 +1,5 @@
 import axios from 'axios';
+import authHeader from '../header-auth';
 
 const API_URL = 'http://localhost/api/web';
 
@@ -133,6 +134,12 @@ const orderCart = (dispatch, state, dataUser) => {
     }
 }
 
+const userInfo = (dispatch, id) => {
+    dispatch({type: 'LOADING_USERDATA'})
+    const response = axios.get(API_URL +'/usuario/data/'+id, {headers: authHeader()})
+    return response
+}
+
 export{
     roboshotStations,
     recipesStation,
@@ -142,5 +149,6 @@ export{
     addOrderToCart,
     emptyCart,
     deleteOrderToCart,
-    orderCart
+    orderCart,
+    userInfo
 }

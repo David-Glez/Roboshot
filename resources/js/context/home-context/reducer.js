@@ -126,6 +126,18 @@ const HomeReducer = (initialState, action) => {
                 total: 0,
                 qr_code: action.qr_code
             }
+        case 'LOADING_USERDATA':
+            return{
+                ...initialState,
+                loading: true,
+                module: 'user_profile'
+            }
+        case 'USERDATA_CHARGED':
+            return{
+                ...initialState,
+                loading: false,
+                module: ''
+            }
         case 'CATCH_SUCCESS':
             return{
                 ...initialState,
