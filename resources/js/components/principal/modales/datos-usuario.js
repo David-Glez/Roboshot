@@ -17,7 +17,8 @@ import CheckButton from 'react-validation/build/button';
 
 //  componentes
 import Loader from '../../alertas/loader';
-import {useHomeState, useHomeDispatch, closeModalSwitch, useAuthState} from '../../../context'
+import {useHomeState, useHomeDispatch, closeModalSwitch, useAuthState} from '../../../context';
+import useUserEditForm from '../../../hooks/principal/users/user-edit-hook';
 
 const required = (value) =>{
     if(!value){
@@ -32,6 +33,7 @@ const required = (value) =>{
 
 const Contenido = (props) => {
 
+    
     const id = props.id;
 
     const form = useRef();
@@ -308,11 +310,12 @@ const ModalUsuario = (props) => {
     
     const settings = useHomeState();
     const dispatch = useHomeDispatch();
+    const {userData, onChangeInput, onSubmitForm} = useUserEditForm(props.user)
+    console.log(userData)
 
     if(settings.modal.open == true && settings.modal.name == 'user_details'){
         return(
             <>
-            
             <Modal
                 show = {settings.modal.open}
                 onHide = {(e) => closeModalSwitch(dispatch, e)}
@@ -321,8 +324,116 @@ const ModalUsuario = (props) => {
                 dialogClassName = 'modal-dialog-centered'
                 className = 'modalTransparente'
             >
-                <Modal.Body>Prueba</Modal.Body>
-                
+                <Modal.Body>
+                    <div className = 'cardLogin card-containerEdit'>
+                        <h5 className="card-title">
+                            Tus Datos
+                            <button className = 'close float-right' onClick={(e) => closeModalSwitch(dispatch, e)}>
+                                <span aria-hidden='true'>
+                                    &times;
+                                </span>
+                            </button>
+                        </h5>
+                        <Form encType="multipart/form-data">
+                        <div className = 'row'>
+                            <div className = 'col-md-6'>
+                                <div className = 'row'>
+                                    <div className = 'col-sm-6'>
+                                        <div className = 'form-group'>
+                                            <Input 
+                                                type = 'text'
+                                                className = 'form-control validaReg'
+                                                name = 'nombres'
+                                                placeholder="Nombre"
+                                                value = {userData.nombres}
+                                                onChange = {onChangeInput}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className = 'col-sm-6'>
+                                        <div className = 'form-group'>
+                                            <Input 
+                                                type = 'text'
+                                                className = 'form-control validaReg'
+                                                name = 'apellidos'
+                                                placeholder="Apellido"
+                                                value = {userData.apellidos}
+                                                onChange = {onChangeInput}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className = 'row'>
+                                    <div className = 'col-sm-12'>
+                                        <div className = 'form-group'>
+                                            <Input
+                                                type = 'email'
+                                                className = 'form-control validaReg'
+                                                name = 'email'
+                                                placeholder = 'Correo Electrónico'
+                                                value = {userData.email}
+                                                onChange = {onChangeInput}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                        
+                                <div className = 'row'>
+                                    <div className = 'col-sm-12'>
+                                        <div className = 'form-group'>
+                                            <Input
+                                                type = 'password'
+                                                className = 'form-control validaReg'
+                                                name = 'contrasena'
+                                                placeholder = 'Contraseña'
+                                                value = {userData.contrasena}
+                                                validations = {[required]}
+                                                onChange = {onChangeInput}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className = 'row'>
+                                    <div className = 'col-sm-12'>
+                                        <div className = 'form-group'>
+                                            <small>
+                                                **Ingresa tu contraseña para hacer validos los cambios
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div className = 'col-md-6'>
+                                <div className = 'row'>
+                                    <div className = 'col-sm-12 imgPadre'>
+                                        <div className = 'imageContent content-justify-center'>
+                                        <img 
+                                            src={userData.img ? URL.createObjectURL(userData.img) : userData.avatar } 
+                                            alt={userData.img ? userData.img.name : null} 
+                                        />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className = 'row'>
+                                    <div className = 'col-sm-12'>
+                                        <div className = 'custom-file'>
+                                        <input type = 'file' id = 'img' name = 'img' className = 'custom-file-input' onChange = {onChangeInput} lang="es" />
+                                        <label className="custom-file-label" htmlFor="img">Seleccionar...</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className = 'row'>
+                            <div className = 'col-sm-12 d-flex justify-content-center'>
+                                
+                            </div>
+                        </div>
+                        <CheckButton style={{ display: "none" }}  />
+                        </Form>
+                    </div>
+                </Modal.Body>
             </Modal>
             </>
         )

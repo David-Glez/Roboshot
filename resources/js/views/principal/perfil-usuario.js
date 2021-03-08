@@ -2,10 +2,10 @@ import React from 'react';
 
 //  componentes
 import Loader from '../../components/alertas/loader';
-import SinElementos from '../../components/alertas/vacio';
 import CardDataUser from '../../components/principal/cards/card-data-usuario';
 import CardPedidos from '../../components/principal/cards/pedidos-card';
-
+import ModalUsuario from '../../components/principal/modales/datos-usuario'
+import ModalPedido from '../../components/principal/modales/pedido'
 //  context
 import {useAuthState, useHomeState} from '../../context'
 import useUserData from '../../hooks/principal/users/user-hook'
@@ -38,7 +38,9 @@ const Perfil = () => {
             </div>
             </>
         )}
-        </>
+        <ModalUsuario user = {user} />
+        
+        </> 
     )
     
 };

@@ -1,15 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {
     Route,
     Switch
 }from 'react-router-dom'; 
- 
-//  URL's API
-import Accion from '../services/conexion';
-import AuthService from '../services/auth/autenticacion';
 
 //  libreria toast
-import { ToastContainer, toast, Flip } from 'react-toastify';
+import { ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 //  componentes
@@ -18,8 +14,6 @@ import ModalReceta from '../components/principal/modales/receta';
 import ModalManual from '../components/principal/modales/manual';
 import ModalCarrito from '../components/principal/modales/carrito';
 import ModalCodigo from '../components/principal/modales/codigo';
-import ModalUsuario from '../components/principal/modales/datos-usuario';
-import ModalPedido from '../components/principal/modales/pedido';
 
 //  vistas
 import RoboshotCard from '../views/principal/roboshots';
@@ -125,8 +119,7 @@ function Home(props){
                 <Route exact path = '/perfil' component = {Perfil} />
             </Switch>
         </div>
-            <ModalUsuario />
-            <ModalPedido />
+            
             <ModalReceta />
             <ModalManual />
             <ModalCarrito />
