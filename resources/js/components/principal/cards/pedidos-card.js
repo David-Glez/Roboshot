@@ -2,14 +2,11 @@ import React from 'react';
 
 //  componentes
 import SinElementos from '../../alertas/vacio';
+import {useHomeDispatch, openModalSwitch} from '../../../context'
 
 const CardPedidos = (props) => {
     const lista = props.pedidos;
-
-    const abrir = (e, item) => {
-        e.preventDefault();
-        props.abrirPedido(item)
-    }
+    const dispatch = useHomeDispatch();
 
     return(
         <>
@@ -29,7 +26,7 @@ const CardPedidos = (props) => {
                         {lista.map((item, index) => {
                             return(
                                 <li className = 'list-group-item' key = {index} >
-                                    <a href = '#' onClick = {(e) => abrir(e, item)}>
+                                    <a href = '#' onClick = {(e) => openModalSwitch(dispatch, 'order_item', item, e)}>
                                         <div className = 'row'>
                                             <div className = 'col-sm-6'>
                                                 {item.codigo}

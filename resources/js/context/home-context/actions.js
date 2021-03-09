@@ -140,6 +140,27 @@ const userInfo = (dispatch, id) => {
     return response
 }
 
+const updateUser = (dispatch, data) => {
+    dispatch({type: 'LOADING', module: 'sending_userdata'})
+    const resp = axios.post(API_URL + '/usuario/data/actualizar', data, {headers: authHeader()})
+    resp.then((response) => {
+        dispatch({
+            type: 'CATCH_SUCCESS',
+            successCode: 201,
+            successMessage: response.data.mensaje
+        })
+    }).catch((error) => {
+        dispatch({type: 'CHARGED'})
+        dispatch({
+            type: 'CATCH_ERROR',
+            errorCode: 202,
+            errorMessage: error.response.data.mensaje
+        })
+    })
+}
+
+const orderedRecipeIngredients = () => {}
+
 export{
     roboshotStations,
     recipesStation,
@@ -150,5 +171,7 @@ export{
     emptyCart,
     deleteOrderToCart,
     orderCart,
-    userInfo
+    userInfo,
+    updateUser,
+    orderedRecipeIngredients
 }

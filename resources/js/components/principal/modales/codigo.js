@@ -30,7 +30,9 @@ const ModalCodigo = (props) => {
                 <Modal.Body>
                     <div className = 'row'>
                         <div className = 'col-md-6'>
-                            <QRGenerator />
+                            <QRGenerator
+                                codigo = {settings.qr_code}
+                             />
                         </div>
                         <div className = 'col-md-6'>
                             <p>Codigo: {settings.qr_code}</p>

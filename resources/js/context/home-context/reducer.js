@@ -138,6 +138,23 @@ const HomeReducer = (initialState, action) => {
                 loading: false,
                 module: ''
             }
+        case 'LOADING':
+            return{
+                ...initialState,
+                loading: true,
+                module: action.module
+            }
+        case 'CHARGED':
+            return {
+                ...initialState,
+                loading: false,
+                module: ''
+            }
+        case 'CATCH_QRCODE':
+            return{
+                ...initialState,
+                qr_code: action.qr_code
+            }
         case 'CATCH_SUCCESS':
             return{
                 ...initialState,

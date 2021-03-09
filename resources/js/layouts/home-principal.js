@@ -32,18 +32,25 @@ function Home(props){
         if(settings.success){
             switch(settings.successCode){
                 case 104:
+                    //  receta añadida al carrito
                     closeModalSwitch(dispatch)
                     successToast(settings.message)
                     dispatch({type: 'CLEAR_SUCCESS'})
                     break;
                 case 105:
+                    //  receta eliminada del carrito
                     successToast(settings.message);
                     dispatch({type: 'CLEAR_SUCCESS'})
                     break;
-                case 107:
-                    console.log(settings.message);
-                    break;
                 case 112:
+                    //  codigo del pedido recibido
+                    dispatch({type: 'CLEAR_SUCCESS'})
+                    break;
+                case 201:
+                    //  usuario actualizado
+                    closeModalSwitch(dispatch);
+                    props.history.push('/')
+                    successToast(settings.message)
                     dispatch({type: 'CLEAR_SUCCESS'})
                     break;
             }
@@ -73,6 +80,13 @@ function Home(props){
                 case 109:
                     //  se realiza el pedido con el carrito vacio
                     errorToast(settings.errorMessage)
+                    dispatch({type: 'CLEAR_ERROR'})
+                    break;
+                case 202:
+                    //  errores en el formulario para actualizar datos del usuario
+                    settings.errorMessage.forEach((error) => {
+                        errorToast(error)
+                    })
                     dispatch({type: 'CLEAR_ERROR'})
                     break;
             }

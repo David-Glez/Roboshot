@@ -39,7 +39,7 @@ const Perfil = () => {
             </>
         )}
         <ModalUsuario user = {user} />
-        
+        <ModalPedido />
         </> 
     )
     

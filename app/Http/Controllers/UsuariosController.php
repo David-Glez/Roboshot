@@ -291,7 +291,7 @@ class UsuariosController extends Controller
 
     //  actualiza los datos del usuario
     public function actualizaUsuario(Request $request){
-
+        $status = 0;
         try{
             $request->validate([
                 'contrasena' => ['required', 'password:api']
@@ -335,6 +335,7 @@ class UsuariosController extends Controller
                     //$path = Storage::putFileAs('public/img-users', $img, $nombre);
                 }catch(ValidationException $e){
                     $errors = [];
+                    $status = 415;  //  unsupported media type
                     foreach($e->errors() as $item) {
                         foreach($item as $x){
                             $errors[] = $x;
@@ -345,7 +346,7 @@ class UsuariosController extends Controller
                         'mensaje' => $errors
                     );
 
-                    return response()->json($data);
+                    return response()->json($data, $status);
                 }
             }
             $cliente->nombres = $request->nombres;
@@ -355,13 +356,17 @@ class UsuariosController extends Controller
             $cliente->path = $path;
             $cliente->update();
 
+            $status = 200;  //  OK
             $data = array(
                 'status' => true,
                 'mensaje' => 'Datos actualizados'
             );
 
+            return response()->json($data, $status);
+
         }catch(ValidationException $e){
             $errors = [];
+            $status = 401;  //  unauthorized
             foreach($e->errors() as $item) {
                 foreach($item as $x){
                     $errors[] = $x;
@@ -372,10 +377,10 @@ class UsuariosController extends Controller
                 'mensaje' => $errors
             );
 
-            
+            return response()->json($data, $status);
         }
 
-        return response()->json($data);
+        
     }
 
 }

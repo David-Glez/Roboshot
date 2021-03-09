@@ -1,7 +1,10 @@
 import React, {useState, useEffect} from 'react';
+import {useHomeDispatch, updateUser} from '../../../context';
 
-const useUserEditForm = (user) => {
-    
+const useUserEditForm = (user, validateForm) => {
+
+    const dispatch = useHomeDispatch();
+
     const [userData, setUserData] = useState({
         nombres: '',
         apellidos: '',
@@ -35,7 +38,18 @@ const useUserEditForm = (user) => {
 
     const onSubmitForm = (e) => {
         e.preventDefault();
-        console.log('do something')
+        const validate = validateForm()
+        if(validate){
+            //  datos a enviar
+            const data = new FormData();
+            data.append('nombres', userData.nombres);
+            data.append('apellidos', userData.apellidos);
+            data.append('email', userData.email);
+            data.append('contrasena', userData.contrasena);
+            data.append('img', userData.img);
+            
+            updateUser(dispatch, data)
+        }
     }
     
     return {userData, onChangeInput, onSubmitForm}
