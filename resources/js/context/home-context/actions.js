@@ -1,7 +1,11 @@
 import axios from 'axios';
 import authHeader from '../header-auth';
 
-const API_URL = 'http://localhost/api/web';
+//  for development
+//const API_URL = 'http://localhost/api/web';
+
+//  for production
+const API_URL = 'https://roboshot-integra.herokuapp.com/api/web'
 
 const roboshotStations = (dispatch, login) => {
     dispatch({type: 'LOADING_HOME', log_status: login});
