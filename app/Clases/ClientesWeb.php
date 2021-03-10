@@ -31,13 +31,13 @@ class ClientesWeb{
         $usuarioGral = Clientes::where('idUsuario', $id)->first();
 
         $fecha = Carbon::parse($usuarioGral->created_at)->format('d/m/Y');
-        //$url = Storage::url($usuarioGral->logo);
+        $url = Storage::disk('s3')->url($usuarioGral->path);
         //  arreglo de datos
         $datosUsuario = array(
             'nombres' => $usuarioGral->nombres,
             'apellidoP' => $usuarioGral->apellidoPaterno,
             'apellidoM' => $usuarioGral->apellidoMaterno,
-            'img' => $usuarioGral->logo,
+            'img' => $url,
             'email' => $usuarioGral->email,
             'alta' => $fecha
         );

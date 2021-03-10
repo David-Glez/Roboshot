@@ -16,6 +16,7 @@ use App\Models\Pedidos;
 
 
 use App\Clases\Conexion;
+use Illuminate\Support\Facades\Storage;
 
 class GeneralController extends Controller
 {
@@ -166,6 +167,18 @@ class GeneralController extends Controller
         return response()->json($data);
     }
 
+    /*public function deleteDirectory($dir){
+
+        Storage::disk('s3')->deleteDirectory($dir);
+
+        return response()->json('ok', 200);
+
+    }
     
+    public function directoriesList(){
+        $list = Storage::disk('s3')->allFiles('images');
+
+        return response()->json($list);*/
+    }
 
 }

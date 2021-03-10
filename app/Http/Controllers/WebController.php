@@ -23,17 +23,15 @@ class WebController extends Controller
 
         $clientes = Clientes::where('esquema', '!=', '')->get();
         foreach($clientes as $i){
-            $logo = Storage::url($i->path);
+            $link = Storage::disk('s3')->url($i->path);
             $datos = array(
                 'idCliente' => $i->idCliente,
                 'razonSocial' => $i->razonSocial,
-                'logo' => $logo
+                'logo' => $link
             );
-
             $data[] = $datos;
         }
         return response()->json($data);
-     
     }
 
     //  selecciona todas las recetas de un cliente

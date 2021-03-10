@@ -18,13 +18,7 @@ use App\Models\User;
 
 class UsuariosController extends Controller
 {
-    public function __construct(){
-        //  Necesitamos obtener una instancia de la clase Client la cual tiene algunos métodos
-        //  que serán necesarios.
-        //  en el caso de que marque error el metodo getDriver ignorar
-        $this->dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();   
-    }
-    
+   
     //////////////////////////////////////////////////////////////////////////////////////////
     //          funciones para usuarios clientes
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -41,18 +35,15 @@ class UsuariosController extends Controller
 
     //insertar clientes en bd
     public function anadirCliente(Request $request){
-        $id = '';
         $dir = '';
         $path = '';
         
-        //  validacion de datos
         try{
              //  validacion de los datos
              $request->validate([
                 'user' => ['required', 'unique:usuarios,nombre'],
                 'bd' => ['required','unique:clientes,esquema'],
                 'password' => ['required', 'min:6'],
-                
             ]);
 
              //  nombre del directorio
@@ -64,29 +55,22 @@ class UsuariosController extends Controller
                     $request->validate([
                         'img' => ['image','mimes:jpeg,png,jpg,gif,svg']
                     ]);
-                    
-                    //  local
-                    //$path = Storage::makeDirectory('public/images'.$dir);
-                    $path = Storage::disk('dropbox')->makeDirectory('public/images/'.$dir);
+                    //  aws s3
+                    Storage::disk('s3')->makeDirectory('clients/'.$dir.'/images');
                     $fecha = Carbon::now()->format('Y-m-d');
                     $image = $request->file('img');
                     $extension = $image->getClientOriginalExtension();
                     $nombre = $fecha.'-'.$request->user.'.'.$extension;
 
-                    //  se mueve el logo al directorio
-                    //$path = Storage::putFileAs('public/images/'.$dir, $image, $nombre);
-                    
-                    $imageUrl = $image->storeAs(
-                        'public/images/'.$dir,
+                    $path = $image->storePubliclyAs(
+                        'clients/'.$dir.'/images',
                         $nombre,
-                        'dropbox'
+                        's3'
                     );
-                    $path = $this->dropbox->createSharedLinkWithSettings(
-                        $imageUrl, 
-                        ["requested_visibility" => "public"]
-                    );
+                    
                 }catch(ValidationException $e){
                     $errors = [];
+                    $status = 415;  //  unsupported media type
                     foreach($e->errors() as $item) {
                         foreach($item as $x){
                             $errors[] = $x;
@@ -96,58 +80,48 @@ class UsuariosController extends Controller
                         'status' => false,
                         'mensaje' => $errors,
                     );
-                    return response()->json($data);
+                    return response()->json($data, $status);
                 }
             }else{
-                Storage::disk('dropbox')->makeDirectory('public/images/'.$dir);
-                //  se copia el logo por default al directorio del cliente
-                Storage::disk('dropbox')->copy('public/images-default/camera.jpg', 'public/images/'.$dir.'/camera.jpg');
-                $imageUrl = 'public/images/'.$dir.'/camera.jpg';
-                $path = $this->dropbox->createSharedLinkWithSettings(
-                    $imageUrl, 
-                    ["requested_visibility" => "public"]
-                );
+                Storage::disk('s3')->makeDirectory('clients/'.$dir.'/images');
+                Storage::disk('s3')->copy('images/camera.jpg', 'clients/'.$dir.'/images/camera.jpg');
+                $path = 'clients/'.$dir.'/images/camera.jpg';
             }
 
-            //  se modifica la url para poder visualizar el contenido
-            $modifiedUrl = explode('.', $path['url']);
-            $modifiedUrl[0] = 'https://dl';
-            $directLink = implode('.', $modifiedUrl);
+            $usuario = User::create([
+                'nombre' => $request->user,
+                'password' => bcrypt($request->password),
+                'idRol' => 2
+            ]);
+
+            $cliente = Clientes::create([
+                'idUsuario' => $usuario->idUsuario,
+                'razonSocial' => $request->razonSocial,
+                'nombres' => $request->nombre,
+                'apellidoPaterno' => $request->apellidoPaterno,
+                'apellidoMaterno' => $request->apellidoMaterno,
+                'RFC' => $request->rfc,
+                'email' => $request->email,
+                'esquema' => $request->bd,
+                'directorio' => $dir,
+                'logo' => '-',  //  TODO: delete column from clientes table
+                'path' => $path
+            ]);
+
+            //  create client schema
+            Roboshot::CrearRoboshot($request->bd);
             
-            //  se inserta los datos de inicio
-            $usuario = new User;
-            $usuario->nombre = $request->user;
-            $usuario->password = bcrypt($request->password);
-            $usuario->idRol = 2;
-            $usuario->save();
-
-            $id = $usuario->idUsuario;
-
-            //  se inserta los datos del cliente
-            $cliente = new Clientes;
-            $cliente->idUsuario = $id;
-            $cliente->razonSocial = $request->razonSocial;
-            $cliente->nombres = $request->nombre;
-            $cliente->apellidoPaterno = $request->apellidoPaterno;
-            $cliente->apellidoMaterno = $request->apellidoMaterno;
-            $cliente->RFC = $request->rfc;
-            $cliente->email = $request->email;
-            $cliente->esquema = $request->bd;
-            $cliente->directorio = $dir;
-            $cliente->logo = $directLink;
-            $cliente->path = $imageUrl;
-            $cliente->save();
-            
-            //  se crea la bd para el cliente
-            //Roboshot::CrearRoboshot($request->bd);
-
+            $status = 200;  //  OK
             $data = array(
                 'status' => true,
                 'mensaje' => 'Usuario insertado correctamente',
-                //'data' => $directLink
+                //'data' => $cliente
             );
+            return response()->json($data, $status);
+
         }catch(ValidationException $e){
             $errors = [];
+            $status = 400;  //  Bad request
             foreach($e->errors() as $item) {
                 foreach($item as $x){
                     $errors[] = $x;
@@ -158,17 +132,16 @@ class UsuariosController extends Controller
                 'mensaje' => $errors,
             );
 
-            return response()->json($data);
+            return response()->json($data, $status);
         }
-        
-        return response()->json($data);   
+          
     }
 
     //  datos de un cliente en especifico
     public function infoCliente($id){
         $usuario = User::find($id);
         $cliente = Clientes::where('idUsuario', $id)->first();
-        //$url = Storage::url($cliente->logo);
+        $url = Storage::disk('s3')->url($cliente->path);
         $data = array(
             'usuario' => $usuario->nombre,
             'nombre' => $cliente->nombres,
@@ -176,12 +149,11 @@ class UsuariosController extends Controller
             'apellidoMaterno' => $cliente->apellidoMaterno, 
             'RFC' => $cliente->RFC,
             'razonSocial' => $cliente->razonSocial,
-            'logo' => $cliente->logo,
+            'logo' => $url,
             'email' => $cliente->email, 
             'esquema' => $cliente->esquema
         );
         
-        //$x = Usuarios::infoCliente($id);
         return response()->json($data);
     }
 
@@ -199,7 +171,6 @@ class UsuariosController extends Controller
 
         //  actualiza los datos
         $cliente = Clientes::where('idUsuario', $request->id)->first();
-        $logo = $cliente->logo;
         $path = $cliente->path;
 
         //  en el caso de que exista un archivo de imagen 
@@ -213,26 +184,17 @@ class UsuariosController extends Controller
                 $extension = $image->getClientOriginalExtension();
                 $newLogo = $fecha.'-'.$request->id.'-'.$usuario->nombre.'.'.$extension;
                 //  elimina el archivo anterior
-                // TODO: add new field 'path' to save relative path from logo
-                Storage::disk('dropbox')->delete($path);
+                Storage::disk('s3')->delete($path);
                 //  mueve el elemento
-                //$logo = Storage::putFileAs('public/images/'.$cliente->directorio, $image, $newLogo);
                 $path = $image->storeAs(
-                    'public/images/'.$cliente->directorio,
+                    'clients/'.$cliente->directorio.'/images',
                     $newLogo,
-                    'dropbox'
+                    's3'
                 );
-                $newImage = $this->dropbox->createSharedLinkWithSettings(
-                    $path, 
-                    ["requested_visibility" => "public"]
-                );
-                //  se modifica la url para poder visualizar el contenido
-                $modifiedUrl = explode('.', $newImage['url']);
-                $modifiedUrl[0] = 'https://dl';
-                $logo = implode('.', $modifiedUrl);
-
+                
             }catch(ValidationException $e){
                 $errors = [];
+                $status = 415;  //  unsupported media type
                 foreach($e->errors() as $item) {
                     foreach($item as $x){
                         $errors[] = $x;
@@ -242,8 +204,7 @@ class UsuariosController extends Controller
                     'status' => false,
                     'mensaje' => $errors
                 );
-                
-                return $data;
+                return response()->json($data, $status);
             }
         }
 
@@ -253,15 +214,16 @@ class UsuariosController extends Controller
         $cliente->apellidoMaterno = $request->apellidoMaterno;
         $cliente->RFC = $request->rfc;
         $cliente->email = $request->email;
-        $cliente->logo = $logo;
+        //$cliente->logo = $logo;
         $cliente->path = $path;
         $cliente->save();
 
+        $status = 200;  //  OK
         $data = array(
             'status' => true, 
             'mensaje' => 'Datos actualizados',
         );
-        return response()->json($data);
+        return response()->json($data, $status);
     }
 
     //  elimina un cliente junto a todo su contenido
@@ -315,24 +277,15 @@ class UsuariosController extends Controller
                     //  nombre del archivo nuevo
                     $nombre = $fecha.'-'.Auth::user()->idUsuario.'-'.Auth::user()->nombre.'.'.$extension;
                     
-                    if($path !== 'public/images-default/camera.jpg'){
-                        Storage::disk('dropbox')->delete($path);
+                    if($path !== 'images/camera.jpg'){
+                        Storage::disk('s3')->delete($path);
                     }
                     $path = $img->storeAs(
-                        'public/img-users',
+                        'users/images',
                         $nombre,
-                        'dropbox'
+                        's3'
                     );
-                    $url = $this->dropbox->createSharedLinkWithSettings(
-                        $path, 
-                        ["requested_visibility" => "public"]
-                    );
-                    //  se modifica la url para poder visualizar el contenido
-                    $modifiedUrl = explode('.', $url['url']);
-                    $modifiedUrl[0] = 'https://dl';
-                    $logo = implode('.', $modifiedUrl);
-                    //  se mueve el archivo al storage local
-                    //$path = Storage::putFileAs('public/img-users', $img, $nombre);
+                    
                 }catch(ValidationException $e){
                     $errors = [];
                     $status = 415;  //  unsupported media type
@@ -352,7 +305,7 @@ class UsuariosController extends Controller
             $cliente->nombres = $request->nombres;
             $cliente->apellidoPaterno = $request->apellidos;
             $cliente->email = $request->email;
-            $cliente->logo = $logo;
+            //$cliente->logo = $logo;
             $cliente->path = $path;
             $cliente->update();
 

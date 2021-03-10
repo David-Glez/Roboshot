@@ -29,8 +29,8 @@ class UsuariosDemoSeeder extends Seeder
                 'apellidoMaterno' => $i,
                 'fechaNacimiento' => now(),
                 'email' => 'int@aut-'.$i,
-                'logo' => 'https://www.dropbox.com/s/jqqra9fl8w4y4i5/camera.jpg?dl=1',
-                'path' => 'public/images-default/camera.jpg'
+                'logo' => '-',
+                'path' => 'images/camera.jpg'
             ]);
         }
     }

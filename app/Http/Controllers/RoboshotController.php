@@ -16,13 +16,6 @@ use Illuminate\Support\Facades\Storage;
 
 class RoboshotController extends Controller
 {
-    public function __construct(){
-        //  Necesitamos obtener una instancia de la clase Client la cual tiene algunos métodos
-        //  que serán necesarios.
-        //  en el caso de que marque error el metodo getDriver ignorar
-        $this->dropbox = Storage::disk('dropbox')->getDriver()->getAdapter()->getClient();   
-    }
-
     //  ver la lista de roboshots registrados
     public function inicio(){
 
@@ -131,38 +124,27 @@ class RoboshotController extends Controller
             // generate absolut path from local file path
             $localPath = explode('\\', $item->image);
             $fileName = end($localPath);
-            $imagePath = 'public/images/'.$directory.'/'.$fileName;
+            $imagePath = 'clients/'.$directory.'/images/'.$fileName;
 
             //  check if file exists in client storage
-            $locatedImage = Storage::disk('dropbox')->exists($imagePath);
+            $locatedImage = Storage::disk('s3')->exists($imagePath);
             if(!$locatedImage){
+                $imagePath = 'images/camera.jpg';
+            }
+            /*if(!$locatedImage){
                 // if file not exists searchs in images-without-roboshot
-                $temporaryPath = 'public/images/images-without-roboshot/'.$fileName;
+                $temporaryPath = 'images/images-without-roboshot/'.$fileName;
                 //  check if file exists in temporary directory
-                $locatedMissingImage = Storage::disk('dropbox')->exists($temporaryPath);
+                $locatedMissingImage = Storage::disk('s3')->exists($temporaryPath);
                 //  if file is located move it to client directory
                 if($locatedMissingImage){
-                    Storage::disk('dropbox')->copy($temporaryPath, $imagePath);
+                    Storage::disk('s3')->copy($temporaryPath, $imagePath);
                 }else{
-                    $imagePath = 'public/images-default/camera.jpg';
+                    $imagePath = 'images/camera.jpg';
                 }
-            }
-            //  check if shared link exists
-            $locatedSharedLink = $this->dropbox->listSharedLinks($imagePath);
-            //  if shared link not exists it is created
-            if(empty($locatedSharedLink)){
-                $dropboxUrl = $this->dropbox->createSharedLinkWithSettings(
-                    $imagePath, 
-                    ["requested_visibility" => "public"]
-                );
-                $urlArray = explode('.', $dropboxUrl['url']);
-                $urlArray[0] = 'https://dl';
-                $url =implode('.', $urlArray);
-            }else{
-                $urlArray = explode('.', $locatedSharedLink[0]['url']);
-                $urlArray[0] = 'https://dl';
-                $url = implode('.', $urlArray);
-            }
+            }*/
+
+            //TODO: check if file exists
 
             //  updates recetas table, if the register is not found it's created
             Recetas::updateOrCreate(
@@ -172,7 +154,7 @@ class RoboshotController extends Controller
                     'descripcion' => $item->description,
                     'precio' => $item->price,
                     'activa' => true,
-                    'img' => $url,
+                    'img' => '',
                     'path' => $imagePath,
                     'mezclar' => true
                 ]
