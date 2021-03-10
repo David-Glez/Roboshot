@@ -178,7 +178,7 @@ class GeneralController extends Controller
     public function directoriesList(){
         $list = Storage::disk('s3')->allFiles('images');
 
-        return response()->json($list);*/
-    }
+        return response()->json($list);
+    }*/
 
 }
