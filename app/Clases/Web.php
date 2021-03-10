@@ -17,6 +17,7 @@ use App\Models\RecetaPedidos;
 use App\Models\IngredientePedidos;
 use App\Models\Pedidos;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class Web{
 
