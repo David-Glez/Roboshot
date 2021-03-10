@@ -37,8 +37,8 @@ Route::group([
     //  captura el pedido, lo guarda y genera el codigo para canjear
     Route::post('/pedido/nuevo', 'WebController@pedido');
 
-    Route::get('/delete/{dir}', 'GeneralController@deleteDirectory');
-    Route::get('/directories', 'GeneralController@directoriesList');
+    //Route::get('/delete/{dir}', 'GeneralController@deleteDirectory');
+    //Route::get('/directories', 'GeneralController@directoriesList');
 
     //  rutas para la modificacion y consulta de los datos del usuario
     Route::group([

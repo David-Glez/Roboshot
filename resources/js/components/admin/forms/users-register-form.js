@@ -108,7 +108,7 @@ const UsersAdd = (props) => {
                                     value = {userData.nombre}
                                     onChange = {onChangeInput}
                                     disabled = {userData.loading}
-                                    ////validations = {[validation.required]}
+                                    validations = {[validation.required]}
                                 />
                             </div>
                         </div>
@@ -125,7 +125,7 @@ const UsersAdd = (props) => {
                                     value = {userData.apellidoPaterno}
                                     onChange = {onChangeInput}
                                     disabled = {userData.loading}
-                                    //validations = {[validation.required]}
+                                    validations = {[validation.required]}
                                 />
                             </div>
                         </div>
@@ -142,7 +142,7 @@ const UsersAdd = (props) => {
                                     value = {userData.apellidoMaterno}
                                     onChange = {onChangeInput}
                                     disabled = {userData.loading}
-                                    //validations = {[validation.required]}
+                                    validations = {[validation.required]}
                                 />
                             </div>
                         </div>
@@ -159,7 +159,7 @@ const UsersAdd = (props) => {
                                     value = {userData.razonSocial}
                                     onChange = {onChangeInput}
                                     disabled = {userData.loading}
-                                    //validations = {[validation.required]}
+                                    validations = {[validation.required]}
                                 />
                             </div>
                         </div>
@@ -176,7 +176,7 @@ const UsersAdd = (props) => {
                                     value = {userData.rfc}
                                     onChange = {onChangeInput}
                                     disabled = {userData.loading}
-                                    //validations = {[validation.required, validation.validateRFC]}
+                                    validations = {[validation.required, validation.validateRFC]}
                                 />
                             </div>
                         </div>
@@ -193,7 +193,7 @@ const UsersAdd = (props) => {
                                     value = {userData.email}
                                     onChange = {onChangeInput}
                                     disabled = {userData.loading}
-                                    //validations = {[validation.required]}
+                                    validations = {[validation.required]}
                                 />
                             </div>
                         </div>
@@ -211,7 +211,7 @@ const UsersAdd = (props) => {
                                     value = {userData.bd}
                                     onChange = {onChangeInput}
                                     disabled = {userData.loading}
-                                    //validations = {[validation.required]}
+                                    validations = {[validation.required]}
                                 />
                                 <small>Evite espacios y máyusculas, mínimo 4 caracteres</small>
                             </div>
@@ -268,7 +268,7 @@ const UsersAdd = (props) => {
                                     value = {userData.contrasena}
                                     onChange = {onChangeInput}
                                     disabled = {userData.loading}
-                                    //validations = {[validation.required]}
+                                    validations = {[validation.required]}
                                 />
                                 <PasswordStrengthBar 
                                     password = {userData.contrasena} 

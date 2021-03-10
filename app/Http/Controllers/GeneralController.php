@@ -167,7 +167,7 @@ class GeneralController extends Controller
         return response()->json($data);
     }
 
-    public function deleteDirectory($dir){
+    /*public function deleteDirectory($dir){
 
         Storage::disk('s3')->deleteDirectory($dir);
 
@@ -176,9 +176,9 @@ class GeneralController extends Controller
     }
     
     public function directoriesList(){
-        $list = Storage::disk('s3')->directories('clients');
+        $list = Storage::disk('s3')->allFiles('images');
 
-        return response()->json($list);
+        return response()->json($list);*/
     }
 
 }
