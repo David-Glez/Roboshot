@@ -45,6 +45,7 @@ class Web{
                 );
                 $listIngredients[] = $ingredientDetail;             
             }
+            $link = Storage::disk('s3')->url($recipe->path);
             $recipeDetails = array(
                 'id' => $recipe->id,
                 'idReceta' => $recipe->idReceta,
@@ -52,7 +53,7 @@ class Web{
                 'nombre' => $recipe->nombre,
                 'descripcion' => $recipe->descripcion,
                 'precio' => $recipe->precio,
-                'img' => $recipe->img,
+                'img' => $link,
                 'ingredientes' => $listIngredients
             );
 
