@@ -186,7 +186,7 @@ class UsuariosController extends Controller
                 //  elimina el archivo anterior
                 Storage::disk('s3')->delete($path);
                 //  mueve el elemento
-                $path = $image->storeAs(
+                $path = $image->storePubliclyAs(
                     'clients/'.$cliente->directorio.'/images',
                     $newLogo,
                     's3'
@@ -280,7 +280,7 @@ class UsuariosController extends Controller
                     if($path !== 'images/camera.jpg'){
                         Storage::disk('s3')->delete($path);
                     }
-                    $path = $img->storeAs(
+                    $path = $img->storePubliclyAs(
                         'users/images',
                         $nombre,
                         's3'
