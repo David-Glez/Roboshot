@@ -39,7 +39,6 @@ class InicioController extends Controller
                 'accessToken' => $accessToken,
                 'autorizado' => $verificacion,
                 'mensaje' => 'ok'
-                
             );
             $state = 200;
         }else{

@@ -13,7 +13,23 @@ const ModalPedido = (props) => {
 
     const settings = useHomeState();
     const dispatch = useHomeDispatch();
-    console.log(settings)
+
+    const [ingredients, setIngredients] = useState([]);
+
+    useEffect(() => {
+        return () => {
+            if(settings.modal.open == false && settings.modal.data ==''){
+                setIngredients([]);
+            }
+        }
+    }, [settings]);
+
+    const ingredientsListFromRecipe = (idProd) => {
+        const recipes = settings.modal.data.recetas;
+        const ingredientsRecipe = recipes.find(ing => ing.idProd == idProd);
+
+        setIngredients(ingredientsRecipe.ingredientes)
+    }
     
     if(settings.modal.open == true && settings.modal.name == 'order_item'){
         const item = settings.modal.data;
@@ -69,10 +85,13 @@ const ModalPedido = (props) => {
                                     <RecipeList 
                                         recipes = {item.recetas}
                                         code = {item.codigo}
+                                        seeIngredients = {(e) => ingredientsListFromRecipe(e)}
                                     />
                                 </div>
                                 <div className = 'col-md-7'>
-                                    
+                                    <IngredientsList
+                                        ingredients = {ingredients}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -85,49 +104,4 @@ const ModalPedido = (props) => {
         return null;
     }
 };
-
-/*
-<div className = 'row'>
-                        <div className = 'col-md-3 text-center'>
-                            <QRGenerator 
-                                codigo = {data.codigo}
-                            />
-                        </div>
-                        <div className = 'col-md-9'>
-                            <div className = 'row'>
-                                <label htmlFor = 'codigo' className="col-sm-2 col-form-label">Código</label>
-                                <div className = 'col-sm-4'>
-                                    <span id = 'codigo' className = 'primaryText form-control-plaintext'>
-                                        {data.codigo}
-                                    </span>
-                                </div>
-                                <label htmlFor = 'codigo' className="col-sm-2 col-form-label">Precio</label>
-                                <div className = 'col-sm-4'>
-                                    <span id = 'codigo' className = 'text-success form-control-plaintext'>
-                                        ${parseFloat(data.total).toFixed(2)}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className = 'row'>
-                                
-                            </div>
-                            <div className = 'row'>
-                                <div className = 'col-sm-5'>
-                                    <RecipeList 
-                                        recipes = {data.recetas}
-                                        code = {data.codigo}
-                                        position = {(e) => ingPosition(e)}
-                                    />
-
-                                </div>
-                                <div className = 'col-sm-7'>
-                                    <IngredientsList
-                                        ingredients = {ingredients}
-                                    /> 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
- */
-
 export default ModalPedido;

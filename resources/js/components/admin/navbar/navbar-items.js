@@ -5,12 +5,17 @@ import {Nav, NavDropdown,} from 'react-bootstrap';
 
 //libreria de iconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {openModalSwitch, useHomeDispatch, useAuthDispatch, logoutUser} from '../../../context';
 
 const NavItems = (props) => {
 
+    const homeDispatch = useHomeDispatch();
+    const userDispatch = useAuthDispatch();
+
     const salir = (e) => {
         e.preventDefault();
-        props.logout();
+        openModalSwitch(homeDispatch, 'log_out', '');
+        logoutUser(userDispatch, homeDispatch)
     }
 
     return(

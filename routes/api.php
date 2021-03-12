@@ -96,8 +96,7 @@ Route::group([
         Route::post('/recetas/editar', 'RecetasIngredientesController@updateRecipe');
 
         //  rutas para funciones generales
-        Route::get('/general/stats', 'GeneralController@statsCard');
-        Route::get('/general/rutas', 'GeneralController@rutas');
+        Route::get('/general/home', 'GeneralController@home');
         Route::get('/general/clientes', 'GeneralController@clientes');
         
     });

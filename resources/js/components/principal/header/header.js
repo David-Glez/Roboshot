@@ -27,17 +27,7 @@ const Header = (props) => {
             setRoute('/admin')
         }
         if(userDetail.message != null && userDetail.access == false){
-            toast.warning(userDetail.message,{
-                position: toast.POSITION.TOP_CENTER,
-                autoClose: 4000,
-                hideProgressBar: false,
-                newestOnTop: false,
-                closeOnClick: true,
-                rtl: false,
-                draggable: true,
-                pauseOnHover: true,
-                progress: undefined
-            });
+            
         }
     }, [userDetail])
     

@@ -1,13 +1,16 @@
 import React from 'react';
 
 import {Modal, Spinner} from 'react-bootstrap';
+import {useHomeState} from '../../../context';
 
 const LoadingModal = (props) => {
-    const ver = props.ver;
-    if(ver){
+    
+    const settings = useHomeState();
+
+    if(settings.modal.open == true && settings.modal.name == 'load_home'){
         return(
             <Modal
-                show = {ver}
+                show = {settings.modal.open}
                 //onHide = {props.inactivo}
                 size = 'lg'
                 backdrop = 'static'

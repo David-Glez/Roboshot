@@ -19,9 +19,7 @@ const AdminNavBar = (props) => {
                 </Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse className="justify-content-end">
-                    <NavItems
-                        logout = {logout} 
-                    />
+                    <NavItems />
                 </Navbar.Collapse>
             </div>
         </Navbar>

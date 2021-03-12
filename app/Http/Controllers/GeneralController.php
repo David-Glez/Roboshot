@@ -25,6 +25,18 @@ class GeneralController extends Controller
     //          informacion en dashboard 
     //////////////////////////////////////////////////////////////////////////////////////////
 
+    public function home(){
+
+        $stateCards = $this->statsCard();
+        $routes = $this->rutas();
+
+        $data = array(
+            'routes' => $routes,
+            'stateCards' => $stateCards
+        );
+        return response()->json($data);
+    }
+    
     //  trae informacion para las cards
     public function statsCard(){
         $data = [];
@@ -136,7 +148,7 @@ class GeneralController extends Controller
                 break;
         }
         
-        return response()->json($data);
+        return $data;
     }
 
      //  devuelve las rutas segun el rol del usuario
@@ -145,7 +157,7 @@ class GeneralController extends Controller
 
         $rutas = Rutas::where('idRol', $idRol)->get();
 
-        return response()->json($rutas);
+        return $rutas;
     }
 
     //  consulta una lista de clientes

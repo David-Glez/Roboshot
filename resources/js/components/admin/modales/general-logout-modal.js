@@ -1,13 +1,16 @@
 import React from 'react';
 
 import {Modal, Spinner} from 'react-bootstrap';
+import {useHomeDispatch, useHomeState} from '../../../context';
 
 const LogOutModal = (props) => {
-    const ver = props.ver;
-    if(ver){
+
+    const settings = useHomeState();
+    
+    if(settings.modal.open == true && settings.modal.name == 'log_out'){
         return(
             <Modal
-                show = {ver}
+                show = {settings.modal.open}
                 //onHide = {props.inactivo}
                 size = 'lg'
                 backdrop = 'static'

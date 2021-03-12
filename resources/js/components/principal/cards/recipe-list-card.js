@@ -4,11 +4,11 @@ const RecipeList = (props) => {
 
     const recipes = props.recipes;
     const code = props.code;
-    const position = props.position;
+    const ingredientsList = props.seeIngredients;
 
     //  return ingredients list from select recipe
     const ingredientsRecipe = (e, prod, cod) => {
-        position(prod);
+        ingredientsList(prod);
     }
 
     return(
@@ -37,7 +37,6 @@ const RecipeList = (props) => {
                                     </div>
                                 </div>
                             </li>
-                            
                         )
                     })}
                 </ul>

@@ -15,4 +15,8 @@ class Categorias extends Model
     protected $fillable = [
         'idCategoria', 'roboshot', 'nombre'
     ];
+
+    public function category(){
+        return $this->hasMany(Ingredientes::class, 'categoria', 'idCategoria');
+    }
 }

@@ -1,13 +1,8 @@
 import React from 'react';
-
-//  estilos 
-import {Spinner} from 'react-bootstrap'
-
 //libreria de iconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const StatsCard = (props) => {
-    const loading = props.loading;
     const statsText = props.statsText;
     const statsValue = props.statsValue;
     const bigIcon = props.bigIcon;
@@ -41,37 +36,25 @@ const StatsCard = (props) => {
         <>
         <div className = 'card card-stats'>
             <div className = 'content'>
-                { loading ? (
-                    <>
-                    <div className = 'text-center'>
-                        <Spinner animation = 'border' variant = 'secondary' role = 'status'>
-                            <span className = 'sr-only'>Cargando...</span>
-                        </Spinner>
+                <div className = 'row'>
+                    <div className = 'col-sm-5'>
+                        <div className = 'icon-big text-center icon-warning'>
+                            {bigIcon}
+                        </div> 
                     </div>
-                    </>
-                    ):(
-                    <>
-                    <div className = 'row'>
-                        <div className = 'col-sm-5'>
-                            <div className = 'icon-big text-center icon-warning'>
-                                {bigIcon}
-                            </div> 
-                        </div>
-                        <div className = 'col-sm-7'>
-                            <div className = 'numbers'>
-                                <p>{statsText}</p>
-                                {statsValue}
-                            </div>
+                    <div className = 'col-sm-7'>
+                        <div className = 'numbers'>
+                            <p>{statsText}</p>
+                            {statsValue}
                         </div>
                     </div>
-                    <div className = 'footerAdmin'>
-                        <hr />
-                        <div className = 'stats'>
-                            {icono()} {statsIconText}
-                        </div>
+                </div>
+                <div className = 'footerAdmin'>
+                    <hr />
+                    <div className = 'stats'>
+                        {icono()} {statsIconText}
                     </div>
-                    </> 
-                )}
+                </div>
             </div>
         </div>
         </>

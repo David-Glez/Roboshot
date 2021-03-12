@@ -1,10 +1,10 @@
 import axios from 'axios';
 import authHeader from '../header-auth';
 //  for development
-//const API_URL = 'http://localhost/api/auth';
+const API_URL = 'http://localhost/api/auth';
 
 //  for production 
-const API_URL = 'https://roboshot-integra.herokuapp.com/api/auth';
+//const API_URL = 'https://roboshot-integra.herokuapp.com/api/auth';
 //  login
 const loginUser = (dispatch, loginPayload) => {
     dispatch({type: 'REQUEST_LOGIN'});
@@ -42,9 +42,16 @@ const registerUser = (dispatch, dataPayload) => {
     })
 }
 
+const getRoutesAndStateCards = () => {
+
+    const resp = axios.get(API_URL + '/general/home', {headers: authHeader()});
+    return resp;
+
+}
 
 export {
     loginUser,
     logoutUser,
-    registerUser
+    registerUser,
+    getRoutesAndStateCards
 }

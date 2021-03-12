@@ -14,7 +14,9 @@ const initialState = {
   access: false || current_user.autorizado,
   token: '' || current_user.accessToken,
   message: null,
-  register: null
+  register: null,
+  routes: undefined,
+  state_cards: undefined
 };
 
 const AuthReducer = (initialState, action) => {
@@ -92,6 +94,12 @@ const AuthReducer = (initialState, action) => {
           errorMessage: action.error,
           register: false
         };
+      case 'SETTINGS_CHARGED':
+        return{
+          ...initialState,
+          routes: action.routes,
+          state_cards: action.state_cards
+        }
    
       default:
         throw new Error(`Unhandled action type: ${action.type}`);

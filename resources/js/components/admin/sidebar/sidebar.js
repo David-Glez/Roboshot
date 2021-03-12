@@ -10,14 +10,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 //  components
 import ItemSidebar from './sidebar-list-item';
+import {useAuthState} from '../../../context';
 
 const Sidebar = (props) => {
-    
-    const rutas = props.rutas;
-    const loading = props.loading;
-    const usuario = props.usuario;
-    const rol = props.rol;
-    const autorizado = props.autorizado;
+    const userDetails = useAuthState();
     
     return(
         <>
@@ -32,15 +28,15 @@ const Sidebar = (props) => {
                 </Link>
             </div>
             <div className = 'infoUser '>
-                <p>Usuario: {usuario}</p>
-                <p>Rol: {rol}</p>
+                <p>Usuario: {userDetails.user}</p>
+                <p>Rol: {userDetails.rol}</p>
                 <small>
                     <FontAwesomeIcon 
                         icon = 'circle' 
-                        className = {autorizado ? 'text-success' : 'text-warning'} 
+                        className = {userDetails.access ? 'text-success' : 'text-warning'} 
                     />
                     <span className = 'customSpanAdmin'>
-                        {autorizado ? 'Activo' : 'En espera'}
+                        {userDetails.access ? 'Activo' : 'En espera'}
                     </span>
                 </small>
             </div>
@@ -54,21 +50,18 @@ const Sidebar = (props) => {
                             </span>
                         </Link>
                     </li>
-                {loading ? (
-                    <div></div>
-                ):(
-                    <>
-                    {rutas.map((x) =>
-                        <ItemSidebar
-                            key = {x.idRuta}
-                            nombre = {x.nombre}
-                            ruta = {x.ruta}
-                            icono = {x.icono}
-                        /> 
+                    {(userDetails.routes != undefined) && (
+                        <>
+                        {userDetails.routes.map((x) =>
+                            <ItemSidebar
+                                key = {x.idRuta}
+                                nombre = {x.nombre}
+                                ruta = {x.ruta}
+                                icono = {x.icono}
+                            /> 
+                        )}
+                        </>
                     )}
-                    </>
-                )}   
-                        
                 </ul>
             </div>
         </div>

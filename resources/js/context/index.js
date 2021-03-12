@@ -1,5 +1,10 @@
 import { AuthProvider, useAuthDispatch, useAuthState } from './user-context/context';
-import {loginUser, logoutUser, registerUser} from './user-context/actions';
+import {
+    loginUser, 
+    logoutUser, 
+    registerUser,
+    getRoutesAndStateCards
+} from './user-context/actions';
 
 import{ HomePageProvider, useHomeDispatch, useHomeState} from './home-context/context';
 import {
@@ -24,6 +29,7 @@ export {
     loginUser, 
     logoutUser, 
     registerUser,
+    getRoutesAndStateCards,
     HomePageProvider,
     useHomeDispatch,
     useHomeState, 

@@ -15,5 +15,9 @@ class Ingredientes extends Model
         'idIngrediente', 'roboshot','categoria', 'nombre', 'marca', 'precio', 'actualizado'
     ];
 
+    public function recipes(){
+        return $this->belongsToMany(Recetas::class, 'recetaIngrediente', 'idIngrediente', 'roboshot', 'idIngrediente', 'roboshot')
+                    ->using(RecetaIngredientes::class);
+    }
     
 }
